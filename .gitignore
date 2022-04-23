@@ -37,4 +37,4 @@ out/
 .vscode/
 
 #custom
-application.properties
+#application.properties

@@ -36,9 +36,12 @@ public class RestTestController {
 
         while ((returnLine = br.readLine()) != null) {
             result.append(returnLine);
+
         }
 
         urlConnection.disconnect();
+
+        System.out.println(result);
 
 
         return result.toString();

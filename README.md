@@ -21,6 +21,12 @@
   </tr>
 </table>
 
+### 🚫 push, merge에 대한 주의사항
+- main은 프로젝트가 끝날 때까지 손대지 말기  
+- 기능별로 branch를 만들기  
+- 모든 branch의 merge는 dev로 하기  
+- merge된 branch는 삭제하기  
+
 ### ✅ 커밋 종류
 
 > 수정한 종류에 따라 커밋 메시지를 선택

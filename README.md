@@ -25,6 +25,7 @@
 - main은 프로젝트가 끝날 때까지 손대지 말기  
 - 기능별로 branch를 만들기  
 - 모든 branch의 merge는 dev로 하기  
+- merge된 branch는 삭제하기  
 
 ### ✅ 커밋 종류
 

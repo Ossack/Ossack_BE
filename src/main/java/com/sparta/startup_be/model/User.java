@@ -20,12 +20,16 @@ public class User {
     @Column(unique = true)
     private String nickname;
 
+    @Column
+    private String profile;
+
     @Column(unique = true)
     private String password;
 
-    public User(String userEmail, String nickname, String password) {
+    public User(String userEmail, String nickname, String profile, String password) {
         this.userEmail = userEmail;
         this.nickname = nickname;
+        this.profile = profile;
         this.password = password;
     }
 }

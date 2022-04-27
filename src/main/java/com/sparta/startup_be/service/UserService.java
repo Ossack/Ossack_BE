@@ -39,10 +39,12 @@ public class UserService {
             return new ResultDto(message);
         }
 
+        String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+
         // 패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(userEmail, nickname, password);
+        User user = new User(userEmail, nickname, profile, password);
         userRepository.save(user);
         message = "회원가입 성공";
         return new ResultDto(message);

@@ -20,7 +20,7 @@ public class User {
     @Column(unique = true)
     private String nickname;
 
-    @Column(unique = true)
+    @Column
     private String profile;
 
     @Column(unique = true)

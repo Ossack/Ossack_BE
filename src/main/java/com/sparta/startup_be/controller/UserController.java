@@ -26,7 +26,6 @@ public class UserController {
     public String nullex(IllegalArgumentException e) {
         return e.getMessage();
     }
-
     // 회원가입 등록
     @PostMapping("/user/signup")
     public ResultDto join(
@@ -56,4 +55,4 @@ public class UserController {
         }
         return new ResultDto("사용할 수 있는 아이디 입니다.");
     }
-}
+} 

@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 public class SignupRequestDto {
     // @Controller에 있는 SignupResquestDto를 파라미터로 갖는 메서드에 @Validated 어노테이션을 사용
     @NotBlank
+    @Size
     @Pattern(regexp = "([\\w-.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([\\w-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$", message = "이메일 형식이 맞지 않습니다.")
     private String userEmail;
 

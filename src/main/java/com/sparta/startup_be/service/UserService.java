@@ -24,11 +24,11 @@ public class UserService {
         String userEmail = requestDto.getUserEmail();
         String nickname = requestDto.getNickname();
         String message;
-        Optional<User> foundMail = userRepository.findByUserEmail(userEmail);
+        Optional<User> foundUser = userRepository.findByUserEmail(userEmail);
         Optional<User> foundNick = userRepository.findByNickname(nickname);
 
         // userEmail 중복 체크
-        if(validatedDuplicateUserEmail(foundMail)) {
+        if(validatedDuplicateUserEmail(foundUser)) {
             message = ILLEGAL_USER_NAME_DUPLICATION;
             return new ResultDto(message);
         }
@@ -39,9 +39,10 @@ public class UserService {
             return new ResultDto(message);
         }
 
+        String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+
         // 패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
-        String profile = "../../resources/static/images/basicprofile.png";
 
         User user = new User(userEmail, nickname, profile, password);
         userRepository.save(user);

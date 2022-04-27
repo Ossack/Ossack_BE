@@ -15,21 +15,17 @@ public class User {
     private Long id;
 
     @Column(unique = true)
-    private String userEmail;
+    private String username;
 
     @Column(unique = true)
     private String nickname;
 
     @Column(unique = true)
-    private String profile;
-
-    @Column(unique = true)
     private String password;
 
-    public User(String userEmail, String nickname, String profile, String password) {
-        this.userEmail = userEmail;
+    public User(String username, String nickname, String password) {
+        this.username = username;
         this.nickname = nickname;
-        this.profile = profile;
         this.password = password;
     }
 }

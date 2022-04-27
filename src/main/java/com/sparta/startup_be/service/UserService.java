@@ -21,14 +21,14 @@ public class UserService {
 
     // 회원가입
     public ResultDto save(SignupRequestDto requestDto) {
-        String username = requestDto.getUsername();
+        String userEmail = requestDto.getUserEmail();
         String nickname = requestDto.getNickname();
         String message;
-        Optional<User> foundUser = userRepository.findByUsername(username);
+        Optional<User> foundUser = userRepository.findByUserEmail(userEmail);
         Optional<User> foundNick = userRepository.findByNickname(nickname);
 
-        // username 중복 체크
-        if(validatedDuplicateUsername(foundUser)) {
+        // userEmail 중복 체크
+        if(validatedDuplicateUserEmail(foundUser)) {
             message = ILLEGAL_USER_NAME_DUPLICATION;
             return new ResultDto(message);
         }
@@ -42,14 +42,14 @@ public class UserService {
         // 패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
 
-        User user = new User(username, nickname, password);
+        User user = new User(userEmail, nickname, password);
         userRepository.save(user);
         message = "회원가입 성공";
         return new ResultDto(message);
     }
 
     // 유저이름 중복 체크
-    private boolean validatedDuplicateUsername(Optional<User> found) {
+    private boolean validatedDuplicateUserEmail(Optional<User> found) {
         return found.isPresent();
     }
     // 닉네임 중복 체크

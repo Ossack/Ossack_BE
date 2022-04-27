@@ -50,7 +50,7 @@ public class UserController {
     // 회원 중복 확인
     @PostMapping("/api/idcheck")
     public ResultDto idCheck(@RequestBody UserRequestDto userDto) {
-        if (userRepository.findByUsername(userDto.getUsername()).isPresent()) {
+        if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
             return new ResultDto("이미 존재하는 아이디 입니다.");
         }
         return new ResultDto("사용할 수 있는 아이디 입니다.");

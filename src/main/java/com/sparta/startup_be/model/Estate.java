@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -14,6 +15,9 @@ public class Estate {
 
     @Id
     private Long id;
+
+    @Column
+    private String address;
 
     @Column
     private String city;
@@ -26,6 +30,7 @@ public class Estate {
 
     @Column
     private double area;
+
     @Column
     private String contract_year;
 

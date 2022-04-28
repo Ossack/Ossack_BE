@@ -1,3 +1,4 @@
+
 package com.sparta.startup_be.model;
 
 import lombok.Getter;
@@ -45,3 +46,4 @@ public class User {
         this.kakaoId = kakaoId;
     }
 }
+

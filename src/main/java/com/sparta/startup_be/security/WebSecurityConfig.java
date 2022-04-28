@@ -123,27 +123,27 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // Static 정보 접근 허용
         skipPathList.add("GET,/images/**");
-//        skipPathList.add("MESSAGE,**");
-        skipPathList.add("PUT,**");
-//
-//        skipPathList.add("POST,/api/**");
+        skipPathList.add("GET,/css/**");
+
         // h2-console 허용
+        skipPathList.add("GET,/h2-console");
+        skipPathList.add("POST,/h2-console");
         skipPathList.add("GET,/h2-console/**");
         skipPathList.add("POST,/h2-console/**");
 
 
         // 회원 관리 API 허용
-//        skipPathList.add("GET,/user/**");
-//        skipPathList.add("GET,**");
-//        skipPathList.add("POST,**");
-//        skipPathList.add("PUT,**");
-//        skipPathList.add("DELETE,**");
+        skipPathList.add("GET,/user/**");
+        skipPathList.add("GET,**");
+        skipPathList.add("POST,**");
+        skipPathList.add("PUT,**");
+        skipPathList.add("DELETE,**");
 
         skipPathList.add("POST,/user/signup");
         skipPathList.add("POST,/user/login");
 
 //        skipPathList.add("GET,/api/board/**/**");
-        skipPathList.add("GET,/api/comment/**");
+//        skipPathList.add("GET,/api/comment/**");
 
 
         skipPathList.add("GET,/basic.js");

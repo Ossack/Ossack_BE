@@ -17,4 +17,12 @@ public class AddressController {
         System.out.println("다빈님 바보");
         return "marker";
     }
+
+    @GetMapping("/maemae")
+    public String maemae(){
+        System.out.println("다빈님 바보");
+        return "maemae";
+    }
+
+
 }

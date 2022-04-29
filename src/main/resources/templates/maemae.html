@@ -1,0 +1,150 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!--<!DOCTYPE html>-->
+<html>
+<head>
+    <meta charset="utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>주소로 장소 표시하기</title>
+
+</head>
+<body>
+<!-- 부트스트랩 primary 버튼 -->
+<button type="button" class="btn btn-lg btn-primary" id="getMyPositionBtn" onclick="getCurrentPosBtn()">내 위치 가져오기
+</button>
+
+<!-- 부트스트랩 이용을 위한 jQuery와 CDN -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<p style="margin-top:-12px">
+    <em class="link">
+        <a href="javascript:void(0);"
+           onclick="window.open('http://fiy.daum.net/fiy/map/CsGeneral.daum', '_blank', 'width=981, height=650')">
+            혹시 주소 결과가 잘못 나오는 경우에는 여기에 제보해주세요.
+        </a>
+    </em>
+</p>
+<div id="map" style="width:90%;height:90%;"></div>
+
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=c00080a86c086a8578cf3f90e9e6a96d&libraries=services"></script>
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+            level: 3 // 지도의 확대 레벨
+        };
+
+    // 지도를 생성합니다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+    getCurrentPosBtn();
+    // 주소-좌표 변환 객체를 생성합니다
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    var zoomControl = new kakao.maps.ZoomControl();
+    map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+    // 지도가 확대 또는 축소되면 마지막 파라미터로 넘어온 함수를 호출하도록 이벤트를 등록합니다
+    kakao.maps.event.addListener(map, 'zoom_changed', function () {
+
+        // 지도의 현재 레벨을 얻어옵니다
+        var level = map.getLevel();
+
+        var message = '현재 지도 레벨은 ' + level + ' 입니다';
+        console.log(message);
+
+        if (level == 2) {
+            $.ajax({
+                type: "GET",
+                url: "/api/search",
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        let row = response[i];
+                        let address = row.address;
+                        let price = row.price;
+                        geocoder.addressSearch(address, function (result, status) {
+
+                                // 정상적으로 검색이 완료됐으면
+                                if (status === kakao.maps.services.Status.OK) {
+
+                                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                                    var imageSrc = 'https://mwmw1.s3.ap-northeast-2.amazonaws.com/%EC%A0%9C%EB%AA%A9%EC%9D%84+%EC%9E%85%EB%A0%A5%ED%95%B4%EC%A3%BC%EC%84%B8%EC%9A%94_-001+(2).png', // 마커이미지의 주소입니다
+                                        imageSize = new kakao.maps.Size(50, 50), // 마커이미지의 크기입니다
+                                        imageOption = {offset: new kakao.maps.Point(27, 50)}; // 마커이미지의 옵션입니다. 마커의 좌표와 일치시킬 이미지 안에서의 좌표를 설정합니다
+
+                                    var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption)
+                                    // 결과값으로 받은 위치를 마커로 표시합니다
+                                    var marker = new kakao.maps.Marker({
+                                        map: map,
+                                        position: coords,
+                                        image: markerImage
+                                    });
+
+                                    // 인포윈도우로 장소에 대한 설명을 표시합니다
+                                    var infowindow = new kakao.maps.InfoWindow({
+                                        content: `<div style="width:150px;text-align:center;padding:6px 0;">${address}:${price} 만원</div>`
+                                    });
+                                    infowindow.open(map, marker);
+
+                                    // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                                    // map.setCenter(coords);
+                                }
+                            }
+                        )
+                    }
+                }
+            });
+        }
+        // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+        searchAddrFromCoords(map.getCenter(), displayCenterInfo);
+
+
+        // 주소로 좌표를 검색합니다
+
+
+        function locationLoadSuccess(pos) {
+            // 현재 위치 받아오기
+            var currentPos = new kakao.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+            console.log(currentPos);
+
+            // 지도 이동(기존 위치와 가깝다면 부드럽게 이동)
+            map.panTo(currentPos);
+
+            // 마커 생성
+            var marker = new kakao.maps.Marker({
+                position: currentPos
+            });
+
+            // 기존에 마커가 있다면 제거
+            marker.setMap(null);
+            marker.setMap(map);
+        };
+
+        function locationLoadError(pos) {
+            alert('위치 정보를 가져오는데 실패했습니다.');
+        };
+
+        // 위치 가져오기 버튼 클릭시
+        function getCurrentPosBtn() {
+            navigator.geolocation.getCurrentPosition(locationLoadSuccess, locationLoadError);
+        };
+
+        function searchCity(){
+            let city = $('#inputCity').val();
+        }
+        }
+
+
+        function searchAddrFromCoords(coords, callback) {
+            // 좌표로 행정동 주소 정보를 요청합니다
+            geocoder.coord2RegionCode(coords.getLng(), coords.getLat(), callback);
+        };
+
+
+
+
+</script>
+<input id="inputCity" placeholder="도시를 입력하세요">
+<button onclick="">입력</button>
+</body>
+</html>

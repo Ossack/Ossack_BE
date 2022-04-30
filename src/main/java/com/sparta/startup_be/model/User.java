@@ -27,23 +27,12 @@ public class User {
     @Column(unique = true)
     private String password;
 
-    @Column(nullable = true, unique = true)
-    private Long kakaoId;
-
     public User(String userEmail, String nickname, String profile, String password) {
         this.userEmail = userEmail;
         this.nickname = nickname;
         this.profile = profile;
         this.password = password;
-        this.kakaoId = null;
     }
 
-    public User(String userEmail, String nickname, String profile, String password, Long kakaoId) {
-        this.userEmail = userEmail;
-        this.nickname = nickname;
-        this.profile = profile;
-        this.password = password;
-        this.kakaoId = kakaoId;
-    }
 }
 

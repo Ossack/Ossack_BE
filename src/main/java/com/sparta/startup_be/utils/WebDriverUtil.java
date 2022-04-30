@@ -2,11 +2,13 @@ package com.sparta.startup_be.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Slf4j
@@ -37,18 +39,25 @@ public class WebDriverUtil {
     }
 
     public void useDriver(String url) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
         driver.get(url) ;
-        driver.manage().timeouts().implicitlyWait(500, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
+        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
         try{
-            driver.findElement(By.className("marker_circle")).click();
+            driver.findElement(By.className("btn_option")).click();
         }catch(Exception e){
             e.printStackTrace();
         }
 
+        List<WebElement> webElements = driver.findElements(By.className("item_area"));
+//        for(WebElement webElement : webElements){
+//            System.out.println(webElement);
+//        }
 
-        WebElement searchLabel = driver.findElement(By.id("_listContainer"));
-        log.info("++++++++++++++++++++++===================+++++++++++++ searchLabel : " + searchLabel.getText());
+        for(WebElement webElement : webElements){
+            System.out.println(webElement.findElement(By.className("type")).getText());
+        }
+        log.info("++++++++++++++++++++++===================+++++++++++++ 끝 : " );
 
         quitDriver();
     }

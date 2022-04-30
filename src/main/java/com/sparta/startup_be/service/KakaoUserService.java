@@ -106,9 +106,9 @@ public class KakaoUserService {
 
         String provider = "kakao";
         Long id = jsonNode.get("id").asLong();
-        String email = provider + "_" + jsonNode.get("email").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText();
         String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
+                .get("nickname").asText()  + "_" + provider;
 
         return new KakaoUserInfoDto(id, nickname, email);
     }
@@ -116,17 +116,14 @@ public class KakaoUserService {
     // 3. 카카오ID로 회원가입 처리
     private User registerKakaoUserIfNeed (KakaoUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
-        User kakaoUser = userRepository.findByKakaoId(kakaoId)
+        String kakaoEmail = kakaoUserInfo.getEmail();
+        User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-            // email
-            String email = kakaoUserInfo.getEmail();
-
             // username: kakao nickname
-            String nickname = kakaoUserInfo.getNickname();
+            String nickname = kakaoUserInfo.getNickname() + "_kakao";
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
@@ -134,7 +131,7 @@ public class KakaoUserService {
 
             String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
-            kakaoUser = new User(email, nickname, profile, encodedPassword, kakaoId);
+            kakaoUser = new User(kakaoEmail, nickname, profile, encodedPassword);
             userRepository.save(kakaoUser);
 
         }

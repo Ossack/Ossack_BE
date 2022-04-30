@@ -1,7 +1,7 @@
 package com.sparta.startup_be.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.sparta.startup_be.dto.KakaoUserInfoDto;
+import com.sparta.startup_be.dto.SocialUserInfoDto;
 import com.sparta.startup_be.service.GoogleUserService;
 import com.sparta.startup_be.service.KakaoUserService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +19,7 @@ public class SocialLoginController {
 
     // 카카오 로그인인
    @GetMapping("/user/kakao/callback")
-    public KakaoUserInfoDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+    public SocialUserInfoDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         return kakaoUserService.kakaoLogin(code, response);
     }
 

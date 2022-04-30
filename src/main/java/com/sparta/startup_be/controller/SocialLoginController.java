@@ -2,7 +2,7 @@ package com.sparta.startup_be.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sparta.startup_be.dto.KakaoUserInfoDto;
-import com.sparta.startup_be.service.GoogleUserService;
+//import com.sparta.startup_be.service.GoogleUserService;
 import com.sparta.startup_be.service.KakaoUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class SocialLoginController {
     private final KakaoUserService kakaoUserService;
-    private final GoogleUserService googleUserService;
+//    private final GoogleUserService googleUserService;
 
     // 카카오 로그인인
    @GetMapping("/user/kakao/callback")

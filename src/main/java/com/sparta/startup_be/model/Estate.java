@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -17,9 +18,6 @@ public class Estate {
     private Long id;
 
     @Column
-    private String address;
-
-    @Column
     private String city;
 
     @Column
@@ -29,21 +27,17 @@ public class Estate {
     private String monthly;
 
     @Column
-    private double area;
+    private String area;
 
-    @Column
-    private String contract_year;
+    private String buildingInfo;
 
     @Column
     private String deposit;
     @Column
     private int rent_fee;
     @Column
-    private int floor;
-    @Column
-    private String construct_year;
-    @Column
-    private String roadaddress;
+    private int buildingFloor;
+    private int roomFloor;
 
 
 }

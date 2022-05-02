@@ -54,12 +54,6 @@ public class WebDriverUtil {
             e.printStackTrace();
         }
         WebElement item = driver.findElement(By.className("article_box"));
-//        System.out.println(item.getText());
-//        action.dragAndDropBy(items,960,350).perform();
-//        WebElement item =driver.findElement(By.xpath("//*[@id=\"_listContainer\"]/div/div[3]"));
-//        action.moveByOffset(960,350).perform();
-//        action.moveToElement(items,918,350);
-//        action.click().perform();
         int m = Integer.parseInt(driver.findElement(By.xpath("//*[@id=\"_listContainer\"]/div/div[1]/a/h3/strong")).getText());
         int j=0;
         while(true) {
@@ -69,23 +63,9 @@ public class WebDriverUtil {
             j++;
             if(j==m) break;
         }
-//        System.out.println(item.getText());
-//        var stTime =new Date().getTime();
-//        System.out.println(stTime);
-//        while(new Date().getTime()< stTime+30000) {
-//            Thread.sleep(500);
-//            action.click().perform();
-//            ((JavascriptExecutor) driver).executeScript("argument[0].scrollBy(0,document.body.scrollHeight",item);
-//            ((JavascriptExecutor) driver).executeScript("window.onload=function(){\n" +
-//                    "    let mySpace = document.getElementByClassName(\"article_box\"); \n" +
-//                    "    mySpace.scrollTop = mySpace.scrollHeight;\n" +
-//                    "};");
 
 
         List<WebElement> webElements = driver.findElements(By.className("item_area"));
-//        for(WebElement webElement : webElements){
-//            System.out.println(webElement);
-//        }
 
         int i=0;
         for(WebElement webElement : webElements){

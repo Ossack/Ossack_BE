@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class CrawlingEx {
 
     @GetMapping("/api/ex")
-    public void example(){
+    public void example() throws InterruptedException {
         WebDriverUtil webDriverUtil = new WebDriverUtil();
-        webDriverUtil.useDriver("https://m.land.naver.com/map/37.5613878:126.9251699:15:/OPST/A1:B1:B2:B3#mapFullList");
+        webDriverUtil.useDriver("https://m.land.naver.com/map/37.5612177:126.9597597:14:/SMS/A1:B1:B2:B3#mapFullList");
     }
 }

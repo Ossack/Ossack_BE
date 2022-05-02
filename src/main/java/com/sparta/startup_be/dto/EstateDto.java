@@ -7,4 +7,6 @@ import lombok.Setter;
 @Setter
 public class EstateDto {
     private String monthly;
+    private String title;
+//    private String ci
 }

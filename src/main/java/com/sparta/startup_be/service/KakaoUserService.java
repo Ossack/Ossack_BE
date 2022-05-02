@@ -3,7 +3,7 @@ package com.sparta.startup_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.startup_be.dto.KakaoUserInfoDto;
+import com.sparta.startup_be.dto.SocialUserInfoDto;
 import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
@@ -32,12 +32,12 @@ public class KakaoUserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public SocialUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
         // 2. 토큰으로 카카오 API 호출
-        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+        SocialUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
         // 3. 카카오ID로 회원가입 처리
         User kakaoUser = registerKakaoUserIfNeed(kakaoUserInfo);
@@ -81,7 +81,7 @@ public class KakaoUserService {
     }
 
     // 2. 토큰으로 카카오 API 호출
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -106,27 +106,24 @@ public class KakaoUserService {
 
         String provider = "kakao";
         Long id = jsonNode.get("id").asLong();
-        String email = provider + "_" + jsonNode.get("email").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText();
         String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
+                .get("nickname").asText()  + "_" + provider;
 
-        return new KakaoUserInfoDto(id, nickname, email);
+        return new SocialUserInfoDto(id, nickname, email);
     }
 
     // 3. 카카오ID로 회원가입 처리
-    private User registerKakaoUserIfNeed (KakaoUserInfoDto kakaoUserInfo) {
+    private User registerKakaoUserIfNeed (SocialUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
-        User kakaoUser = userRepository.findByKakaoId(kakaoId)
+        String kakaoEmail = kakaoUserInfo.getEmail();
+        User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-            // email
-            String email = kakaoUserInfo.getEmail();
-
             // username: kakao nickname
-            String nickname = kakaoUserInfo.getNickname();
+            String nickname = kakaoUserInfo.getNickname() + "_kakao";
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
@@ -134,7 +131,7 @@ public class KakaoUserService {
 
             String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
-            kakaoUser = new User(email, nickname, profile, encodedPassword, kakaoId);
+            kakaoUser = new User(kakaoEmail, nickname, profile, encodedPassword);
             userRepository.save(kakaoUser);
 
         }

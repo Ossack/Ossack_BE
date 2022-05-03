@@ -83,17 +83,23 @@ public class WebDriverUtil {
                 String monthly = driver.findElement(By.xpath("//*[@id=\"detailMy--fixed\"]/em")).getText();
                 int rent_fee=0;
                 if(monthly.equals("단기임대")||monthly.equals("월세")) {
-                    rent_fee = Integer.parseInt(a.split("\n")[2].replace(" ","").replace("/",""));
+                    rent_fee = Integer.parseInt(a.split("\n")[2].replace(" ","").replace("/","").replace(",",""));
                 }
                 String deposit = a.split("\n")[0];
+//                if(deposit.contains("억")){
+//                    deposit.split("억")
+//                }
                 String info = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[1]/div/div[2]/div[1]/p")).getText();
-                String area = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[1]/div/span[2]")).getText();
+                String area = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[1]/div/span[2]")).getText().split("\n")[0];
+                System.out.println(area);
                 int buildingFloor = Integer.parseInt(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[3]/div[2]/span[2]"))
                         .getText().split("/")[1].replace("층",""));
                 int roomFloor = Integer.parseInt(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[3]/div[2]/span[2]"))
                         .getText().split("/")[0].replace("B",""));
                 Long id = Long.parseLong(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[11]/div/span[2]")).getText());
-                String city = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[6]/div[2]/em")).getText();
+                String city = driver.findElement(By.className("detail_info_branch")).getText();
+                ////*[@id="content"]/div/div[1]/div[5]/div[2]/em
+                //*[@id="content"]/div/div[1]/div[6]/div[2]/em
                 i++;
                 System.out.println("i="+i);
 //                System.out.println("매물:"+driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[1]/div/div[1]/div[2]/strong")).getText());
@@ -111,11 +117,10 @@ public class WebDriverUtil {
 //                System.out.println("지역:"+driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[6]/div[2]/em")).getText());
 
                 EstateDto estateDto = EstateDto.builder()
-                        .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).deposit(deposit).city(city).rent_fee(rent_fee).type(type).buildingInfo(info)
+                        .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).deposit(deposit).city(city).rent_fee(rent_fee).type(type).buildingInfo(info).monthly(monthly)
                         .build();
                 Estate estate =new Estate(estateDto);
                 estates.add(estate);
-                estateRepository.save(estate);
 
                 driver.close();
                 driver.switchTo().window(driver.getWindowHandles().toArray()[0].toString());

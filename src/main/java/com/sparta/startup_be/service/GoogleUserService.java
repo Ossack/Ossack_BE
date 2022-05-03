@@ -3,7 +3,7 @@ package com.sparta.startup_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.startup_be.dto.GoogleUserInfoDto;
+import com.sparta.startup_be.dto.SocialUserInfoDto;
 import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
@@ -48,7 +48,7 @@ public class GoogleUserService {
         String accessToken = getAccessToken(code);
 
         // 2. 엑세스토큰으로 유저정보 가져오기
-        GoogleUserInfoDto googleUserInfo = getGoogleUserInfo(accessToken);
+        SocialUserInfoDto googleUserInfo = getGoogleUserInfo(accessToken);
 
         // 3. 유저확인 & 회원가입
         User foundUser = getUser(googleUserInfo);
@@ -93,7 +93,7 @@ public class GoogleUserService {
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
-    private GoogleUserInfoDto getGoogleUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialUserInfoDto getGoogleUserInfo(String accessToken) throws JsonProcessingException {
 
         // 헤더에 엑세스토큰 담기, Content-type 지정
         HttpHeaders headers = new HttpHeaders();
@@ -119,12 +119,12 @@ public class GoogleUserService {
         String email = jsonNode.get("email").asText();
         String nickname = jsonNode.get("name").asText() + "_" + provider;
 
-        return new GoogleUserInfoDto(id, nickname, email);
+        return new SocialUserInfoDto(id, nickname, email);
 
     }
 
     // 3. 유저확인 & 회원가입
-    private User getUser(GoogleUserInfoDto googleUserInfo) {
+    private User getUser(SocialUserInfoDto googleUserInfo) {
         // DB 에 중복된 Google Id 가 있는지 확인
         String googleEmail = googleUserInfo.getEmail();
         User googleUser = userRepository.findByUserEmail(googleEmail)

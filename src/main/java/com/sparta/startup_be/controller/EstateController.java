@@ -18,10 +18,10 @@ public class EstateController {
     private final EstateService estateService;
     private final ConvertAddress convertAddress;
 
-    @GetMapping("/api/show")
-    private List<Estate> show(){
-        return estateService.show();
-    }
+//    @GetMapping("/api/show")
+//    private List<Estate> show(){
+//        return estateService.show();
+//    }
 
     @GetMapping("/api/showmore")
     private String average(@RequestParam String query){

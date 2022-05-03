@@ -1,31 +1,14 @@
 package com.sparta.startup_be.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.startup_be.dto.KakaoUserInfoDto;
 import com.sparta.startup_be.dto.ResultDto;
 import com.sparta.startup_be.dto.SignupRequestDto;
 import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.UserRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static com.sparta.startup_be.exception.ExceptionMessage.*;
 

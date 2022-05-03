@@ -3,7 +3,7 @@ package com.sparta.startup_be.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.startup_be.dto.KakaoUserInfoDto;
+import com.sparta.startup_be.dto.SocialUserInfoDto;
 import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
@@ -32,12 +32,12 @@ public class KakaoUserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
-    public KakaoUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public SocialUserInfoDto kakaoLogin(String code, HttpServletResponse response) throws JsonProcessingException {
         // 1. "인가 코드"로 "액세스 토큰" 요청
         String accessToken = getAccessToken(code);
 
         // 2. 토큰으로 카카오 API 호출
-        KakaoUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
+        SocialUserInfoDto kakaoUserInfo = getKakaoUserInfo(accessToken);
 
         // 3. 카카오ID로 회원가입 처리
         User kakaoUser = registerKakaoUserIfNeed(kakaoUserInfo);
@@ -81,7 +81,7 @@ public class KakaoUserService {
     }
 
     // 2. 토큰으로 카카오 API 호출
-    private KakaoUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
+    private SocialUserInfoDto getKakaoUserInfo(String accessToken) throws JsonProcessingException {
         // HTTP Header 생성
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "Bearer " + accessToken);
@@ -110,11 +110,11 @@ public class KakaoUserService {
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
 
-        return new KakaoUserInfoDto(id, nickname, email);
+        return new SocialUserInfoDto(id, nickname, email);
     }
 
     // 3. 카카오ID로 회원가입 처리
-    private User registerKakaoUserIfNeed (KakaoUserInfoDto kakaoUserInfo) {
+    private User registerKakaoUserIfNeed (SocialUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
         Long kakaoId = kakaoUserInfo.getId();
         User kakaoUser = userRepository.findByKakaoId(kakaoId)

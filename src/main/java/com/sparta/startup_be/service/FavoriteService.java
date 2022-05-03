@@ -2,9 +2,10 @@ package com.sparta.startup_be.service;
 
 
 import com.sparta.startup_be.dto.FavoriteResponseDto;
+import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
-import com.sparta.startup_be.model.Post;
 import com.sparta.startup_be.model.User;
+import com.sparta.startup_be.repository.EstateRepository;
 import com.sparta.startup_be.repository.FavoriteRepository;
 import com.sparta.startup_be.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,14 +19,14 @@ public class FavoriteService {
 
     private  final FavoriteRepository favoriteRepository;
     private final UserRepository userRepository;
-    private final PostRepository postRepository;
+    private final EstateRepository estateRepository;
 
-    // 좋아요 기능
+    // 찜하기 기능
     @Transactional
     public FavoriteResponseDto favoriteCheck(Long postId, String userEmail) {
 
-        Post post = postRepository.findById(postId).orElse(null);
-        if(post == null){
+        Estate estate = estateRepository.findById(postId).orElse(null);
+        if(estate == null){
             return  new FavoriteResponseDto(400,"존재하지 않는 게시글 입니다");
         }
 
@@ -37,7 +38,7 @@ public class FavoriteService {
         Favorite favorite = favoriteRepository.findByUser_UserEmailAndPost_PostId(userEmail,postId).orElse(null);
 
         if(favorite == null){
-            Favorite saveFavorite = new Favorite(post,user);
+            Favorite saveFavorite = new Favorite(estate,user);
             favoriteRepository.save(saveFavorite);
             return new FavoriteResponseDto(200,null, true );
         } else {

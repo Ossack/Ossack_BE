@@ -14,6 +14,7 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
 //    Long findByCountByPost(@Param("postId") Long postId);
 //
     Optional<Favorite> findByPost_PostIdAndUser_Nickname(Long postId, String nickname);
+
     void deleteAllByPost_PostId(Long postId);
 
     Optional<Favorite> findByUser_UserEmailAndPost_PostId(String userEmail, Long postId);

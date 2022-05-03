@@ -17,15 +17,15 @@ public class Favorite {
     private Long favoriteId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID")
-    private Post post;
+    @JoinColumn(name = "ESTATE_ID")
+    private Estate estate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    public Favorite(Post post, User user) {
-        this.post = post;
+    public Favorite(Estate estate, User user) {
+        this.estate = estate;
         this.user = user;
     }
 }

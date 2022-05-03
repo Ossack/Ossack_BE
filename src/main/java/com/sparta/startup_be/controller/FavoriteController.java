@@ -17,9 +17,9 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
 
     // 찜하기 기능
-    @PostMapping("/api/Favorite/{postId}")
-    public FavoriteResponseDto favoriteCheck(@PathVariable Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @PostMapping("/api/Favorite/{estateId}")
+    public FavoriteResponseDto favoriteCheck(@PathVariable Long estateId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return favoriteService.favoriteCheck(postId,userDetails.getUsername());
+        return favoriteService.favoriteCheck(estateId,userDetails.getUsername());
     }
 }

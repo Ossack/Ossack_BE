@@ -60,7 +60,7 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "c44c554acf2b4bf8dafc77382e8dbb5a");
-        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -98,7 +98,7 @@ public class KakaoUserService {
         );
 
         // responseBody에 있는 정보를 꺼냄냄
-       String responseBody = response.getBody();
+        String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 //        object.convert json to object in java objectMapper.readValue
@@ -106,9 +106,9 @@ public class KakaoUserService {
 
         String provider = "kakao";
         Long id = jsonNode.get("id").asLong();
-        String email = provider + "_" + jsonNode.get("email").asText();
+        String email = jsonNode.get("kakao_account").get("email").asText();
         String nickname = jsonNode.get("properties")
-                .get("nickname").asText();
+                .get("nickname").asText()  + "_" + provider;
 
         return new SocialUserInfoDto(id, nickname, email);
     }
@@ -116,17 +116,14 @@ public class KakaoUserService {
     // 3. 카카오ID로 회원가입 처리
     private User registerKakaoUserIfNeed (SocialUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 Kakao Id 가 있는지 확인
-        Long kakaoId = kakaoUserInfo.getId();
-        User kakaoUser = userRepository.findByKakaoId(kakaoId)
+        String kakaoEmail = kakaoUserInfo.getEmail();
+        User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-            // email
-            String email = kakaoUserInfo.getEmail();
-
             // username: kakao nickname
-            String nickname = kakaoUserInfo.getNickname();
+            String nickname = kakaoUserInfo.getNickname() + "_kakao";
 
             // password: random UUID
             String password = UUID.randomUUID().toString();
@@ -134,7 +131,7 @@ public class KakaoUserService {
 
             String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
-            kakaoUser = new User(email, nickname, profile, encodedPassword, kakaoId);
+            kakaoUser = new User(kakaoEmail, nickname, profile, encodedPassword);
             userRepository.save(kakaoUser);
 
         }

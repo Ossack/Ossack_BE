@@ -13,10 +13,15 @@ import java.util.List;
 public class EstateService {
     private final EstateRepository estateRepository;
 
-    public List<Estate> show(){
-        return estateRepository.findAllByFloor(4);
-    }
+//    public List<Estate> show(){
+//        return estateRepository.findAllByFloor(4);
+//    }
 
+    public void storeEstate(List<Estate> estates){
+        for(Estate estate :estates){
+            estateRepository.save(estate);
+        }
+    }
     //지역검색하기
     public String average(String query){
         System.out.println(query+"in Service");
@@ -26,10 +31,11 @@ public class EstateService {
         for(Estate estate : estates){
             if(estate.getMonthly().equals("월세")) {
                 System.out.println("nice");
-                sum_fee += estate.getRent_fee()/estate.getArea();
-            }else{
-                sum_deposit += Integer.parseInt(estate.getDeposit().replace(",","")) / estate.getArea();
+//                sum_fee += estate.getRent_fee()/estate.getArea();
             }
+//            else{
+//                sum_deposit += Integer.parseInt(estate.getDeposit().replace(",","")) / estate.getArea();
+//            }
         }
         double avg_fee = sum_fee /estateRepository.countAllByMonthlyAndCity("월세",query)*3.3;
         double avg_deposit = sum_deposit /estateRepository.countAllByMonthlyAndCity("전세",query)*3.3;

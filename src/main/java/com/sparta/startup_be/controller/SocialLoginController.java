@@ -3,7 +3,6 @@ package com.sparta.startup_be.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 
-
 import com.sparta.startup_be.dto.SocialUserInfoDto;
 import com.sparta.startup_be.service.GoogleUserService;
 
@@ -26,8 +25,8 @@ public class SocialLoginController {
     public SocialUserInfoDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         return kakaoUserService.kakaoLogin(code, response);
     }
-//
-//    // 구글 로그인
+
+    // 구글 로그인
 //    @GetMapping("/user/google/callback")
 //    public void googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
 //        googleUserService.googleLogin(code, response);

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class SocialLoginController {
     private final KakaoUserService kakaoUserService;
-//    private final GoogleUserService googleUserService;
+    private final GoogleUserService googleUserService;
 
     // 카카오 로그인인
    @GetMapping("/user/kakao/callback")
@@ -27,10 +27,10 @@ public class SocialLoginController {
     }
 
     // 구글 로그인
-//    @GetMapping("/user/google/callback")
-//    public void googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-//        googleUserService.googleLogin(code, response);
-//    }
+    @GetMapping("/user/google/callback")
+    public void googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        googleUserService.googleLogin(code, response);
+    }
 //
 //    // 네이버 로그인
 //    @GetMapping("/user/naver/callback")

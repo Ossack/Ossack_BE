@@ -60,7 +60,7 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "c44c554acf2b4bf8dafc77382e8dbb5a");
-        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -98,7 +98,7 @@ public class KakaoUserService {
         );
 
         // responseBody에 있는 정보를 꺼냄냄
-       String responseBody = response.getBody();
+        String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 //        object.convert json to object in java objectMapper.readValue

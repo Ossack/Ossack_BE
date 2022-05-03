@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public interface EstateRepository extends JpaRepository<Estate, Long> {
-    List<Estate> findAllByFloor(int floor);
+//    List<Estate> findAllByFloor(int floor);
     List<Estate> findAllByCity(String city);
 //    List<Estate> findAllByMonthly(String monthly);
     int countAllByMonthlyAndCity(String monthly, String city);

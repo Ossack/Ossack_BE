@@ -24,6 +24,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -59,7 +60,7 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "c44c554acf2b4bf8dafc77382e8dbb5a");
+        body.add("client_id", "64a0648a5d36ca7749a5d4211f64da7e");
         body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
         body.add("code", code);
 
@@ -106,7 +107,14 @@ public class KakaoUserService {
 
         String provider = "kakao";
         Long id = jsonNode.get("id").asLong();
-        String email = jsonNode.get("kakao_account").get("email").asText();
+        String email = "";
+        try {
+            email = jsonNode.get("kakao_account").get("email").asText();
+        } catch (NullPointerException e) {
+            // 이메일 선택 동의 거부 할 경우 랜덤 이메일 생성
+            String email_front = UUID.randomUUID().toString();
+            email = email_front + "@kakao.com";
+        }
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText()  + "_" + provider;
 
@@ -115,15 +123,30 @@ public class KakaoUserService {
 
     // 3. 카카오ID로 회원가입 처리
     private User registerKakaoUserIfNeed (SocialUserInfoDto kakaoUserInfo) {
-        // DB 에 중복된 Kakao Id 가 있는지 확인
+        // DB 에 중복된 email이 있는지 확인
         String kakaoEmail = kakaoUserInfo.getEmail();
         User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-            // username: kakao nickname
+
             String nickname = kakaoUserInfo.getNickname() + "_kakao";
+            Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
+
+            // 닉네임 중복 검사
+            if (nickNameCheck.isPresent()) {
+                String tempNickName = nickname;
+                int i = 1;
+                while (true){
+                    nickname = tempNickName + "_" + i;
+                    Optional<User> nickNameCheck2 = userRepository.findByNickname(nickname);
+                    if (!nickNameCheck2.isPresent()) {
+                        break;
+                    }
+                    i++;
+                }
+            }
 
             // password: random UUID
             String password = UUID.randomUUID().toString();

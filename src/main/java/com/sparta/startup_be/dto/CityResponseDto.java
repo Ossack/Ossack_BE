@@ -10,6 +10,12 @@ import java.util.List;
 @Setter
 public class CityResponseDto {
     private String title;
-    private CoordinateDto coordinate;
+    private CoordinateResponseDto coordinate;
     private List<EstateResponseDto> estate;
+
+    public CityResponseDto(String title, CoordinateResponseDto coordinate, List<EstateResponseDto> estate){
+        this.title = title;
+        this.coordinate = coordinate;
+        this.estate = estate;
+    }
 }

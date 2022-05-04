@@ -1,20 +1,25 @@
 package com.sparta.startup_be.service;
 
-import com.sparta.startup_be.dto.EstateResponseDto;
+import com.sparta.startup_be.dto.*;
 import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.repository.CoordinateRepository;
 import com.sparta.startup_be.repository.EstateRepository;
+import com.sparta.startup_be.repository.FavoriteRepository;
+import com.sparta.startup_be.security.UserDetailsImpl;
+import com.sparta.startup_be.utils.ConvertAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
 public class EstateService {
     private final EstateRepository estateRepository;
     private final CoordinateRepository coordinateRepository;
+    private final FavoriteRepository favoriteRepository;
+    private final ConvertAddress convertAddress;
 
 //    public List<Estate> show(){
 //        return estateRepository.findAllByFloor(4);
@@ -55,14 +60,35 @@ public class EstateService {
         return estates;
     }
 
-    public void showEstate(float minX,float maxX, float minY, float maxY,int level){
-        List<Coordinate> coordinates = coordinateRepository.findAllByXGreaterThanAndXLessThanAndYGreaterThanAndYLessThan(minX,maxX,minY,maxY);
+    public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails){
+        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX,maxX,minY,maxY);
+//        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
+        System.out.println(coordinates.size());
+        Set<String> cities = new HashSet<>();
         for(Coordinate coordinate : coordinates){
-            Estate estate = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
-                    ()-> new IllegalArgumentException("")
+            Estate estate2 = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
+                    ()-> new IllegalArgumentException("하이")
             );
-//            EstateResponseDto estateResponseDto = new EstateResponseDto(estate);
+            cities.add(estate2.getCity());
         }
+        Iterator<String> it = cities.iterator();
+        List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
+        while(it.hasNext()){
+            String title = it.next();
+            List<EstateResponseDto> estate = new ArrayList<>();
+            List<Estate> estateList = estateRepository.findAllByCity(title);
+            for(Estate estate1 : estateList){
+                boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate1.getId(),userDetails.getId());
+                EstateResponseDto estateResponseDto = new EstateResponseDto(estate1,mylike);
+                estate.add(estateResponseDto);
+            }
+            String response = convertAddress.convertAddress(title);
+            CoordinateResponseDto coordinateResponseDtoDtoDto = convertAddress.fromJSONtoItems(response);
+            CityResponseDto cityResponseDto = new CityResponseDto(title,coordinateResponseDtoDtoDto,estate);
+            cityResponseDtoList.add(cityResponseDto);
+        }
+        MapResponseDto mapResponseDto = new MapResponseDto(level,cityResponseDtoList);
+        return mapResponseDto;
     }
 
 }

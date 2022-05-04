@@ -6,5 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CoordinateRepository extends JpaRepository<Coordinate, Long> {
-    List<Coordinate> findAllByXGreaterThanAndXLessThanAndYGreaterThanAndYLessThan(Float minX, Float maxX, Float minY, Float maxY );
+    List<Coordinate> findAllByXBetweenAndYBetween(Float minX, Float maxX, Float minY, Float maxY );
+    List<Coordinate> findAllByXBetween(Float minX, Float maxX );
 }

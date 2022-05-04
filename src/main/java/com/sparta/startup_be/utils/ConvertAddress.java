@@ -1,6 +1,7 @@
 package com.sparta.startup_be.utils;
 
 import com.sparta.startup_be.dto.CoordinateDto;
+import com.sparta.startup_be.dto.CoordinateResponseDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.*;
@@ -30,8 +31,16 @@ public class ConvertAddress {
         JSONObject rjson = new JSONObject(result);
         JSONArray items = rjson.getJSONArray("documents");
         JSONObject itemJson = items.getJSONObject(0);
-        CoordinateDto coordinateDto = new CoordinateDto(Double.parseDouble(String.valueOf(itemJson.get("x"))),Double.parseDouble(String.valueOf(itemJson.get("y"))),estateid);
+        CoordinateDto coordinateDto = new CoordinateDto(Float.parseFloat(String.valueOf(itemJson.get("x"))),Float.parseFloat(String.valueOf(itemJson.get("y"))),estateid);
         return coordinateDto;
+    }
+
+    public CoordinateResponseDto fromJSONtoItems(String result) {
+        JSONObject rjson = new JSONObject(result);
+        JSONArray items = rjson.getJSONArray("documents");
+        JSONObject itemJson = items.getJSONObject(0);
+        CoordinateResponseDto coordinateResponseDtoDtoDto = new CoordinateResponseDto(Float.parseFloat(String.valueOf(itemJson.get("x"))),Float.parseFloat(String.valueOf(itemJson.get("y"))));
+        return coordinateResponseDtoDtoDto;
     }
 
 }

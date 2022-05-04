@@ -10,4 +10,9 @@ import java.util.List;
 public class MapResponseDto {
     private int level;
     private List<CityResponseDto> cityResponseDtoList;
+
+    public MapResponseDto(int level, List<CityResponseDto> cityResponseDtoList){
+        this.level = level;
+        this.cityResponseDtoList = cityResponseDtoList;
+    }
 }

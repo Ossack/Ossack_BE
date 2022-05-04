@@ -12,4 +12,6 @@ public interface FavoriteRepository extends JpaRepository<Favorite, Long> {
     Optional<Favorite> findByUseridAndEstateid(Long userid, Long estateid);
     void deleteByUseridAndEstateid(Long userid, Long estateid);
     List<Favorite> findAllByEstateid(Long estateid);
+
+    boolean existsByEstateidAndUserid(Long estateid, Long userid);
 }

@@ -1,6 +1,6 @@
 package com.sparta.startup_be.utils;
 
-import com.sparta.startup_be.dto.EstateDto;
+import com.sparta.startup_be.dto.EstateRequestDto;
 import com.sparta.startup_be.model.Estate;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -119,11 +119,11 @@ public class WebDriverUtil {
                 String city = driver.findElement(By.className("detail_info_branch")).getText();
                 i++;
                 System.out.println("i="+i);
-                EstateDto estateDto = EstateDto.builder()
+                EstateRequestDto estateRequestDto = EstateRequestDto.builder()
                         .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).imageList(imageList)
                         .deposit(deposit).city(city).rent_fee(rent_fee).type(type).buildingInfo(info).monthly(monthly)
                         .build();
-                Estate estate =new Estate(estateDto);
+                Estate estate =new Estate(estateRequestDto);
                 estates.add(estate);
 
                 driver.close();

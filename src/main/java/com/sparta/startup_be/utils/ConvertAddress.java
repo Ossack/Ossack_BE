@@ -1,15 +1,11 @@
 package com.sparta.startup_be.utils;
 
 import com.sparta.startup_be.dto.CoordinateDto;
-import com.sparta.startup_be.dto.EstateDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Component
 public class ConvertAddress {

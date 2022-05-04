@@ -1,7 +1,9 @@
 package com.sparta.startup_be.service;
 
-import com.sparta.startup_be.dto.EstateDto;
+import com.sparta.startup_be.dto.EstateResponseDto;
+import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.model.Estate;
+import com.sparta.startup_be.repository.CoordinateRepository;
 import com.sparta.startup_be.repository.EstateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,7 @@ import java.util.List;
 @Service
 public class EstateService {
     private final EstateRepository estateRepository;
+    private final CoordinateRepository coordinateRepository;
 
 //    public List<Estate> show(){
 //        return estateRepository.findAllByFloor(4);
@@ -51,4 +54,15 @@ public class EstateService {
         }
         return estates;
     }
+
+    public void showEstate(float minX,float maxX, float minY, float maxY,int level){
+        List<Coordinate> coordinates = coordinateRepository.findAllByXGreaterThanAndXLessThanAndYGreaterThanAndYLessThan(minX,maxX,minY,maxY);
+        for(Coordinate coordinate : coordinates){
+            Estate estate = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
+                    ()-> new IllegalArgumentException("")
+            );
+//            EstateResponseDto estateResponseDto = new EstateResponseDto(estate);
+        }
+    }
+
 }

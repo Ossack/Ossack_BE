@@ -6,6 +6,7 @@ import com.sparta.startup_be.service.EstateService;
 import com.sparta.startup_be.utils.ConvertAddress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,6 +33,12 @@ public class EstateController {
     @GetMapping("/api/city/gu")
     private List<Estate> ugAverage(){
         return estateService.guAverage();
+    }
+
+    //지도조회
+    @GetMapping("/api/{level}/map?SWlat={SWlat}&SWlng={SWlng}&NElat={NElat}&NElng={NElng}")
+    private void showEstate(@PathVariable int level, @RequestParam float SWlat,@RequestParam float SWlng,@RequestParam float NElat, @RequestParam float NElng){
+
     }
 
 //    @GetMapping("/api/city/hi")

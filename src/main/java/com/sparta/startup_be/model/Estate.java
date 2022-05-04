@@ -4,9 +4,7 @@ import com.sparta.startup_be.dto.EstateDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,7 +20,6 @@ public class Estate {
 
     @Column
     private String city;
-
 
     @Column
     private String monthly;
@@ -40,6 +37,17 @@ public class Estate {
     private int buildingFloor;
     private int roomFloor;
 
+    @ElementCollection
+    @CollectionTable
+    @JoinColumn
+    private List<String> imageList;
+
+    @ElementCollection
+    @CollectionTable
+    @JoinColumn
+    private List<String> subwaylist;
+
+
     private String roadaddress;
 
     public Estate(EstateDto estateDto){
@@ -53,5 +61,7 @@ public class Estate {
         this.rent_fee = estateDto.getRent_fee();
         this.roomFloor = estateDto.getRoomFloor();
         this.monthly = estateDto.getMonthly();
+        this.imageList = estateDto.getImageList();
+        this.subwaylist = estateDto.getSubwayList();
     }
 }

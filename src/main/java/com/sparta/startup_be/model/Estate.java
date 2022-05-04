@@ -37,13 +37,15 @@ public class Estate {
     private int buildingFloor;
     private int roomFloor;
 
-    @OneToMany
+    @ElementCollection
+    @CollectionTable
     @JoinColumn
-    private List<Image> imageList;
+    private List<String> imageList;
 
     @ElementCollection
     @CollectionTable
-    private List<String> subways;
+    @JoinColumn
+    private List<String> subwaylist;
 
 
     private String roadaddress;
@@ -60,5 +62,6 @@ public class Estate {
         this.roomFloor = estateDto.getRoomFloor();
         this.monthly = estateDto.getMonthly();
         this.imageList = estateDto.getImageList();
+        this.subwaylist = estateDto.getSubwayList();
     }
 }

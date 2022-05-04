@@ -14,6 +14,6 @@ public class CrawlingEx {
     @GetMapping("/api/ex")
     public void example() throws InterruptedException {
         WebDriverUtil webDriverUtil = new WebDriverUtil();
-        estateService.storeEstate(webDriverUtil.useDriver("https://m.land.naver.com/map/37.5589363:126.9228726:19:/SMS/A1:B1:B2:B3"));
+        estateService.storeEstate(webDriverUtil.useDriver("https://m.land.naver.com/map/37.5600494:126.9232803:18:/SMS/A1:B1:B2:B3#mapFullList"));
     }
 }

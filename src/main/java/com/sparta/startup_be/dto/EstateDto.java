@@ -1,9 +1,7 @@
 package com.sparta.startup_be.dto;
 
-import com.sparta.startup_be.model.Image;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -20,6 +18,7 @@ public class EstateDto {
     private int rent_fee;
     private int buildingFloor;
     private int roomFloor;
-    private List<Image> imageList;
+    private List<String> imageList;
+    private List<String> subwayList;
 //    private String ci
 }

@@ -38,3 +38,4 @@ out/
 
 #custom
 application.properties
+aws.yml

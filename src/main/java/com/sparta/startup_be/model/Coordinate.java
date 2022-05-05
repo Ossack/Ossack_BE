@@ -16,11 +16,10 @@ import javax.persistence.Id;
 public class Coordinate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long estateid;;
 
-    private double x;
-    private double y;
+    private float x;
+    private float y;
 
     public Coordinate(CoordinateDto coordinateDto){
         this.x = coordinateDto.getX();

@@ -6,11 +6,11 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CoordinateDto {
-    private double x;
-    private double y;
+    private float x;
+    private float y;
     private Long estateid;
 
-    public CoordinateDto(double x, double y,Long estateid){
+    public CoordinateDto(float x, float y,Long estateid){
         this.x = x;
         this.y = y;
         this.estateid= estateid;

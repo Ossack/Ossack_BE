@@ -1,12 +1,11 @@
 package com.sparta.startup_be.model;
 
-import com.sparta.startup_be.dto.EstateDto;
+import com.sparta.startup_be.dto.EstateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -50,18 +49,18 @@ public class Estate {
 
     private String roadaddress;
 
-    public Estate(EstateDto estateDto){
-        this.id = estateDto.getId();
-        this.type = estateDto.getType();
-        this.city = estateDto.getCity();
-        this.area = estateDto.getArea();
-        this.buildingFloor = estateDto.getBuildingFloor();
-        this.buildingInfo= estateDto.getBuildingInfo();
-        this.deposit = estateDto.getDeposit();
-        this.rent_fee = estateDto.getRent_fee();
-        this.roomFloor = estateDto.getRoomFloor();
-        this.monthly = estateDto.getMonthly();
-        this.imageList = estateDto.getImageList();
-        this.subwaylist = estateDto.getSubwayList();
+    public Estate(EstateRequestDto estateRequestDto){
+        this.id = estateRequestDto.getId();
+        this.type = estateRequestDto.getType();
+        this.city = estateRequestDto.getCity();
+        this.area = estateRequestDto.getArea();
+        this.buildingFloor = estateRequestDto.getBuildingFloor();
+        this.buildingInfo= estateRequestDto.getBuildingInfo();
+        this.deposit = estateRequestDto.getDeposit();
+        this.rent_fee = estateRequestDto.getRent_fee();
+        this.roomFloor = estateRequestDto.getRoomFloor();
+        this.monthly = estateRequestDto.getMonthly();
+        this.imageList = estateRequestDto.getImageList();
+        this.subwaylist = estateRequestDto.getSubwayList();
     }
 }

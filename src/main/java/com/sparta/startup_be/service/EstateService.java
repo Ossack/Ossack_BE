@@ -32,13 +32,11 @@ public class EstateService {
     }
     //지역검색하기
     public String average(String query){
-        System.out.println(query+"in Service");
         List<Estate> estates = estateRepository.findAllByCity(query);
         double sum_fee = 0;
         double sum_deposit = 0;
         for(Estate estate : estates){
             if(estate.getMonthly().equals("월세")) {
-                System.out.println("nice");
 //                sum_fee += estate.getRent_fee()/estate.getArea();
             }
 //            else{
@@ -51,9 +49,8 @@ public class EstateService {
     }
 
     //구별로 모아보기
-    public List<Estate> guAverage(){
-        String query="강서구";
-        List<Estate> estates = estateRepository.findAllByCityLike("%"+query+"%");
+    public List<Estate> guAverage(String query){
+        List<Estate> estates = estateRepository.searchAllByCity(query);
         for(Estate estate : estates){
             System.out.println(estate.getCity());
         }
@@ -63,20 +60,28 @@ public class EstateService {
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails){
         List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX,maxX,minY,maxY);
 //        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
-        System.out.println(coordinates.size());
+//        System.out.println(coordinates.size());
         Set<String> cities = new HashSet<>();
         for(Coordinate coordinate : coordinates){
             Estate estate2 = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
                     ()-> new IllegalArgumentException("하이")
             );
-            cities.add(estate2.getCity());
+            String city = "";
+            if(level ==1){
+                city=estate2.getCity().split(" ")[0];
+            } else if (level == 2) {
+                city = estate2.getCity().split(" ")[0]+" "+estate2.getCity().split(" ")[1];
+            }else{
+                city = estate2.getCity();
+            }
+            cities.add(city);
         }
         Iterator<String> it = cities.iterator();
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         while(it.hasNext()){
             String title = it.next();
             List<EstateResponseDto> estate = new ArrayList<>();
-            List<Estate> estateList = estateRepository.findAllByCity(title);
+            List<Estate> estateList = estateRepository.searchAllByCity(title);
             for(Estate estate1 : estateList){
                 boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate1.getId(),userDetails.getId());
                 EstateResponseDto estateResponseDto = new EstateResponseDto(estate1,mylike);

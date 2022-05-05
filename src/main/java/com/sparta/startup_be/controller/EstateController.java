@@ -34,8 +34,8 @@ public class EstateController {
     }
 
     @GetMapping("/api/city/gu")
-    private List<Estate> ugAverage(){
-        return estateService.guAverage();
+    private List<Estate> ugAverage(@RequestParam String query){
+        return estateService.guAverage(query);
     }
 
     //지도조회

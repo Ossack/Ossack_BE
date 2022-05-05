@@ -28,8 +28,8 @@ public class SocialLoginController {
 
     // 구글 로그인
     @GetMapping("/user/google/callback")
-    public void googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
-        googleUserService.googleLogin(code, response);
+    public SocialUserInfoDto googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        return googleUserService.googleLogin(code, response);
     }
 //
 //    // 네이버 로그인

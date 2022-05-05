@@ -43,7 +43,7 @@ public class GoogleUserService {
     private final UserRepository userRepository;
 
     // 구글 로그인
-    public void googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
+    public SocialUserInfoDto googleLogin(String code, HttpServletResponse response) throws JsonProcessingException {
 
         // 1. 인가코드로 엑세스토큰 가져오기
         String accessToken = getAccessToken(code);
@@ -59,6 +59,7 @@ public class GoogleUserService {
 
         // 5. jwt 토큰 발급
         jwtToken(authentication, response);
+        return googleUserInfo;
     }
 
     // 1. 인가코드로 엑세스토큰 가져오기
@@ -89,8 +90,7 @@ public class GoogleUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode responseToken = objectMapper.readTree(responseBody);
-        String accessToken = responseToken.get("access_token").asText();
-        return accessToken;
+        return responseToken.get("access_token").asText();
     }
 
     // 2. 엑세스토큰으로 유저정보 가져오기
@@ -116,7 +116,7 @@ public class GoogleUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         String provider = "google";
-        Long id = jsonNode.get("id").asLong();
+        Long id = jsonNode.get("sub").asLong();
         String email = jsonNode.get("email").asText();
         String nickname = jsonNode.get("name").asText() + "_" + provider;
 
@@ -126,13 +126,13 @@ public class GoogleUserService {
 
     // 3. 유저확인 & 회원가입
     private User getUser(SocialUserInfoDto googleUserInfo) {
-        // DB 에 중복된 Google Id 가 있는지 확인
+        // DB 에 중복된 Google email, nickname이 있는지 확인
         String googleEmail = googleUserInfo.getEmail();
-        User googleUser = userRepository.findByUserEmail(googleEmail)
+        String nickname = googleUserInfo.getNickname();
+        User googleUser = userRepository.findByUserEmailAndNickname(googleEmail, nickname)
                 .orElse(null);
 
         if (googleUser == null) {
-            String nickname = googleUserInfo.getNickname() + "_google";
             Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
 
             // 닉네임 중복 검사
@@ -155,6 +155,7 @@ public class GoogleUserService {
             String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
             googleUser = new User(googleEmail, nickname, profile, encodedPassword);
+            userRepository.save(googleUser);
         }
 
         return googleUser;

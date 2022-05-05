@@ -20,7 +20,7 @@ public class SocialLoginController {
     private final KakaoUserService kakaoUserService;
     private final GoogleUserService googleUserService;
 
-    // 카카오 로그인인
+    // 카카오 로그인
    @GetMapping("/user/kakao/callback")
     public SocialUserInfoDto kakaoLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         return kakaoUserService.kakaoLogin(code, response);

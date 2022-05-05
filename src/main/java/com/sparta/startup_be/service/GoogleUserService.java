@@ -25,6 +25,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -69,8 +70,8 @@ public class GoogleUserService {
 
         // 바디에 필요한 정보 담기
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id" , "352564969502-akjpp0ifploecdsbj59be80d2kodgpqr.apps.googleusercontent.com");
-        body.add("client_secret", "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");
+        body.add("client_id" , "922925499099-ae2nodkaoccn3rcd933u331j6bjnupum.apps.googleusercontent.com");
+        body.add("client_secret", "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");
         body.add("code", code);
         body.add("redirect_uri", "http://localhost:3000/user/google/callback");
         body.add("grant_type", "authorization_code");
@@ -132,6 +133,21 @@ public class GoogleUserService {
 
         if (googleUser == null) {
             String nickname = googleUserInfo.getNickname() + "_google";
+            Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
+
+            // 닉네임 중복 검사
+            if (nickNameCheck.isPresent()) {
+                String tempNickName = nickname;
+                int i = 1;
+                while (true){
+                    nickname = tempNickName + "_" + i;
+                    Optional<User> nickNameCheck2 = userRepository.findByNickname(nickname);
+                    if (!nickNameCheck2.isPresent()) {
+                        break;
+                    }
+                    i++;
+                }
+            }
 
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);

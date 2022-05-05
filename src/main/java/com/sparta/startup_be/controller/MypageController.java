@@ -1,6 +1,7 @@
 package com.sparta.startup_be.controller;
 
 import com.sparta.startup_be.dto.ProfileResponseDto;
+import com.sparta.startup_be.dto.UserResponseDto;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.MypageService;
 import lombok.RequiredArgsConstructor;
@@ -16,15 +17,8 @@ public class MypageController {
 
     // 프로필 수정
     @PutMapping("/api/user/profile")
-    public ProfileResponseDto updateImg (@RequestParam("profileImg") MultipartFile multipartFile,
-//                                                         @RequestParam("nickname") String nickname,
-                                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ProfileResponseDto profileResponseDto = mypageService.updateProfile(multipartFile, userDetails);
-        return profileResponseDto;
+    public UserResponseDto updateImg (@RequestParam("profileImg") MultipartFile multipartFile,
+                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.updateProfile(multipartFile, userDetails);
     }
-//
-//    // 프로필 조회
-//    @GetMapping("/api/user/profile")
-
-
 }

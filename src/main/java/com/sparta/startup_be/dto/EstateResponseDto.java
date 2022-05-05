@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 public class EstateResponseDto {
     private Long estateid;
+    private String title;
     private String type;
     private String monthly;
     private String deposit;
@@ -24,6 +25,7 @@ public class EstateResponseDto {
 
     public EstateResponseDto(Estate estate,boolean mylike){
         this.estateid= estate.getId();
+        this.title = estate.getCity();
         this.type = estate.getType();
         this.monthly = estate.getMonthly();
         this.deposit = estate.getDeposit();

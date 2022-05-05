@@ -1,7 +1,13 @@
 package com.sparta.startup_be.controller;
 
 import com.sparta.startup_be.dto.CoordinateDto;
+
+
+import com.sparta.startup_be.dto.EstateResponseDto;
+import com.sparta.startup_be.dto.FavoriteListDto;
+
 import com.sparta.startup_be.dto.MapResponseDto;
+
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.EstateService;
@@ -50,4 +56,11 @@ public class EstateController {
 //        String resultString = convertAddress.convertAddress();
 //        return convertAddress.fromJSONtoItems(resultString);
 //    }
+
+    @GetMapping("/api/list/favorite")
+    public List<EstateResponseDto> showFavorite(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+            ){
+        return estateService.showFavorite(userDetails);
+    }
 }

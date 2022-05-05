@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class EstateDto {
+public class EstateRequestDto {
     private Long id;
     private String city;
     private String type;

@@ -15,6 +15,7 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
 //    List<Estate> findAllByMonthly(String monthly);
     int countAllByMonthlyAndCity(String monthly, String city);
 //     searchAllByCity(String city);
-    List<Estate> findAllByCityLike(String city);
+    @Query("select u from Estate u where u.city like %:keyword%")
+    List<Estate> searchAllByCity(@Param("keyword")String city);
 //    @Query(find)
 }

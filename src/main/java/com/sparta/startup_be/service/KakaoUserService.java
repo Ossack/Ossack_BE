@@ -152,7 +152,7 @@ public class KakaoUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
             kakaoUser = new User(kakaoEmail, nickname, profile, encodedPassword);
             userRepository.save(kakaoUser);

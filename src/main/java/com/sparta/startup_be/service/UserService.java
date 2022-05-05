@@ -39,7 +39,7 @@ public class UserService {
             return new ResultDto(message);
         }
 
-        String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+        String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
         // 패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());

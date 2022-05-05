@@ -23,7 +23,6 @@ public class Estate {
 
     @Column
     private String monthly;
-
     @Column
     private String area;
 

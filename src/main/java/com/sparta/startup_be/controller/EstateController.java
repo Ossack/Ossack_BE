@@ -1,11 +1,16 @@
 package com.sparta.startup_be.controller;
 
 import com.sparta.startup_be.dto.CoordinateDto;
+import com.sparta.startup_be.dto.EstateDto;
+import com.sparta.startup_be.dto.FavoriteListDto;
 import com.sparta.startup_be.model.Estate;
+import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.EstateService;
 import com.sparta.startup_be.utils.ConvertAddress;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -39,4 +44,11 @@ public class EstateController {
 //        String resultString = convertAddress.convertAddress();
 //        return convertAddress.fromJSONtoItems(resultString);
 //    }
+
+    @GetMapping("/api/list/favorite")
+    public List<FavoriteListDto> showFavorite(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+            ){
+        return estateService.showFavorite(userDetails);
+    }
 }

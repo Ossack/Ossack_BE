@@ -1,5 +1,6 @@
 package com.sparta.startup_be.dto;
 
+import com.sparta.startup_be.model.Estate;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -8,6 +9,7 @@ import java.util.List;
 @Getter
 @Builder
 public class EstateDto {
+
     private Long id;
     private String city;
     private String type;
@@ -21,4 +23,5 @@ public class EstateDto {
     private List<String> imageList;
     private List<String> subwayList;
 //    private String ci
+
 }

@@ -1,17 +1,26 @@
 package com.sparta.startup_be.service;
 
 import com.sparta.startup_be.dto.EstateDto;
+import com.sparta.startup_be.dto.FavoriteListDto;
 import com.sparta.startup_be.model.Estate;
+import com.sparta.startup_be.model.Favorite;
+import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.EstateRepository;
+import com.sparta.startup_be.repository.FavoriteRepository;
+import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RequiredArgsConstructor
 @Service
 public class EstateService {
     private final EstateRepository estateRepository;
+    private final UserRepository userRepository;
+    private final FavoriteRepository favoriteRepository;
 
 //    public List<Estate> show(){
 //        return estateRepository.findAllByFloor(4);
@@ -50,5 +59,24 @@ public class EstateService {
             System.out.println(estate.getCity());
         }
         return estates;
+    }
+
+    // 찜한것 보기
+    public List<FavoriteListDto> showFavorite(UserDetailsImpl userDetails){
+
+        // 찜한 매물 목록
+        List<Favorite> favoriteList = favoriteRepository.findByUserid(userDetails.getId());
+        System.out.println(favoriteList);
+
+        List<FavoriteListDto> favoriteListDtos = new ArrayList<>();
+        for(int i=0; i<favoriteList.size(); i++) {
+            favoriteList.get(i).getEstateid();
+            System.out.println(favoriteList.get(i).getEstateid());
+            Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
+                    () -> new NullPointerException("dfdfdf"));
+            FavoriteListDto favoriteListDto = new FavoriteListDto(estate,true);
+            favoriteListDtos.add(favoriteListDto);
+        }
+        return favoriteListDtos;
     }
 }

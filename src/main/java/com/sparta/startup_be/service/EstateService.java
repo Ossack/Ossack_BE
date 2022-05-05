@@ -48,7 +48,29 @@ public class EstateService {
         return "월세 평균은"+avg_fee+"이고, 전세보증금 평균은"+avg_deposit+"입니다.";
     }
 
-    //구별로 모아보기
+    //메인페이지 해당 동 조회
+    public List<EstateResponseDto> searchTown(String query,UserDetailsImpl userDetails){
+        List<Estate> estates = estateRepository.searchAllByCity(query);
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        for(Estate estate : estates){
+            boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(),userDetails.getId());
+            EstateResponseDto estateResponseDto =new EstateResponseDto(estate,mylike);
+            estateResponseDtoList.add(estateResponseDto);
+        }
+        return estateResponseDtoList;
+    }
+
+    //핫한 매물 보기기
+    public List<Map<String,Object>> searchHot(UserDetailsImpl userDetails){
+        List<Map<String,Object>> asd = favoriteRepository.countUseridQuery();
+//        for(Map<String,Object> asdd : asd){
+//            boolean mylike = favoriteRepository.existsByEstateidAndUserid(Long.valueOf(String.valueOf(asdd.get("id"))),userDetails.getId());
+//            asdd.put("mylike",mylike);
+//        }
+        return asd;
+    }
+
+   //구별로 모아보기
     public List<Estate> guAverage(String query){
         List<Estate> estates = estateRepository.searchAllByCity(query);
         for(Estate estate : estates){

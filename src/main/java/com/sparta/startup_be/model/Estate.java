@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(indexes= @Index( columnList ="city,monthly"))
 public class Estate {
 
     @Id

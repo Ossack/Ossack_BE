@@ -1,6 +1,7 @@
 package com.sparta.startup_be.controller;
 
 import com.sparta.startup_be.dto.CoordinateDto;
+import com.sparta.startup_be.dto.EstateResponseDto;
 import com.sparta.startup_be.dto.MapResponseDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.security.UserDetailsImpl;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -38,11 +40,23 @@ public class EstateController {
         return estateService.guAverage(query);
     }
 
-    //지도조회
+    //메인 페이지 해당 동 조회
+    @GetMapping("/api/list")
+    private List<EstateResponseDto> searchTown(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.searchTown(query,userDetails);
+    }
+
+    //level별 지도 조회
     @GetMapping("/api/{level}/map")
     private MapResponseDto showEstate(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
                                       @PathVariable int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails);
+    }
+
+    // 지금 핫한 오피스
+    @GetMapping("/api/list/hot")
+    private List<Map<String,Object>> showHot(@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.searchHot(userDetails);
     }
 
 //    @GetMapping("/api/city/hi")

@@ -152,7 +152,7 @@ public class GoogleUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
             googleUser = new User(googleEmail, nickname, profile, encodedPassword);
         }

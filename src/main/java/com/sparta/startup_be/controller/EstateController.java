@@ -3,6 +3,7 @@ package com.sparta.startup_be.controller;
 import com.sparta.startup_be.dto.CoordinateDto;
 
 
+import com.sparta.startup_be.dto.EstateResponseDto;
 import com.sparta.startup_be.dto.FavoriteListDto;
 
 import com.sparta.startup_be.dto.MapResponseDto;
@@ -57,7 +58,7 @@ public class EstateController {
 //    }
 
     @GetMapping("/api/list/favorite")
-    public List<FavoriteListDto> showFavorite(
+    public List<EstateResponseDto> showFavorite(
             @AuthenticationPrincipal UserDetailsImpl userDetails
             ){
         return estateService.showFavorite(userDetails);

@@ -78,22 +78,21 @@ public class EstateService {
 
 
     // 찜한것 보기
-    public List<FavoriteListDto> showFavorite(UserDetailsImpl userDetails){
+    public List<EstateResponseDto> showFavorite(UserDetailsImpl userDetails){
 
         // 찜한 매물 목록
         List<Favorite> favoriteList = favoriteRepository.findByUserid(userDetails.getId());
-        System.out.println(favoriteList);
 
-        List<FavoriteListDto> favoriteListDtos = new ArrayList<>();
+        List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
         for(int i=0; i<favoriteList.size(); i++) {
             favoriteList.get(i).getEstateid();
             System.out.println(favoriteList.get(i).getEstateid());
             Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
-                    () -> new NullPointerException("dfdfdf"));
-            FavoriteListDto favoriteListDto = new FavoriteListDto(estate,true);
-            favoriteListDtos.add(favoriteListDto);
+                    () -> new NullPointerException("게시글이 없습니다"));
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate,true);
+            estateResponseDtos.add(estateResponseDto);
         }
-        return favoriteListDtos;
+        return estateResponseDtos;
     }
 
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails){

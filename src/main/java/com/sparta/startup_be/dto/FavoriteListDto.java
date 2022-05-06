@@ -10,8 +10,8 @@ import java.util.List;
 public class FavoriteListDto {
     private Long id;
     private String title;
-    private int buildingFloor;
-    private int roomFloor;
+    private String buildingFloor;
+    private String roomFloor;
     private String type;
     private String monthly;
     private String deposit;

@@ -22,8 +22,8 @@ public class EstateRequestDto {
     private String buildingInfo;
     private String deposit;
     private int rent_fee;
-    private int buildingFloor;
-    private int roomFloor;
+    private String buildingFloor;
+    private String roomFloor;
     private List<String> imageList;
     private List<String> subwayList;
 //    private String ci

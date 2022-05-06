@@ -81,21 +81,19 @@ public class EstateService {
 
     //핫한 매물 보기기
     public List<Map<String,Object>> searchHot(UserDetailsImpl userDetails){
-        List<Map<String,Object>> asd = favoriteRepository.countUseridQuery();
-//        for(Map<String,Object> asdd : asd){
+        //        for(Map<String,Object> asdd : asd){
 //            boolean mylike = favoriteRepository.existsByEstateidAndUserid(Long.valueOf(String.valueOf(asdd.get("id"))),userDetails.getId());
 //            asdd.put("mylike",mylike);
 //        }
-        return asd;
+        return favoriteRepository.countUseridQuery();
     }
 
    //구별로 모아보기
     public List<Estate> guAverage(String query){
-        List<Estate> estates = estateRepository.searchAllByCity(query);
-        for(Estate estate : estates){
-            System.out.println(estate.getCity());
-        }
-        return estates;
+        //        for(Estate estate : estates){
+//            System.out.println(estate.getCity());
+//        }
+        return estateRepository.searchAllByCity(query);
     }
 
 
@@ -108,7 +106,7 @@ public class EstateService {
         List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
         for(int i=0; i<favoriteList.size(); i++) {
             favoriteList.get(i).getEstateid();
-            System.out.println(favoriteList.get(i).getEstateid());
+//            System.out.println(favoriteList.get(i).getEstateid());
             Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
                     () -> new NullPointerException("게시글이 없습니다"));
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate,true);
@@ -152,7 +150,6 @@ public class EstateService {
             CityResponseDto cityResponseDto = new CityResponseDto(title,coordinateResponseDtoDtoDto,estate);
             cityResponseDtoList.add(cityResponseDto);
         }
-        MapResponseDto mapResponseDto = new MapResponseDto(level,cityResponseDtoList);
-        return mapResponseDto;
+        return new MapResponseDto(level,cityResponseDtoList);
     }
 }

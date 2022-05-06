@@ -15,8 +15,8 @@ public class EstateResponseDto {
     private String monthly;
     private String deposit;
     private int rent_fee;
-    private int buildingFloor;
-    private int roomFloor;
+    private String buildingFloor;
+    private String roomFloor;
     private String buildingInfo;
     private String area;
     private List<String> subways;

@@ -33,8 +33,8 @@ public class Estate {
     @Column
     private int rent_fee;
     @Column
-    private int buildingFloor;
-    private int roomFloor;
+    private String buildingFloor;
+    private String roomFloor;
 
     @ElementCollection
     @CollectionTable

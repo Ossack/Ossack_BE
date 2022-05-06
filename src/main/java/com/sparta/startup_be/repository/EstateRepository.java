@@ -18,4 +18,5 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     @Query("select u from Estate u where u.city like %:keyword%")
     List<Estate> searchAllByCity(@Param("keyword")String city);
 //    @Query(find)
+
 }

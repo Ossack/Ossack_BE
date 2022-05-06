@@ -1,7 +1,6 @@
 package com.sparta.startup_be.service;
 
 
-
 import com.sparta.startup_be.dto.FavoriteListDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
@@ -44,93 +43,139 @@ public class EstateService {
 //        return estateRepository.findAllByFloor(4);
 //    }
 
-    public void storeEstate(List<Estate> estates){
-        for(Estate estate :estates){
+    public void storeEstate(List<Estate> estates) {
+        for (Estate estate : estates) {
             estateRepository.save(estate);
         }
     }
+
     //지역검색하기
-    public String average(String query){
+    public String average(String query) {
         List<Estate> estates = estateRepository.findAllByCity(query);
         double sum_fee = 0;
         double sum_deposit = 0;
-        for(Estate estate : estates){
-            if(estate.getMonthly().equals("월세")) {
+        for (Estate estate : estates) {
+            if (estate.getMonthly().equals("월세")) {
 //                sum_fee += estate.getRent_fee()/estate.getArea();
             }
 //            else{
 //                sum_deposit += Integer.parseInt(estate.getDeposit().replace(",","")) / estate.getArea();
 //            }
         }
-        double avg_fee = sum_fee /estateRepository.countAllByMonthlyAndCity("월세",query)*3.3;
-        double avg_deposit = sum_deposit /estateRepository.countAllByMonthlyAndCity("전세",query)*3.3;
-        return "월세 평균은"+avg_fee+"이고, 전세보증금 평균은"+avg_deposit+"입니다.";
+        double avg_fee = sum_fee / estateRepository.countAllByMonthlyAndCity("월세", query) * 3.3;
+        double avg_deposit = sum_deposit / estateRepository.countAllByMonthlyAndCity("전세", query) * 3.3;
+        return "월세 평균은" + avg_fee + "이고, 전세보증금 평균은" + avg_deposit + "입니다.";
+    }
+
+    //메인페이지 해당 동 조회
+    public List<EstateResponseDto> searchTown(String query, UserDetailsImpl userDetails) {
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        System.out.println(query);
+        String a = "";
+        if (query.equals("맛집")) {
+            a = "서울특별시 서초구 양재동";
+        } else if (query.equals("역")) {
+            a = "서울특별시 서초구 서초동";
+        }
+        System.out.println("잘들오네요");
+        List<Estate> estates = estateRepository.searchAllByCity(a);
+        int i = 0;
+        for (Estate estate : estates) {
+            boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, mylike);
+            estateResponseDtoList.add(estateResponseDto);
+            i++;
+            if (i == 4) break;
+        }
+
+        return estateResponseDtoList;
+    }
+
+    //핫한 매물 보기기
+    public List<Map<String, Object>> searchHot(UserDetailsImpl userDetails) {
+        //        for(Map<String,Object> asdd : asd){
+//            boolean mylike = favoriteRepository.existsByEstateidAndUserid(Long.valueOf(String.valueOf(asdd.get("id"))),userDetails.getId());
+//            asdd.put("mylike",mylike);
+//        }
+        return favoriteRepository.countUseridQuery();
     }
 
     //구별로 모아보기
-    public List<Estate> guAverage(String query){
-        List<Estate> estates = estateRepository.searchAllByCity(query);
-        for(Estate estate : estates){
-            System.out.println(estate.getCity());
-        }
-        return estates;
+    public List<Estate> guAverage(String query) {
+        //        for(Estate estate : estates){
+//            System.out.println(estate.getCity());
+//        }
+        return estateRepository.searchAllByCity(query);
     }
 
 
     // 찜한것 보기
-    public List<EstateResponseDto> showFavorite(UserDetailsImpl userDetails){
+    public List<EstateResponseDto> showFavorite(UserDetailsImpl userDetails) {
 
         // 찜한 매물 목록
         List<Favorite> favoriteList = favoriteRepository.findByUserid(userDetails.getId());
 
         List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
-        for(int i=0; i<favoriteList.size(); i++) {
+        for (int i = 0; i < favoriteList.size(); i++) {
             favoriteList.get(i).getEstateid();
-            System.out.println(favoriteList.get(i).getEstateid());
+//            System.out.println(favoriteList.get(i).getEstateid());
             Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
                     () -> new NullPointerException("게시글이 없습니다"));
-            EstateResponseDto estateResponseDto = new EstateResponseDto(estate,true);
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, true);
             estateResponseDtos.add(estateResponseDto);
         }
         return estateResponseDtos;
     }
 
-    public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails){
-        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX,maxX,minY,maxY);
+    public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
+        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX, maxX, minY, maxY);
 //        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
 //        System.out.println(coordinates.size());
         Set<String> cities = new HashSet<>();
-        for(Coordinate coordinate : coordinates){
+        for (Coordinate coordinate : coordinates) {
             Estate estate2 = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
-                    ()-> new IllegalArgumentException("하이")
+                    () -> new IllegalArgumentException("하이")
             );
             String city = "";
-            if(level ==1){
-                city=estate2.getCity().split(" ")[0];
-            } else if (level == 2) {
-                city = estate2.getCity().split(" ")[0]+" "+estate2.getCity().split(" ")[1];
-            }else{
+            if (level < 7) {
                 city = estate2.getCity();
+            } else if (level == 7 || level == 8) {
+                city = estate2.getCity().split(" ")[0] + " " + estate2.getCity().split(" ")[1];
+            } else {
+                city = estate2.getCity().split(" ")[0];
             }
             cities.add(city);
         }
         Iterator<String> it = cities.iterator();
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
-        while(it.hasNext()){
+        while (it.hasNext()) {
             String title = it.next();
             List<EstateResponseDto> estate = new ArrayList<>();
             List<Estate> estateList = estateRepository.searchAllByCity(title);
-            for(Estate estate1 : estateList){
-                boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate1.getId(),userDetails.getId());
-                EstateResponseDto estateResponseDto = new EstateResponseDto(estate1,mylike);
+            for (Estate estate1 : estateList) {
+                boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate1.getId(), userDetails.getId());
+                EstateResponseDto estateResponseDto = new EstateResponseDto(estate1, mylike);
                 estate.add(estateResponseDto);
             }
             String response = convertAddress.convertAddress(title);
             CoordinateResponseDto coordinateResponseDtoDtoDto = convertAddress.fromJSONtoItems(response);
-            CityResponseDto cityResponseDto = new CityResponseDto(title,coordinateResponseDtoDtoDto,estate);
+            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate);
             cityResponseDtoList.add(cityResponseDto);
         }
-        MapResponseDto mapResponseDto = new MapResponseDto(level,cityResponseDtoList);
-        return mapResponseDto;
+        return new MapResponseDto(level, cityResponseDtoList);
+    }
+
+    //지도 검색 조회
+    public CityResponseDto showSearchonMap(int level, String query, UserDetailsImpl userDetails) {
+        List<Estate> estateList = estateRepository.searchAllByCity("query");
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        for (Estate estate : estateList) {
+            boolean myLike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, myLike);
+            estateResponseDtoList.add(estateResponseDto);
+        }
+        String response = convertAddress.convertAddress(query);
+        CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
+        return new CityResponseDto(query, coordinateResponseDto, estateResponseDtoList);
     }
 }

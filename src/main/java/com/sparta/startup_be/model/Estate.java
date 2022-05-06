@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@Table(indexes= @Index( columnList ="city"))
 public class Estate {
 
     @Id
@@ -22,7 +23,6 @@ public class Estate {
 
     @Column
     private String monthly;
-
     @Column
     private String area;
 
@@ -31,7 +31,7 @@ public class Estate {
     @Column
     private String deposit;
     @Column
-    private int rent_fee;
+    private String rent_fee;
     @Column
     private String buildingFloor;
     private String roomFloor;

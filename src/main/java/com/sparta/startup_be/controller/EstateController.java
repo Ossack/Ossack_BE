@@ -1,5 +1,6 @@
 package com.sparta.startup_be.controller;
 
+import com.sparta.startup_be.dto.CityResponseDto;
 import com.sparta.startup_be.dto.EstateResponseDto;
 import com.sparta.startup_be.dto.MapResponseDto;
 import com.sparta.startup_be.model.Estate;
@@ -27,16 +28,16 @@ public class EstateController {
 //        return estateService.show();
 //    }
 
-    @GetMapping("/api/showmore")
-    private String average(@RequestParam String query){
-        System.out.println(query);
-        return estateService.average(query);
-    }
+//    @GetMapping("/api/showmore")
+//    private String average(@RequestParam String query){
+//        System.out.println(query);
+//        return estateService.average(query);
+//    }
 
-    @GetMapping("/api/city/gu")
-    private List<Estate> ugAverage(@RequestParam String query){
-        return estateService.guAverage(query);
-    }
+//    @GetMapping("/api/city/gu")
+//    private List<Estate> ugAverage(@RequestParam String query){
+//        return estateService.guAverage(query);
+//    }
 
     //메인 페이지 해당 동 조회
     @GetMapping("/api/list")
@@ -55,6 +56,13 @@ public class EstateController {
     @GetMapping("/api/list/hot")
     private List<Map<String,Object>> showHot(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.searchHot(userDetails);
+    }
+
+    //검색 복록 지도 조회
+    @GetMapping("/api/{level}/map/search")
+    private CityResponseDto showSearchonMap(@PathVariable int level, @RequestParam String query,
+                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.showSearchonMap(level,query,userDetails);
     }
 
 //    @GetMapping("/api/city/hi")

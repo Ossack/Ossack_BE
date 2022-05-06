@@ -152,4 +152,18 @@ public class EstateService {
         }
         return new MapResponseDto(level,cityResponseDtoList);
     }
+
+    //지도 검색 조회
+    public CityResponseDto showSearchonMap(int level, String query,UserDetailsImpl userDetails){
+        List<Estate> estateList = estateRepository.searchAllByCity("query");
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        for(Estate estate : estateList){
+            boolean myLike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate,myLike);
+            estateResponseDtoList.add(estateResponseDto);
+        }
+        String response = convertAddress.convertAddress(query);
+        CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
+        return new CityResponseDto(query,coordinateResponseDto,estateResponseDtoList);
+    }
 }

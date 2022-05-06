@@ -172,10 +172,10 @@ public class WebDriverUtil {
 //        System.out.println(webElements.size());
         int i = 0;
         for (WebElement webElement : webElements) {
+            String monthly =webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
             Thread.sleep(1000);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 30)", item);
-            String monthly =webElement.findElement(By.className("type")).getText();
             webElement.sendKeys(Keys.ENTER);
+
 
             String a = driver.findElement(By.className("detail_price")).getText();
             String deposit = a.split("/")[0].replace("보증금","");
@@ -226,9 +226,14 @@ public class WebDriverUtil {
             String type = product[0];
 //            String floor = product.split("\n")[3];
 
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 1000)", scroll);
+            String city="";
+            do {
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                city = driver.findElement(By.id("location")).getText();
+            } while (!city.contains("시"));
+            System.out.println(city);
+            city =city.split("\n")[1];
 
-            String city = driver.findElement(By.id("location")).getText();
             i++;
             System.out.println("i=" + i);
 //            System.out.println("id="+id);
@@ -241,7 +246,7 @@ public class WebDriverUtil {
 //            System.out.println("id="+id);
 //            System.out.println("floor="+floor);
 //            System.out.println("imageList="+imageList);
-//            System.out.println("city="+city);
+            System.out.println("city="+city);
 //            System.out.println("type="+type);
             EstateRequestDto estateDto = EstateRequestDto.builder()
                     .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).imageList(imageList)
@@ -253,6 +258,7 @@ public class WebDriverUtil {
 
             driver.findElement(By.className("btn_prev")).click();
 //                System.out.println(driver.findElement(By.cssSelector("iframe")).getAttribute("id"));
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 150)", item);
 
 
         }

@@ -1,6 +1,5 @@
 package com.sparta.startup_be.service;
 
-import com.sparta.startup_be.dto.ProfileResponseDto;
 import com.sparta.startup_be.dto.UserResponseDto;
 import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.UserRepository;

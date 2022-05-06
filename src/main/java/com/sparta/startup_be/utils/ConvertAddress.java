@@ -11,12 +11,13 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class ConvertAddress {
 
-    public String convertAddress(String query ){
+    public String convertAddress(String query){
         RestTemplate rest = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization", "KakaoAK 0b1c519e27d6cea4e2da28be7bc7d1c1");
         String body = "";
 
+        System.out.println(query);
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> responseEntity = rest.exchange("https://dapi.kakao.com/v2/local/search/address.json?query="+query, HttpMethod.GET, requestEntity, String.class);
         HttpStatus httpStatus = responseEntity.getStatusCode();

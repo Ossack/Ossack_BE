@@ -44,7 +44,7 @@ public class UserController {
     // 회원 로그인 여부 확인
     @GetMapping("/api/islogin")
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return new UserResponseDto(userDetails.getUser());
+        return new UserResponseDto(userDetails,"https://ossack.s3.ap-northeast-2.amazonaws.com/"+userDetails.getUser().getProfile());
     }
 
     // 회원 중복 확인
@@ -53,6 +53,7 @@ public class UserController {
         if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
             return new ResultDto("이미 존재하는 아이디 입니다.");
         }
+
         return new ResultDto("사용할 수 있는 아이디 입니다.");
     }
 } 

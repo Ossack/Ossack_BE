@@ -67,13 +67,33 @@ public class EstateService {
         return "월세 평균은"+avg_fee+"이고, 전세보증금 평균은"+avg_deposit+"입니다.";
     }
 
-    //구별로 모아보기
-    public List<Estate> guAverage(String query){
+    //메인페이지 해당 동 조회
+    public List<EstateResponseDto> searchTown(String query,UserDetailsImpl userDetails){
         List<Estate> estates = estateRepository.searchAllByCity(query);
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         for(Estate estate : estates){
-            System.out.println(estate.getCity());
+            boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(),userDetails.getId());
+            EstateResponseDto estateResponseDto =new EstateResponseDto(estate,mylike);
+            estateResponseDtoList.add(estateResponseDto);
         }
-        return estates;
+        return estateResponseDtoList;
+    }
+
+    //핫한 매물 보기기
+    public List<Map<String,Object>> searchHot(UserDetailsImpl userDetails){
+        //        for(Map<String,Object> asdd : asd){
+//            boolean mylike = favoriteRepository.existsByEstateidAndUserid(Long.valueOf(String.valueOf(asdd.get("id"))),userDetails.getId());
+//            asdd.put("mylike",mylike);
+//        }
+        return favoriteRepository.countUseridQuery();
+    }
+
+   //구별로 모아보기
+    public List<Estate> guAverage(String query){
+        //        for(Estate estate : estates){
+//            System.out.println(estate.getCity());
+//        }
+        return estateRepository.searchAllByCity(query);
     }
 
 
@@ -86,7 +106,7 @@ public class EstateService {
         List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
         for(int i=0; i<favoriteList.size(); i++) {
             favoriteList.get(i).getEstateid();
-            System.out.println(favoriteList.get(i).getEstateid());
+//            System.out.println(favoriteList.get(i).getEstateid());
             Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
                     () -> new NullPointerException("게시글이 없습니다"));
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate,true);
@@ -130,7 +150,20 @@ public class EstateService {
             CityResponseDto cityResponseDto = new CityResponseDto(title,coordinateResponseDtoDtoDto,estate);
             cityResponseDtoList.add(cityResponseDto);
         }
-        MapResponseDto mapResponseDto = new MapResponseDto(level,cityResponseDtoList);
-        return mapResponseDto;
+        return new MapResponseDto(level,cityResponseDtoList);
+    }
+
+    //지도 검색 조회
+    public CityResponseDto showSearchonMap(int level, String query,UserDetailsImpl userDetails){
+        List<Estate> estateList = estateRepository.searchAllByCity("query");
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        for(Estate estate : estateList){
+            boolean myLike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate,myLike);
+            estateResponseDtoList.add(estateResponseDto);
+        }
+        String response = convertAddress.convertAddress(query);
+        CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
+        return new CityResponseDto(query,coordinateResponseDto,estateResponseDtoList);
     }
 }

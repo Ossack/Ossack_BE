@@ -15,7 +15,13 @@ public class CrawlingEx {
     @GetMapping("/api/ex")
     public void example() throws InterruptedException {
         WebDriverUtil webDriverUtil = new WebDriverUtil();
-        estateService.storeEstate(webDriverUtil.useDriver("https://m.land.naver.com/map/37.5479589:126.9861738:13:/SMS/A1:B1:B2:B3#mapList"));
+        estateService.storeEstate(webDriverUtil.useDriver("https://m.land.naver.com/map/37.5587991:126.9217943:18:/SMS/A1:B1:B2:B3#mapFullList"));
+    }
+
+    @GetMapping("/api/nemo")
+    public void exampleNemo() throws InterruptedException {
+        WebDriverUtil webDriverUtil = new WebDriverUtil();
+       estateService.storeEstate(webDriverUtil.useDriverNemo());
     }
 }
 

@@ -125,13 +125,12 @@ public class KakaoUserService {
     private User registerKakaoUserIfNeed (SocialUserInfoDto kakaoUserInfo) {
         // DB 에 중복된 email이 있는지 확인
         String kakaoEmail = kakaoUserInfo.getEmail();
-        User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
+        String nickname = kakaoUserInfo.getNickname();
+        User kakaoUser = userRepository.findByUserEmailAndNickname(kakaoEmail, nickname)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-
-            String nickname = kakaoUserInfo.getNickname() + "_kakao";
             Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
 
             // 닉네임 중복 검사
@@ -152,7 +151,7 @@ public class KakaoUserService {
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 
-            String profile = "https://mwmw1.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+            String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
 
             kakaoUser = new User(kakaoEmail, nickname, profile, encodedPassword);
             userRepository.save(kakaoUser);

@@ -1,6 +1,5 @@
 package com.sparta.startup_be.controller;
 
-import com.sparta.startup_be.dto.CoordinateDto;
 import com.sparta.startup_be.dto.EstateResponseDto;
 import com.sparta.startup_be.dto.MapResponseDto;
 import com.sparta.startup_be.model.Estate;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -64,4 +62,11 @@ public class EstateController {
 //        String resultString = convertAddress.convertAddress();
 //        return convertAddress.fromJSONtoItems(resultString);
 //    }
+
+    @GetMapping("/api/list/favorite")
+    public List<EstateResponseDto> showFavorite(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+            ){
+        return estateService.showFavorite(userDetails);
+    }
 }

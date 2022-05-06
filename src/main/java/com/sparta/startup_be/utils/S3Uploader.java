@@ -31,7 +31,7 @@ public class S3Uploader {
         objectMetadata.setContentType(multipartFile.getContentType());
 
         // 기존 이미지 삭제
-//        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, currentFilePath));
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, currentFilePath));
 
         // 수정 이미지 업로드
         try(InputStream inputStream = multipartFile.getInputStream()) {

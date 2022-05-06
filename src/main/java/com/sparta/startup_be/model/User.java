@@ -35,8 +35,10 @@ public class User {
     }
 
     // 프로필 이미지 수정 시, 필요한 생성자
-    public User(Long id, String imageUrl) {
+    public User(Long id, String userEmail, String nickname, String imageUrl) {
         this.id = id;
+        this.userEmail = userEmail;
+        this.nickname = nickname;
         this.profile = imageUrl;
     }
 

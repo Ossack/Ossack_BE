@@ -1,5 +1,21 @@
 package com.sparta.startup_be.service;
 
+
+
+import com.sparta.startup_be.dto.FavoriteListDto;
+import com.sparta.startup_be.model.Estate;
+import com.sparta.startup_be.model.Favorite;
+import com.sparta.startup_be.model.User;
+import com.sparta.startup_be.repository.EstateRepository;
+import com.sparta.startup_be.repository.FavoriteRepository;
+import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.security.UserDetailsImpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sparta.startup_be.dto.*;
 import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.model.Estate;
@@ -13,13 +29,16 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+
 @RequiredArgsConstructor
 @Service
 public class EstateService {
     private final EstateRepository estateRepository;
-    private final CoordinateRepository coordinateRepository;
+    private final UserRepository userRepository;
     private final FavoriteRepository favoriteRepository;
+    private final CoordinateRepository coordinateRepository;
     private final ConvertAddress convertAddress;
+
 
 //    public List<Estate> show(){
 //        return estateRepository.findAllByFloor(4);
@@ -79,6 +98,25 @@ public class EstateService {
         return estates;
     }
 
+
+    // 찜한것 보기
+    public List<EstateResponseDto> showFavorite(UserDetailsImpl userDetails){
+
+        // 찜한 매물 목록
+        List<Favorite> favoriteList = favoriteRepository.findByUserid(userDetails.getId());
+
+        List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
+        for(int i=0; i<favoriteList.size(); i++) {
+            favoriteList.get(i).getEstateid();
+            System.out.println(favoriteList.get(i).getEstateid());
+            Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
+                    () -> new NullPointerException("게시글이 없습니다"));
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate,true);
+            estateResponseDtos.add(estateResponseDto);
+        }
+        return estateResponseDtos;
+    }
+
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails){
         List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX,maxX,minY,maxY);
 //        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
@@ -117,5 +155,4 @@ public class EstateService {
         MapResponseDto mapResponseDto = new MapResponseDto(level,cityResponseDtoList);
         return mapResponseDto;
     }
-
 }

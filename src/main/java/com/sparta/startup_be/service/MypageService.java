@@ -1,6 +1,6 @@
 package com.sparta.startup_be.service;
 
-import com.sparta.startup_be.dto.ProfileResponseDto;
+import com.sparta.startup_be.dto.UserResponseDto;
 import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
@@ -22,7 +22,7 @@ public class MypageService {
 
     // 프로필 이미지 수정
     @Transactional
-    public ProfileResponseDto updateProfile(MultipartFile multipartFile, UserDetailsImpl userDetails){
+    public UserResponseDto updateProfile(MultipartFile multipartFile, UserDetailsImpl userDetails){
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
         );
@@ -33,14 +33,14 @@ public class MypageService {
         // 새로운 이미지 > S3 업로드 > 이미지 Url 생성
         String fileName = createFileName(multipartFile.getOriginalFilename());
         String imageUrl = s3Uploader.updateFile(multipartFile, oldImgName, fileName);
-        User profile = new User(user.getId(),imageUrl);
+        User profile = new User(user.getId(), user.getUserEmail(), user.getNickname(), imageUrl);
 
         // 새로운 이미지 Url을 파싱해서 파일명으로만 DB에 저장
         String [] newImgUrl = imageUrl.split("/");
         String imageKey = newImgUrl[newImgUrl.length-1];
         user.update(user.getId(), imageKey);
 
-        return new ProfileResponseDto(profile);
+        return new UserResponseDto(profile);
     }
 
     // 이미지 파일명 변환 관련 메소드

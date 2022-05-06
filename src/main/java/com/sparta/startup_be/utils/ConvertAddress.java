@@ -40,7 +40,7 @@ public class ConvertAddress {
         JSONObject rjson = new JSONObject(result);
         JSONArray items = rjson.getJSONArray("documents");
         JSONObject itemJson = items.getJSONObject(0);
-        CoordinateResponseDto coordinateResponseDtoDtoDto = new CoordinateResponseDto(Float.parseFloat(String.valueOf(itemJson.get("x"))),Float.parseFloat(String.valueOf(itemJson.get("y"))));
+        CoordinateResponseDto coordinateResponseDtoDtoDto = new CoordinateResponseDto(Float.parseFloat(String.valueOf(itemJson.get("y"))),Float.parseFloat(String.valueOf(itemJson.get("x"))));
         return coordinateResponseDtoDtoDto;
     }
 

@@ -1,8 +1,8 @@
-package com.sparta.startup_be.service;
+package com.sparta.startup_be.login.service;
 
-import com.sparta.startup_be.dto.UserResponseDto;
-import com.sparta.startup_be.model.User;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.dto.UserResponseDto;
+import com.sparta.startup_be.login.model.User;
+import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;

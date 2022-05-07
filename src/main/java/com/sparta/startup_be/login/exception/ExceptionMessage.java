@@ -1,4 +1,4 @@
-package com.sparta.startup_be.exception;
+package com.sparta.startup_be.login.exception;
 
 public class ExceptionMessage {
     public static final String ILLEGAL_USER_NAME_DUPLICATION = "중복된 아이디입니다.";

@@ -1,11 +1,11 @@
-package com.sparta.startup_be.service;
+package com.sparta.startup_be.login.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sparta.startup_be.dto.SocialUserInfoDto;
-import com.sparta.startup_be.model.User;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.dto.SocialUserInfoDto;
+import com.sparta.startup_be.login.model.User;
+import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;

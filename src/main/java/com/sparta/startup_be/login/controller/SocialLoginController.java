@@ -1,12 +1,12 @@
-package com.sparta.startup_be.controller;
+package com.sparta.startup_be.login.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 
-import com.sparta.startup_be.dto.SocialUserInfoDto;
-import com.sparta.startup_be.service.GoogleUserService;
+import com.sparta.startup_be.login.dto.SocialUserInfoDto;
+import com.sparta.startup_be.login.service.GoogleUserService;
 
-import com.sparta.startup_be.service.KakaoUserService;
+import com.sparta.startup_be.login.service.KakaoUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;

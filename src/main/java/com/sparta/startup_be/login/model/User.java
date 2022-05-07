@@ -1,5 +1,5 @@
 
-package com.sparta.startup_be.model;
+package com.sparta.startup_be.login.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

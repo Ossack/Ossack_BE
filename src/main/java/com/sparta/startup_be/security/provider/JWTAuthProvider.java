@@ -1,7 +1,7 @@
 package com.sparta.startup_be.security.provider;
 
-import com.sparta.startup_be.model.User;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.model.User;
+import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.security.jwt.JwtDecoder;
 import com.sparta.startup_be.security.jwt.JwtPreProcessingToken;

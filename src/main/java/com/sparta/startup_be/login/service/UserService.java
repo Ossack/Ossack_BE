@@ -1,16 +1,16 @@
-package com.sparta.startup_be.service;
+package com.sparta.startup_be.login.service;
 
 import com.sparta.startup_be.dto.ResultDto;
-import com.sparta.startup_be.dto.SignupRequestDto;
-import com.sparta.startup_be.model.User;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.dto.SignupRequestDto;
+import com.sparta.startup_be.login.model.User;
+import com.sparta.startup_be.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static com.sparta.startup_be.exception.ExceptionMessage.*;
+import static com.sparta.startup_be.login.exception.ExceptionMessage.*;
 
 @Service
 @RequiredArgsConstructor

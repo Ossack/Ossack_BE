@@ -1,4 +1,4 @@
-package com.sparta.startup_be.dto;
+package com.sparta.startup_be.login.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -17,7 +17,6 @@ public class ConvertAddress {
         headers.add("Authorization", "KakaoAK 0b1c519e27d6cea4e2da28be7bc7d1c1");
         String body = "";
 
-        System.out.println(query);
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> responseEntity = rest.exchange("https://dapi.kakao.com/v2/local/search/address.json?query="+query, HttpMethod.GET, requestEntity, String.class);
         HttpStatus httpStatus = responseEntity.getStatusCode();
@@ -40,7 +39,7 @@ public class ConvertAddress {
         JSONObject rjson = new JSONObject(result);
         JSONArray items = rjson.getJSONArray("documents");
         JSONObject itemJson = items.getJSONObject(0);
-        CoordinateResponseDto coordinateResponseDtoDtoDto = new CoordinateResponseDto(Float.parseFloat(String.valueOf(itemJson.get("x"))),Float.parseFloat(String.valueOf(itemJson.get("y"))));
+        CoordinateResponseDto coordinateResponseDtoDtoDto = new CoordinateResponseDto(Float.parseFloat(String.valueOf(itemJson.get("y"))),Float.parseFloat(String.valueOf(itemJson.get("x"))));
         return coordinateResponseDtoDtoDto;
     }
 

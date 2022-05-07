@@ -55,6 +55,7 @@ public class UserController {
         if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
             return new ResultDto("이미 존재하는 아이디 입니다.");
         }
+
         return new ResultDto("사용할 수 있는 아이디 입니다.");
     }
 } 

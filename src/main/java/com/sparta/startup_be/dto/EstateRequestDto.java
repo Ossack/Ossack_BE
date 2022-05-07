@@ -8,10 +8,6 @@ import java.util.List;
 
 @Getter
 @Builder
-
-
-
-
 public class EstateRequestDto {
 
     private Long id;

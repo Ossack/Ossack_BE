@@ -39,17 +39,28 @@ public class EstateController {
 //        return estateService.guAverage(query);
 //    }
 
-    //메인 페이지 해당 동 조회
+    //메인 페이지 키워드 검색
     @GetMapping("/api/list")
-    private List<EstateResponseDto> searchTown(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return estateService.searchTown(query,userDetails);
+    private List<EstateResponseDto> searchKeyword(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.searchKeyword(query,userDetails);
+    }
+
+    //검색 후 리스트 반환
+    @GetMapping("/api/list/search")
+    private List<EstateResponseDto> searchTowm(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.searchTowm(query,userDetails);
     }
 
     //level별 지도 조회
     @GetMapping("/api/{level}/map")
-    private MapResponseDto showEstate(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
+    private MapResponseDto showEstate2(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
                                       @PathVariable int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails);
+    }
+    //리스트 선택 후 디테일 조회
+    @GetMapping("/api/detail/{estateid}")
+    private EstateResponseDto showDetail(@PathVariable Long estateid, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.showDetail(estateid,userDetails.getUser());
     }
 
     // 지금 핫한 오피스

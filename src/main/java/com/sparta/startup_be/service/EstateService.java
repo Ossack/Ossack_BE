@@ -2,13 +2,11 @@ package com.sparta.startup_be.service;
 
 
 
-import com.sparta.startup_be.dto.FavoriteListDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
-import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.EstateRepository;
 import com.sparta.startup_be.repository.FavoriteRepository;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +16,8 @@ import java.util.List;
 
 import com.sparta.startup_be.dto.*;
 import com.sparta.startup_be.model.Coordinate;
-import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.repository.CoordinateRepository;
-import com.sparta.startup_be.repository.EstateRepository;
-import com.sparta.startup_be.repository.FavoriteRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.utils.ConvertAddress;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 

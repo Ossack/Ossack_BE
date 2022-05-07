@@ -1,13 +1,14 @@
-package com.sparta.startup_be.controller;
+package com.sparta.startup_be.login.controller;
 
 import com.sparta.startup_be.dto.ResultDto;
-import com.sparta.startup_be.dto.SignupRequestDto;
-import com.sparta.startup_be.dto.UserRequestDto;
-import com.sparta.startup_be.dto.UserResponseDto;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.dto.SignupRequestDto;
+import com.sparta.startup_be.login.dto.UserRequestDto;
+import com.sparta.startup_be.login.dto.UserResponseDto;
+import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
-import com.sparta.startup_be.service.UserService;
+import com.sparta.startup_be.login.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -43,8 +44,9 @@ public class UserController {
 
     // 회원 로그인 여부 확인
     @GetMapping("/api/islogin")
-    public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return new UserResponseDto(userDetails.getUser());
+    public ResponseEntity<UserResponseDto> isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), "https://ossack.s3.ap-northeast-2.amazonaws.com/" + userDetails.getUser().getProfile());
+        return ResponseEntity.ok().body(userResponseDto);
     }
 
     // 회원 중복 확인

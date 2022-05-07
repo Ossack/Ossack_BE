@@ -1,6 +1,6 @@
 package com.sparta.startup_be.security;
 
-import com.sparta.startup_be.model.User;
+import com.sparta.startup_be.login.model.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 

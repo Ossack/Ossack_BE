@@ -1,6 +1,7 @@
 package com.sparta.startup_be.controller;
 
 
+import com.sparta.startup_be.dto.MylikeDto;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
@@ -18,18 +19,18 @@ public class FavoriteController {
     }
 
     @PostMapping("/api/favorite/{estateid}")
-    public String pressLike(@PathVariable Long estateid,
-                            @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public MylikeDto pressLike(@PathVariable Long estateid,
+                               @AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userid = userDetails.getUser().getId();
         favoriteService.pressLike(estateid,userid);
-        return "좋아요 눌름";
+        return new MylikeDto(true);
     }
 
     @DeleteMapping("/api/favorite/{estateid}")
-    public String unpresslike(@PathVariable Long estateid,
+    public MylikeDto unpresslike(@PathVariable Long estateid,
                               @AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userid = userDetails.getUser().getId();
         favoriteService.unpressLike(estateid,userid);
-        return "좋아요 취소";
+        return new MylikeDto(false);
     }
 }

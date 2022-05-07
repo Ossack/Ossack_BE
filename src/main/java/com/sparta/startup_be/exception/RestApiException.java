@@ -1,4 +1,4 @@
-package com.sparta.startup_be.login.exception;
+package com.sparta.startup_be.exception;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,17 +1,22 @@
 package com.sparta.startup_be.login.service;
 
+import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.login.dto.UserResponseDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.Charset;
 import java.util.UUID;
 
 @Service
@@ -22,7 +27,7 @@ public class MypageService {
 
     // 프로필 이미지 수정
     @Transactional
-    public UserResponseDto updateProfile(MultipartFile multipartFile, UserDetailsImpl userDetails){
+    public ResponseEntity<StatusMessage> updateProfile(MultipartFile multipartFile, UserDetailsImpl userDetails){
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
         );
@@ -40,7 +45,17 @@ public class MypageService {
         String imageKey = newImgUrl[newImgUrl.length-1];
         user.update(user.getId(), imageKey);
 
-        return new UserResponseDto(profile);
+        UserResponseDto userResponseDto = new UserResponseDto(profile);
+
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("수정 완료");
+        message.setData(userResponseDto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
     // 이미지 파일명 변환 관련 메소드

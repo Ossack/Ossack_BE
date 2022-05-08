@@ -31,8 +31,16 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     @Query("select u from Estate u where u.dong like %:keyword%")
     List<Estate> searchAllBydong(@Param("keyword")String city);
 
+    @Query("select avg (u.rent_fee) from Estate u where u.dong like %:keyword% group by u.dong")
+    float dongAvgQuery(@Param("keyword")String dong);
+    @Query("select avg (u.rent_fee) from Estate u where u.gu like %:keyword% group by u.dong")
+    float guAvgQuery(@Param("keyword")String gu);
+    @Query("select avg (u.rent_fee) from Estate u where u.city like %:keyword% group by u.dong")
+    float cityAvgQuery(@Param("keyword")String city);
+
     @Query("select u from Estate u where u.gu like %:keyword%")
     List<Estate> searchAllBygu(@Param("keyword")String city);
+
 
     @Query(nativeQuery = true,value = "select distinct e.city from estate e," +
             " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")

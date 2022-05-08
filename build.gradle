@@ -1,65 +1,4 @@
-<<<<<<< HEAD
-plugins {
-    id 'org.springframework.boot' version '2.6.7'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'java'
-}
 
-group = 'com.sparta'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
-
-configurations {
-    compileOnly {
-        extendsFrom annotationProcessor
-    }
-}
-
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.jetbrains:annotations:20.1.0'
-    compileOnly 'org.projectlombok:lombok'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'mysql:mysql-connector-java'
-    annotationProcessor 'org.projectlombok:lombok'
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
-    // 스프링 시큐리티
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    // Thymeleaf (뷰 템플릿 엔진)
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    // https://mvnrepository.com/artifact/org.json/json
-    implementation group: 'org.json', name: 'json', version: '20160810'
-
-    // JWT
-    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.6'
-    implementation 'commons-codec:commons-codec:1.5'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
-    implementation 'com.auth0:java-jwt:3.13.0'
-    // S3
-//    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
-//    implementation 'org.springframework.boot:spring-boot-starter-websocket'
-//    implementation group: 'org.json', name: 'json', version: '20160810'
-//    implementation 'org.webjars:webjars-locator-core'
-//    implementation 'org.webjars:sockjs-client:1.0.2'
-//    implementation 'org.webjars:stomp-websocket:2.3.3'
-//    implementation 'org.webjars:bootstrap:3.3.7'
-//    implementation 'org.webjars:jquery:3.1.1-1'
-    // https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java
-    implementation group: 'org.seleniumhq.selenium', name: 'selenium-java', version: '4.1.1'
-
-}
-
-tasks.named('test') {
-    useJUnitPlatform()
-}
-=======
 plugins {
     id 'org.springframework.boot' version '2.6.7'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -134,4 +73,3 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
->>>>>>> 00535908658a1be52294b715abbcaad2e869eaf7

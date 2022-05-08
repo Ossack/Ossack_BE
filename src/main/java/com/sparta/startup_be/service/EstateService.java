@@ -169,7 +169,6 @@ public class EstateService {
 //        }
 
         long start =System.currentTimeMillis();
-
         System.out.println(cities.size());
         List<String> cities2 = new ArrayList<>();
 
@@ -183,12 +182,16 @@ public class EstateService {
             System.out.println(title);
             List<EstateResponseDto> estate = new ArrayList<>();
             List<Estate> estateList =new ArrayList<>();
+            float avg = 0f;
             if (level < 7) {
                  estateList = estateRepository.searchAllBydong(title);
+                 avg  = estateRepository.dongAvgQuery(title);
             } else if (level == 7 || level == 8) {
                  estateList = estateRepository.searchAllBygu(title);
+                 avg = estateRepository.guAvgQuery(title);
             } else {
                  estateList = estateRepository.searchAllByCity(title);
+                 avg = estateRepository.cityAvgQuery(title);
             }
             for (Estate estate1 : estateList) {
                 boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate1.getId(), userDetails.getId());
@@ -197,7 +200,8 @@ public class EstateService {
             }
             String response = convertAddress.convertAddress(title);
             CoordinateResponseDto coordinateResponseDtoDtoDto = convertAddress.fromJSONtoItems(response);
-            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate);
+
+            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate,avg);
             cityResponseDtoList.add(cityResponseDto);
         }
         return new MapResponseDto(level, cityResponseDtoList);
@@ -205,7 +209,8 @@ public class EstateService {
 
     //지도 검색 조회
     public CityResponseDto showSearchonMap(int level, String query, UserDetailsImpl userDetails) {
-        List<Estate> estateList = estateRepository.searchAllByCity("query");
+        List<Estate> estateList = estateRepository.searchAllByCity(query);
+        float avg =estateRepository.cityAvgQuery(query);
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         for (Estate estate : estateList) {
             boolean myLike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -214,6 +219,6 @@ public class EstateService {
         }
         String response = convertAddress.convertAddress(query);
         CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
-        return new CityResponseDto(query, coordinateResponseDto, estateResponseDtoList);
+        return new CityResponseDto(query, coordinateResponseDto, estateResponseDtoList,avg);
     }
 }

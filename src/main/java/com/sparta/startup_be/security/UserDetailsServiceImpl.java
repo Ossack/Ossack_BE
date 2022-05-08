@@ -1,7 +1,7 @@
 package com.sparta.startup_be.security;
 
-import com.sparta.startup_be.model.User;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.model.User;
+import com.sparta.startup_be.login.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -21,7 +21,7 @@ public class CoordinateService {
     public void convertAddress() {
         List<Estate> estateList = estateRepository.findAll();
         for (Estate estate : estateList) {
-            String address = estate.getCity()+estate.getRoadaddress();
+            String address = estate.getCity();
             String response = convertAddress.convertAddress(address);
             CoordinateDto coordinateDto = convertAddress.fromJSONtoItems(response, estate.getId());
             Coordinate coordinate = new Coordinate(coordinateDto);

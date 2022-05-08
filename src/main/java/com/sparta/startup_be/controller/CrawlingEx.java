@@ -13,7 +13,7 @@
 //    private final EstateService estateService;
 //
 //    @GetMapping("/api/ex")
-//    public void example() throws Ingit terruptedException {
+//    public void example() throws InterruptedException {
 //        WebDriverUtil webDriverUtil = new WebDriverUtil();
 //        estateService.storeEstate(webDriverUtil.useDriver("https://m.land.naver.com/map/37.5587991:126.9217943:18:/SMS/A1:B1:B2:B3#mapFullList"));
 //    }

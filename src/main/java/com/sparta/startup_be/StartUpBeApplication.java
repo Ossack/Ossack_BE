@@ -21,5 +21,4 @@ public class StartUpBeApplication {
                 .properties(APPLICATION_LOCATIONS)
                 .run(args);
     }
-
 }

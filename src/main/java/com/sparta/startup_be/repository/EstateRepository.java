@@ -47,4 +47,5 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     List<String> finddong(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
 
 
+
 }

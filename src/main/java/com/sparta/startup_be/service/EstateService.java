@@ -1,14 +1,12 @@
 package com.sparta.startup_be.service;
 
-
-import com.sparta.startup_be.dto.FavoriteListDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
-import com.sparta.startup_be.model.User;
 import com.sparta.startup_be.repository.EstateRepository;
 import com.sparta.startup_be.repository.FavoriteRepository;
-import com.sparta.startup_be.repository.UserRepository;
+import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
+import com.sparta.startup_be.login.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,15 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sparta.startup_be.dto.*;
-import com.sparta.startup_be.model.Coordinate;
-import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.repository.CoordinateRepository;
-import com.sparta.startup_be.repository.EstateRepository;
-import com.sparta.startup_be.repository.FavoriteRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.utils.ConvertAddress;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -68,17 +59,42 @@ public class EstateService {
     }
 
     //메인페이지 해당 동 조회
-    public List<EstateResponseDto> searchTown(String query, UserDetailsImpl userDetails) {
+    public List<EstateResponseDto> searchKeyword(String query, UserDetailsImpl userDetails) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         System.out.println(query);
-        String a = "";
+        String keyword = "";
         if (query.equals("맛집")) {
-            a = "서울특별시 서초구 양재동";
+            keyword = "서울특별시 서초구 양재동";
         } else if (query.equals("역")) {
-            a = "서울특별시 서초구 서초동";
+            keyword = "서울특별시 서초구 서초동";
         }
         System.out.println("잘들오네요");
-        List<Estate> estates = estateRepository.searchAllByCity(a);
+        List<Estate> estates = estateRepository.searchAllByCity(keyword);
+        int i = 0;
+        for (Estate estate : estates) {
+            boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, mylike);
+            estateResponseDtoList.add(estateResponseDto);
+            i++;
+            if (i == 4) break;
+        }
+
+        return estateResponseDtoList;
+    }
+
+    //리스트 선택후 조회
+    public EstateResponseDto showDetail(Long estateid, User user){
+        Estate estate = estateRepository.findById(estateid).orElseThrow(
+                () -> new IllegalArgumentException("사라진 매물입니다")
+        );
+        boolean mylike = favoriteRepository.existsByEstateidAndUserid(estateid,user.getId());
+        return new EstateResponseDto(estate,mylike);
+    }
+
+
+    public List<EstateResponseDto> searchTowm(String query, UserDetailsImpl userDetails) {
+        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        List<Estate> estates = estateRepository.searchAllByCity(query);
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -127,34 +143,56 @@ public class EstateService {
         return estateResponseDtos;
     }
 
+
+
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
-        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX, maxX, minY, maxY);
-//        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
-//        System.out.println(coordinates.size());
-        Set<String> cities = new HashSet<>();
-        for (Coordinate coordinate : coordinates) {
-            Estate estate2 = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
-                    () -> new IllegalArgumentException("하이")
-            );
-            String city = "";
-            if (level < 7) {
-                city = estate2.getCity();
-            } else if (level == 7 || level == 8) {
-                city = estate2.getCity().split(" ")[0] + " " + estate2.getCity().split(" ")[1];
-            } else {
-                city = estate2.getCity().split(" ")[0];
-            }
-            cities.add(city);
-        }
-        Iterator<String> it = cities.iterator();
+        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
+//        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX, maxX, minY, maxY);
+////        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
+////        System.out.println(coordinates.size());
+//        long temp1 = System.currentTimeMillis();
+//        System.out.println(temp1 - start);
+//        Set<String> cities = new HashSet<>();
+//        for (Coordinate coordinate : coordinates) {
+//            Estate estate2 = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
+//                    () -> new IllegalArgumentException("하이")
+//            );
+//            String city = "";
+//            if (level < 7) {
+//                city = estate2.getCity();
+//            } else if (level == 7 || level == 8) {
+//                city = estate2.getCity().split(" ")[0] + " " + estate2.getCity().split(" ")[1];
+//            } else {
+//                city = estate2.getCity().split(" ")[0];
+//            }
+//            cities.add(city);
+//        }
+
+        long start =System.currentTimeMillis();
+
+        System.out.println(cities.size());
+        List<String> cities2 = new ArrayList<>();
+
+        long end =System.currentTimeMillis();
+        System.out.println(end-start);
+        System.out.println("size"+cities2.size());
+//        Iterator<String> it = cities.iterator();
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
-        while (it.hasNext()) {
-            String title = it.next();
+        for(int i=0; i<cities2.size(); i++) {
+            String title = cities2.get(i);
+            System.out.println(title);
             List<EstateResponseDto> estate = new ArrayList<>();
-            List<Estate> estateList = estateRepository.searchAllByCity(title);
+            List<Estate> estateList =new ArrayList<>();
+            if (level < 7) {
+                 estateList = estateRepository.searchAllBydong(title);
+            } else if (level == 7 || level == 8) {
+                 estateList = estateRepository.searchAllBygu(title);
+            } else {
+                 estateList = estateRepository.searchAllByCity(title);
+            }
             for (Estate estate1 : estateList) {
                 boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate1.getId(), userDetails.getId());
-                EstateResponseDto estateResponseDto = new EstateResponseDto(estate1, mylike);
+                EstateResponseDto estateResponseDto = new EstateResponseDto(estate1,title, mylike);
                 estate.add(estateResponseDto);
             }
             String response = convertAddress.convertAddress(title);

@@ -1,6 +1,6 @@
-package com.sparta.startup_be.repository;
+package com.sparta.startup_be.login.repository;
 
-import com.sparta.startup_be.model.User;
+import com.sparta.startup_be.login.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -7,8 +7,6 @@ import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.EstateService;
 import com.sparta.startup_be.utils.ConvertAddress;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Map;
-@Api (tags = {"매물정보 관련 기능 Controller"})
+
 @RequiredArgsConstructor
 @RestController
 public class EstateController {
@@ -41,30 +39,37 @@ public class EstateController {
 //        return estateService.guAverage(query);
 //    }
 
-    //메인 페이지 해당 동 조회
-    @ApiOperation(value = "메인페이지 해당 동 조회")
+    //메인 페이지 키워드 검색
     @GetMapping("/api/list")
-    private List<EstateResponseDto> searchTown(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return estateService.searchTown(query,userDetails);
+    private List<EstateResponseDto> searchKeyword(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.searchKeyword(query,userDetails);
+    }
+
+    //검색 후 리스트 반환
+    @GetMapping("/api/list/search")
+    private List<EstateResponseDto> searchTowm(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.searchTowm(query,userDetails);
     }
 
     //level별 지도 조회
-    @ApiOperation(value = "level별 지도 조회")
     @GetMapping("/api/{level}/map")
-    private MapResponseDto showEstate(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
+    private MapResponseDto showEstate2(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
                                       @PathVariable int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails);
     }
+    //리스트 선택 후 디테일 조회
+    @GetMapping("/api/detail/{estateid}")
+    private EstateResponseDto showDetail(@PathVariable Long estateid, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.showDetail(estateid,userDetails.getUser());
+    }
 
     // 지금 핫한 오피스
-    @ApiOperation(value = "지금 핫한 오피스")
     @GetMapping("/api/list/hot")
     private List<Map<String,Object>> showHot(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.searchHot(userDetails);
     }
 
     //검색 복록 지도 조회
-    @ApiOperation(value = "검색 목록 지도 조회")
     @GetMapping("/api/{level}/map/search")
     private CityResponseDto showSearchonMap(@PathVariable int level, @RequestParam String query,
                                             @AuthenticationPrincipal UserDetailsImpl userDetails){
@@ -76,8 +81,7 @@ public class EstateController {
 //        String resultString = convertAddress.convertAddress();
 //        return convertAddress.fromJSONtoItems(resultString);
 //    }
-    //찜한 매물 조회
-@ApiOperation(value = "찜한 매물 조회")
+
     @GetMapping("/api/list/favorite")
     public List<EstateResponseDto> showFavorite(
             @AuthenticationPrincipal UserDetailsImpl userDetails

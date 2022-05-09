@@ -1,7 +1,6 @@
-package com.sparta.startup_be.dto;
+package com.sparta.startup_be.login.dto;
 
-import com.sparta.startup_be.model.User;
-import com.sparta.startup_be.security.UserDetailsImpl;
+import com.sparta.startup_be.login.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,10 +19,10 @@ public class UserResponseDto {
         this.imageUrl = user.getProfile();
     }
 
-    public UserResponseDto(UserDetailsImpl userDetails, String profile) {
-        this.id = userDetails.getUser().getId();
-        this.userEmail = userDetails.getUser().getUserEmail();
-        this.nickname = userDetails.getUser().getNickname();
-        this.imageUrl = profile;
+    public UserResponseDto(User user, String imageUrl) {
+        this.id = user.getId();
+        this.userEmail = user.getUserEmail();
+        this.nickname = user.getNickname();
+        this.imageUrl = imageUrl;
     }
 }

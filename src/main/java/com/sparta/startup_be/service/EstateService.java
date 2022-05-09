@@ -68,13 +68,9 @@ public class EstateService {
         } else if (query.equals("역")) {
             keyword = "서초동";
         }
-<<<<<<< HEAD
-        List<Estate> estates = estateRepository.searchAllBydong(keyword);
-=======
         System.out.println("잘들오네요");
         List<Estate> estates = estateRepository.searchAllBydong(keyword);
         System.out.println(estates.size());
->>>>>>> dea2e6c7c3acdd76859cb763c92886eee52a6fbc
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -99,7 +95,7 @@ public class EstateService {
 
     public List<EstateResponseDto> searchTowm(String query, UserDetailsImpl userDetails) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
-        List<Estate> estates = estateRepository.searchAllByCity(query);
+        List<Estate> estates = estateRepository.searchAllBydong(query);
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -151,6 +147,8 @@ public class EstateService {
 
 
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
+        long temp1 =System.currentTimeMillis();
+
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
         List<String> cities = new ArrayList<>();
 
@@ -182,12 +180,11 @@ public class EstateService {
 //            cities.add(city);
 //        }
 
-        long start =System.currentTimeMillis();
-        System.out.println(cities.size());
 //        List<String> cities2 = new ArrayList<>();
 
-        long end =System.currentTimeMillis();
-        System.out.println(end-start);
+        long temp2 =System.currentTimeMillis();
+        System.out.println("temp1:");
+        System.out.println( temp2-temp1);
 //        System.out.println("size"+cities2.size());
 //        Iterator<String> it = cities.iterator();
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
@@ -218,6 +215,11 @@ public class EstateService {
             CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate,avg);
             cityResponseDtoList.add(cityResponseDto);
         }
+        long temp3 =System.currentTimeMillis();
+        System.out.println("temp2:");
+        System.out.println( temp3-temp2);
+        System.out.println("총:");
+        System.out.println( temp3-temp1);
         return new MapResponseDto(level, cityResponseDtoList);
     }
 

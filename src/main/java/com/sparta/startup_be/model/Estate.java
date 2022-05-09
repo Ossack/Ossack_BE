@@ -21,6 +21,7 @@ public class Estate {
     private Long id;
 
     private String type;
+    private String office;
 
     @Column
     private String city;

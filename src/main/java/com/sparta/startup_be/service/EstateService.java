@@ -64,12 +64,11 @@ public class EstateService {
         System.out.println(query);
         String keyword = "";
         if (query.equals("맛집")) {
-            keyword = "서울특별시 서초구 양재동";
+            keyword = "양재동";
         } else if (query.equals("역")) {
-            keyword = "서울특별시 서초구 서초동";
+            keyword = "서초동";
         }
-        System.out.println("잘들오네요");
-        List<Estate> estates = estateRepository.searchAllByCity(keyword);
+        List<Estate> estates = estateRepository.searchAllBydong(keyword);
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());

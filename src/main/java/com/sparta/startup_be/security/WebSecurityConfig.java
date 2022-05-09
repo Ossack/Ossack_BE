@@ -6,6 +6,7 @@ import com.sparta.startup_be.security.filter.JwtAuthFilter;
 import com.sparta.startup_be.security.jwt.HeaderTokenExtractor;
 import com.sparta.startup_be.security.provider.FormLoginAuthProvider;
 import com.sparta.startup_be.security.provider.JWTAuthProvider;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -27,6 +28,21 @@ import java.util.List;
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
 @EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**"
+    };
+
+
 
     private final JWTAuthProvider jwtAuthProvider;
     private final HeaderTokenExtractor headerTokenExtractor;
@@ -51,12 +67,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(jwtAuthProvider);
     }
 
+
     @Override
     public void configure(WebSecurity web) {
         // h2-console 사용에 대한 허용 (CSRF, FrameOptions 무시)
         web
                 .ignoring()
                 .antMatchers("/h2-console/**");
+
+        web
+                .ignoring()
+                .antMatchers(PERMIT_URL_ARRAY);
     }
 
     @Override
@@ -80,7 +101,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(formLoginFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
-        http.authorizeRequests()
+        http
+                .authorizeRequests()
+                .antMatchers(PERMIT_URL_ARRAY).permitAll()
                 .antMatchers("/oauth_login").permitAll()
                 .antMatchers("/**").permitAll()
                 .anyRequest()

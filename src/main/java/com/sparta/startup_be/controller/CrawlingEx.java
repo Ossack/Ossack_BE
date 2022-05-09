@@ -3,10 +3,12 @@
 //
 //import com.sparta.startup_be.service.EstateService;
 //import com.sparta.startup_be.utils.WebDriverUtil;
+//import io.swagger.annotations.Api;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.web.bind.annotation.GetMapping;
 //import org.springframework.web.bind.annotation.RestController;
 //
+//@Api (tags = {"매물정보 크롤링 하는 기능 Controller"})
 //@RestController
 //@RequiredArgsConstructor
 //public class CrawlingEx {
@@ -24,4 +26,4 @@
 //       estateService.storeEstate(webDriverUtil.useDriverNemo());
 //    }
 //}
-//
+

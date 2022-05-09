@@ -21,4 +21,10 @@ public class MypageController {
                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.updateProfile(multipartFile, userDetails);
     }
+
+    // 회원 로그인 여부 확인
+    @GetMapping("/api/islogin")
+    public ResponseEntity<StatusMessage> isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return mypageService.isLogin(userDetails);
+    }
 }

@@ -75,4 +75,26 @@ public class MypageService {
 
     }
 
+    // 회원 정보 조회
+    public ResponseEntity<StatusMessage> isLogin(UserDetailsImpl userDetails) {
+        String basicImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+        String profileImg = userDetails.getUser().getProfile();
+
+        // 기본 프로필 이외에
+        if (!profileImg.equals(basicImg)) {
+            profileImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/" + profileImg;
+        }
+        UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), profileImg);
+
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("유저 정보 조회");
+        message.setData(userResponseDto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
 }

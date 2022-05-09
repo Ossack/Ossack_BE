@@ -38,5 +38,14 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
             " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
     List<String> findCity(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
 
+    @Query(nativeQuery = true,value = "select distinct e.gu from estate e," +
+            " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+    List<String> findgu(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
+
+    @Query(nativeQuery = true,value = "select distinct e.dong from estate e," +
+            " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+    List<String> finddong(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
+
+
 
 }

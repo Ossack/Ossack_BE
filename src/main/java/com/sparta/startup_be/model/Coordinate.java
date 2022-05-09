@@ -18,8 +18,8 @@ public class Coordinate {
     @Id
     private Long estateid;;
 
-    private float x;
-    private float y;
+    private double x;
+    private double y;
 
     public Coordinate(CoordinateDto coordinateDto){
         this.x = coordinateDto.getX();

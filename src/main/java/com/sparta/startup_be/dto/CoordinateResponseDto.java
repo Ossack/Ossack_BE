@@ -6,10 +6,10 @@ import lombok.Setter;
 @Getter
 @Setter
 public class CoordinateResponseDto {
-    private float lat;
-    private float lng;
+    private double lat;
+    private double lng;
 
-    public CoordinateResponseDto(float lat,float lng){
+    public CoordinateResponseDto(double lat,double lng){
         this.lat = lat;
         this.lng = lng;
     }

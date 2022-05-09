@@ -10,12 +10,15 @@ import java.util.List;
 @Setter
 public class CityResponseDto {
     private String title;
+
+    private Float average;
     private CoordinateResponseDto coordinate;
     private List<EstateResponseDto> estate;
 
-    public CityResponseDto(String title, CoordinateResponseDto coordinate, List<EstateResponseDto> estate){
+    public CityResponseDto(String title, CoordinateResponseDto coordinate, List<EstateResponseDto> estate,Float average){
         this.title = title;
         this.coordinate = coordinate;
         this.estate = estate;
+        this.average = average;
     }
 }

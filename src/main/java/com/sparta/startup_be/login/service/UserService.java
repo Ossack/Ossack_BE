@@ -3,8 +3,11 @@ package com.sparta.startup_be.login.service;
 import com.sparta.startup_be.dto.ResultDto;
 import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.login.dto.SignupRequestDto;
+import com.sparta.startup_be.login.dto.UserRequestDto;
+import com.sparta.startup_be.login.dto.UserResponseDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
+import com.sparta.startup_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -71,6 +74,63 @@ public class UserService {
     // 닉네임 중복 체크
     private boolean validatedDuplicateNickname(Optional<User> found) {
         return found.isPresent();
+    }
+
+    // 회원 정보 조회
+    public ResponseEntity<StatusMessage> isLogin(UserDetailsImpl userDetails) {
+        UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), "https://ossack.s3.ap-northeast-2.amazonaws.com/" + userDetails.getUser().getProfile());
+
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("유저 정보 조회");
+        message.setData(userResponseDto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+    }
+
+    // 이메일 중복 확인
+    public ResponseEntity<StatusMessage> dupEmail(UserRequestDto userDto) {
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
+
+            message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
+            message.setMessage("이미 존재하는 이메일입니다.");
+
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("사용할 수 있는 이메일입니다.");
+        message.setData(userDto.getUserEmail());
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+
+    }
+
+    // 닉네임 중복 확인
+    public ResponseEntity<StatusMessage> dupNick(UserRequestDto userDto) {
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        if (userRepository.findByUserEmail(userDto.getNickname()).isPresent()) {
+
+            message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
+            message.setMessage("이미 존재하는 닉네임입니다.");
+
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+        }
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("사용할 수 있는 닉네임입니다.");
+        message.setData(userDto.getNickname());
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+
     }
 
 }

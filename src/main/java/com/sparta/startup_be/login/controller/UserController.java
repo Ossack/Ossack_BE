@@ -31,10 +31,6 @@ public class UserController {
     private final UserService userService;
     private final UserRepository userRepository;
 
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public String nullex(IllegalArgumentException e) {
-//        return e.getMessage();
-//    }
     // 회원가입 등록
     @PostMapping("/user/signup")
     public ResponseEntity<StatusMessage> join(
@@ -59,37 +55,19 @@ public class UserController {
     // 회원 로그인 여부 확인
     @GetMapping("/api/islogin")
     public ResponseEntity<StatusMessage> isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), "https://ossack.s3.ap-northeast-2.amazonaws.com/" + userDetails.getUser().getProfile());
-
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("유저 정보 조회");
-        message.setData(userResponseDto);
-
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        return userService.isLogin(userDetails);
     }
 
     // 이메일 중복 확인
     @PostMapping("/api/idcheck")
-    public ResultDto idCheck(@RequestBody UserRequestDto userDto) {
-        if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
-            return new ResultDto("이미 존재하는 아이디 입니다.");
-        }
-
-        return new ResultDto("사용할 수 있는 아이디 입니다.");
+    public ResponseEntity<StatusMessage> idCheck(@RequestBody UserRequestDto userDto) {
+        return userService.dupEmail(userDto);
     }
 
     // 닉네임 중복 확인
     @PostMapping("/api/nickname")
-    public ResultDto nnCheck(@RequestBody UserRequestDto userDto) {
-        if (userRepository.findByNickname(userDto.getNickname()).isPresent()) {
-            return new ResultDto("이미 존재하는 닉네임 입니다.");
-        }
-
-        return new ResultDto("사용할 수 있는 닉네임임 입니다.");
+    public ResponseEntity<StatusMessage> nnCheck(@RequestBody UserRequestDto userDto) {
+        return userService.dupNick(userDto);
     }
 
 //    @GetMapping("/user/{id}")

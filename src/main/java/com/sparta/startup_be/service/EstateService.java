@@ -68,7 +68,13 @@ public class EstateService {
         } else if (query.equals("역")) {
             keyword = "서초동";
         }
+<<<<<<< HEAD
         List<Estate> estates = estateRepository.searchAllBydong(keyword);
+=======
+        System.out.println("잘들오네요");
+        List<Estate> estates = estateRepository.searchAllBydong(keyword);
+        System.out.println(estates.size());
+>>>>>>> dea2e6c7c3acdd76859cb763c92886eee52a6fbc
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -145,7 +151,16 @@ public class EstateService {
 
 
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
-        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
+//        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
+        List<String> cities = new ArrayList<>();
+
+        if (level < 7) {
+            cities = estateRepository.findDong(minX, maxX, minY, maxY);
+        } else if (level == 7 || level == 8) {
+            cities = estateRepository.findGu(minX, maxX, minY, maxY);
+        } else {
+            cities = estateRepository.findCity(minX, maxX, minY, maxY);
+        }
 //        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX, maxX, minY, maxY);
 ////        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
 ////        System.out.println(coordinates.size());
@@ -169,15 +184,15 @@ public class EstateService {
 
         long start =System.currentTimeMillis();
         System.out.println(cities.size());
-        List<String> cities2 = new ArrayList<>();
+//        List<String> cities2 = new ArrayList<>();
 
         long end =System.currentTimeMillis();
         System.out.println(end-start);
-        System.out.println("size"+cities2.size());
+//        System.out.println("size"+cities2.size());
 //        Iterator<String> it = cities.iterator();
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
-        for(int i=0; i<cities2.size(); i++) {
-            String title = cities2.get(i);
+        for(int i=0; i<cities.size(); i++) {
+            String title = cities.get(i);
             System.out.println(title);
             List<EstateResponseDto> estate = new ArrayList<>();
             List<Estate> estateList =new ArrayList<>();

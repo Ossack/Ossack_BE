@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
+
 @EnableJpaAuditing
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
 public class StartUpBeApplication {
@@ -21,5 +22,4 @@ public class StartUpBeApplication {
                 .properties(APPLICATION_LOCATIONS)
                 .run(args);
     }
-
 }

@@ -2,13 +2,23 @@ package com.sparta.startup_be.service;
 
 
 import com.sparta.startup_be.dto.FavoriteDto;
+import com.sparta.startup_be.dto.MylikeDto;
+import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.model.Favorite;
 import com.sparta.startup_be.repository.FavoriteRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.nio.charset.Charset;
 import java.util.Optional;
+
+import static com.sparta.startup_be.exception.ExceptionMessage.ILLEGAL_ALREADY_LIKE_CANCEL;
+import static com.sparta.startup_be.exception.ExceptionMessage.ILLEGAL_ALREADY_LIKE_EXIST;
 
 
 @RequiredArgsConstructor
@@ -16,23 +26,45 @@ import java.util.Optional;
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
-    public void pressLike(Long estateid, Long userid){
-        Optional<Favorite> favorite = favoriteRepository.findByUseridAndEstateid(userid,estateid);
+    public ResponseEntity<StatusMessage> pressLike(Long estateid, Long userid){
+        Optional<Favorite> favorite = favoriteRepository.findByUseridAndEstateid(userid, estateid);
         if(favorite.isPresent()){
-            throw new IllegalArgumentException("이미 눌러진 좋아요 입니다");
+            throw new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_EXIST);
         }
-        FavoriteDto favoriteDto = new FavoriteDto(userid,estateid);
+        FavoriteDto favoriteDto = new FavoriteDto(userid, estateid);
         Favorite favorite1 = new Favorite(favoriteDto);
         favoriteRepository.save(favorite1);
+
+        MylikeDto mylikeDto = new MylikeDto(true);
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("좋아요 완료");
+        message.setData(mylikeDto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 
 
     @Transactional
-    public void unpressLike(Long estateid,Long userid){
+    public ResponseEntity<StatusMessage> unpressLike(Long estateid,Long userid){
         Favorite favorite = favoriteRepository.findByUseridAndEstateid(userid,estateid).orElseThrow(
-                ()-> new IllegalArgumentException("이미 좋아요가 취소되었습니다")
+                ()-> new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_CANCEL)
         );
         favoriteRepository.deleteByUseridAndEstateid(userid, estateid);
+
+        MylikeDto mylikeDto = new MylikeDto(false);
+        StatusMessage message = new StatusMessage();
+        HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
+        message.setStatusCode(StatusMessage.StatusEnum.OK);
+        message.setMessage("좋아요 취소");
+        message.setData(mylikeDto);
+
+        return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 }
 

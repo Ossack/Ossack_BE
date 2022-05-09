@@ -76,21 +76,6 @@ public class UserService {
         return found.isPresent();
     }
 
-    // 회원 정보 조회
-    public ResponseEntity<StatusMessage> isLogin(UserDetailsImpl userDetails) {
-        UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), "https://ossack.s3.ap-northeast-2.amazonaws.com/" + userDetails.getUser().getProfile());
-
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("유저 정보 조회");
-        message.setData(userResponseDto);
-
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
-    }
-
     // 이메일 중복 확인
     public ResponseEntity<StatusMessage> dupEmail(UserRequestDto userDto) {
         StatusMessage message = new StatusMessage();

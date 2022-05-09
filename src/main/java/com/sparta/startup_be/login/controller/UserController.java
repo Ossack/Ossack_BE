@@ -50,11 +50,6 @@ public class UserController {
         return userService.save(requestDto);
     }
 
-    // 회원 로그인 여부 확인
-    @GetMapping("/api/islogin")
-    public ResponseEntity<StatusMessage> isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return userService.isLogin(userDetails);
-    }
 
     // 이메일 중복 확인
     @PostMapping("/api/idcheck")

@@ -71,5 +71,6 @@ public class Estate {
         this.monthly = estate.getMonthly();
         this.imageList = estate.getImageList();
         this.subwaylist = estate.getSubwayList();
+        this.office = estate.getOffice();
     }
 }

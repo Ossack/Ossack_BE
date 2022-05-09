@@ -14,6 +14,7 @@ public class EstateRequestDto {
     private String city;
     private String type;
     private String monthly;
+    private String office;
     private String area;
     private String buildingInfo;
     private String deposit;

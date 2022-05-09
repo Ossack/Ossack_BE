@@ -45,6 +45,4 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     @Query(nativeQuery = true,value = "select distinct e.dong from estate e," +
             " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
     List<String> findDong(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
-
-
 }

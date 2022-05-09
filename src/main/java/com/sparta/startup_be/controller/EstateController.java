@@ -71,8 +71,7 @@ public class EstateController {
 
     //검색 복록 지도 조회
     @GetMapping("/api/{level}/map/search")
-    private CityResponseDto showSearchonMap(@PathVariable int level, @RequestParam String query,
-                                            @AuthenticationPrincipal UserDetailsImpl userDetails){
+    private CityResponseDto showSearchonMap(@PathVariable int level, @RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showSearchonMap(level,query,userDetails);
     }
 

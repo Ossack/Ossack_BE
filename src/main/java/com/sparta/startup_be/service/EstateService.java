@@ -70,6 +70,7 @@ public class EstateService {
         }
         System.out.println("잘들오네요");
         List<Estate> estates = estateRepository.searchAllBydong(keyword);
+        System.out.println(estates.size());
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -178,7 +179,6 @@ public class EstateService {
 //        }
 
         long start =System.currentTimeMillis();
-
         System.out.println(cities.size());
 //        List<String> cities2 = new ArrayList<>();
 

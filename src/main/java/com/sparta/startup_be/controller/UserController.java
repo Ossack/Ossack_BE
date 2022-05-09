@@ -7,6 +7,8 @@ import com.sparta.startup_be.dto.UserResponseDto;
 import com.sparta.startup_be.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Api (tags = {"회원관련 기능 Controller"})
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -26,7 +28,9 @@ public class UserController {
     public String nullex(IllegalArgumentException e) {
         return e.getMessage();
     }
+
     // 회원가입 등록
+    @ApiOperation(value = "회원가입 등록 메소드")
     @PostMapping("/user/signup")
     public ResultDto join(
             @Validated @RequestBody SignupRequestDto requestDto,
@@ -42,12 +46,14 @@ public class UserController {
     }
 
     // 회원 로그인 여부 확인
+    @ApiOperation(value = "회원 로그인 여부 확인 메소드")
     @GetMapping("/api/islogin")
     public UserResponseDto isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return new UserResponseDto(userDetails,"https://ossack.s3.ap-northeast-2.amazonaws.com/"+userDetails.getUser().getProfile());
     }
 
     // 회원 중복 확인
+    @ApiOperation(value = "회원 중복 확인 메소드")
     @PostMapping("/api/idcheck")
     public ResultDto idCheck(@RequestBody UserRequestDto userDto) {
         if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {

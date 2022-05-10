@@ -13,12 +13,14 @@ public class CityResponseDto {
 
     private Float average;
     private CoordinateResponseDto coordinate;
-    private List<EstateResponseDto> estate;
 
-    public CityResponseDto(String title, CoordinateResponseDto coordinate, List<EstateResponseDto> estate,Float average){
+    private int estate_cnt;
+
+
+    public CityResponseDto(String title, CoordinateResponseDto coordinate, int estate_cnt,Float average){
         this.title = title;
         this.coordinate = coordinate;
-        this.estate = estate;
+        this.estate_cnt = estate_cnt;
         this.average = average;
     }
 }

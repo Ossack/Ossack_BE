@@ -19,9 +19,11 @@ public class EstateResponseDto {
     private String roomFloor;
     private String buildingInfo;
     private String area;
-    private List<String> subways;
+    private String subwayInfo;
     private List<String> images;
     private boolean mylike;
+    private String buildingDetail;
+    private String agent;
 
     public EstateResponseDto(Estate estate,boolean mylike){
         this.estateid= estate.getId();
@@ -34,9 +36,11 @@ public class EstateResponseDto {
         this.roomFloor = estate.getRoomFloor();
         this.buildingInfo = estate.getBuildingInfo();
         this.area = estate.getArea();
-        this.subways = estate.getSubwaylist();
+        this.subwayInfo = estate.getSubwayInfo();
         this.images =estate.getImageList();
         this.mylike = mylike;
+        this.buildingDetail = estate.getBuildingDetail();
+        this.agent = estate.getAgent();
     }
 
     public EstateResponseDto(Estate estate, String city, boolean mylike){
@@ -50,8 +54,11 @@ public class EstateResponseDto {
         this.roomFloor = estate.getRoomFloor();
         this.buildingInfo = estate.getBuildingInfo();
         this.area = estate.getArea();
-        this.subways = estate.getSubwaylist();
+        this.subwayInfo = estate.getSubwayInfo();
         this.images =estate.getImageList();
+        this.buildingDetail = estate.getBuildingDetail();
         this.mylike = mylike;
+        this.agent = estate.getAgent();
+
     }
 }

@@ -34,6 +34,7 @@ public class Estate {
     private String area;
 
     private String buildingInfo;
+    private String buildingDetail;
 
     @Column
     private String deposit;
@@ -42,19 +43,15 @@ public class Estate {
     @Column
     private String buildingFloor;
     private String roomFloor;
+    private String agent;
 
     @ElementCollection
     @CollectionTable
     @JoinColumn
     private List<String> imageList;
 
-    @ElementCollection
-    @CollectionTable
-    @JoinColumn
-    private List<String> subwaylist;
+    private String subwayInfo;
 
-
-    private String roadaddress;
 
     public Estate(EstateRequestDto estate){
         this.id = estate.getId();
@@ -70,7 +67,9 @@ public class Estate {
         this.roomFloor = estate.getRoomFloor();
         this.monthly = estate.getMonthly();
         this.imageList = estate.getImageList();
-        this.subwaylist = estate.getSubwayList();
+        this.subwayInfo = estate.getSubwayInfo();
         this.office = estate.getOffice();
+        this.buildingDetail = estate.getBuildingDetail();
+        this.agent = estate.getAgent();
     }
 }

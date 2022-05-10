@@ -22,7 +22,7 @@ public class WebDriverUtil extends Thread {
     private WebDriver driver;
     private List<Estate> result;
     public static String WEB_DRIVER_ID = "webdriver.chrome.driver"; // Properties 설정
-    public static String WEB_DRIVER_PATH = "C:/Users/장윤희/Desktop/미누/chromedriver.exe"; // WebDriver 경로
+    public static String WEB_DRIVER_PATH = "chromedriver"; // WebDriver 경로
     private int num;
     @Override
     public void run(){
@@ -49,9 +49,9 @@ public class WebDriverUtil extends Thread {
         ChromeOptions options = new ChromeOptions();
         options.setHeadless(true);
         options.addArguments("--lang=ko");
+        options.addArguments("--headless");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
         options.setCapability("ignoreProtectedModeSettings", true);
         // weDriver 생성.
         driver = new ChromeDriver();
@@ -202,6 +202,7 @@ public class WebDriverUtil extends Thread {
 
                     String a = driver.findElement(By.className("detail_price")).getText();
                     String deposit = a.split("/")[0].replace("보증금", "");
+                    String subwayInfo = webElement.findElement(By.className("detail_address")).getText();
                     String rent_fee = "0";
                     if (monthly.equals("월세")) {
                         rent_fee = a.split("/")[1].replace("\n", "").replace("월세", "");
@@ -222,12 +223,13 @@ public class WebDriverUtil extends Thread {
                     }
                     Long id = Long.parseLong(driver.findElement(By.className("product_number")).getText().split(" ")[1]);
                     String info = driver.findElement(By.className("detail_title")).getText();
-                    String area = driver.findElement(By.className("area")).getText();
+                    String area = driver.findElement(By.className("area")).getText().split(" ")[1];
                     WebElement scroll = driver.findElement(By.className("content_area"));
 
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
+                    driver.findElement(By.className("btn_more")).click();
+                    String buidlingDetail = webElement.findElement(By.className("description more_content")).getText();
 
-                    Thread.sleep(1000);
 //            buildingFloor = Integer.parseInt(driver.findElement(By.className("floor")).getText()
 //                    .split("/")[1].replace("층", ""));      //*[@id="content"]/div/div[1]/div[2]/div[2]/div[4]/div[2]/span[2]
 //            roomFloor =  Integer.parseInt(driver.findElement(By.className("floor")).findElement(By.className("content")).getText()
@@ -255,6 +257,11 @@ public class WebDriverUtil extends Thread {
                         city = driver.findElement(By.id("location")).getText();
                         if (city.contains("군")) break;
                     } while (!city.contains("시"));
+                    String agent ="";
+                    do {
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                        agent = driver.findElement(By.className("agent_name")).getText();
+                    } while (!agent.equals(null));
                     city = city.split("\n")[1];
                     System.out.println("i=" + i);
 //            System.out.println("id="+id);

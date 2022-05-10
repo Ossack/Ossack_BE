@@ -46,9 +46,9 @@ public class EstateController {
     }
 
     //검색 후 리스트 반환
-    @GetMapping("/api/list/search")
-    private List<EstateResponseDto> searchTowm(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
-        return estateService.searchTowm(query,userDetails);
+    @GetMapping("/api/list/search/{officecnt}")
+    private List<EstateResponseDto> searchTowm(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable int officecnt){
+        return estateService.searchTowm(query,userDetails,officecnt);
     }
 
     //level별 지도 조회

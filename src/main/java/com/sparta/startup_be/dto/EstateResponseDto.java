@@ -22,6 +22,7 @@ public class EstateResponseDto {
     private List<String> subways;
     private List<String> images;
     private boolean mylike;
+    private int totalpage;
 
     public EstateResponseDto(Estate estate,boolean mylike){
         this.estateid= estate.getId();
@@ -53,5 +54,22 @@ public class EstateResponseDto {
         this.subways = estate.getSubwaylist();
         this.images =estate.getImageList();
         this.mylike = mylike;
+    }
+
+    public EstateResponseDto(Estate estate, String city, boolean mylike , int totalpage){
+        this.estateid= estate.getId();
+        this.title = city;
+        this.type = estate.getType();
+        this.monthly = estate.getMonthly();
+        this.deposit = estate.getDeposit();
+        this.rent_fee = estate.getRent_fee();
+        this.buildingFloor = estate.getBuildingFloor();
+        this.roomFloor = estate.getRoomFloor();
+        this.buildingInfo = estate.getBuildingInfo();
+        this.area = estate.getArea();
+        this.subways = estate.getSubwaylist();
+        this.images =estate.getImageList();
+        this.mylike = mylike;
+        this.totalpage =totalpage;
     }
 }

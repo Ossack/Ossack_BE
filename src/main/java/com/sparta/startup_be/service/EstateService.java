@@ -93,7 +93,7 @@ public class EstateService {
     }
 
 
-    public List<EstateResponseDto> searchTowm(String query, UserDetailsImpl userDetails) {
+    public List<EstateResponseDto> searchTowm(String query, UserDetailsImpl userDetails,int officecnt) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         List<Estate> estates = new ArrayList<>();
         if(query.contains("시")){
@@ -114,6 +114,15 @@ public class EstateService {
             if (i == 10) break;
         }
 
+        final int end = Math.min(officecnt+10,estateResponseDtoList.size());
+        int totalpage = 0;
+                if(estateResponseDtoList.size() % officecnt ==0){
+                    totalpage = estateResponseDtoList.size() / officecnt;
+                }
+                else {
+                    totalpage = (estateResponseDtoList.size() / officecnt) +1;
+                }
+            estateResponseDtoList.subList(0,end);
         return estateResponseDtoList;
     }
 

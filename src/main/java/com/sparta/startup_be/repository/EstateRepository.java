@@ -18,6 +18,14 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
 //     searchAllByCity(String city);
     @Query("select u from Estate u where u.city like :keyword")
     List<Estate> searchAllByCity(@Param("keyword")String city);
+    @Query("select count(u) from Estate u where u.city like :keyword")
+    int countAllByCity(@Param("keyword")String city);
+
+    @Query("select count(u) from Estate u where u.gu like :keyword")
+    int countAllByGu(@Param("keyword")String gu);
+
+    @Query("select count(u) from Estate u where u.dong like :keyword")
+    int countAllByDong(@Param("keyword")String dong);
 //    @Query(find)
 
 //    @Query(nativeQuery = true,value = "select distinct e.city from estate e," +

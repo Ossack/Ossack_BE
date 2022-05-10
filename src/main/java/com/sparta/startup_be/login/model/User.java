@@ -18,7 +18,7 @@ public class User {
     @Column(unique = true)
     private String userEmail;
 
-    @Column(unique = true)
+    @Column
     private String nickname;
 
     @Column

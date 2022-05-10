@@ -115,10 +115,9 @@ public class GoogleUserService {
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
-        String provider = "google";
         Long id = jsonNode.get("sub").asLong();
         String email = jsonNode.get("email").asText();
-        String nickname = jsonNode.get("name").asText() + "_" + provider;
+        String nickname = jsonNode.get("name").asText();
 
         return new SocialUserInfoDto(id, nickname, email);
 
@@ -129,26 +128,10 @@ public class GoogleUserService {
         // DB 에 중복된 Google email, nickname이 있는지 확인
         String googleEmail = googleUserInfo.getEmail();
         String nickname = googleUserInfo.getNickname();
-        User googleUser = userRepository.findByUserEmailAndNickname(googleEmail, nickname)
+        User googleUser = userRepository.findByUserEmail(googleEmail)
                 .orElse(null);
 
         if (googleUser == null) {
-            Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
-
-            // 닉네임 중복 검사
-            if (nickNameCheck.isPresent()) {
-                String tempNickName = nickname;
-                int i = 1;
-                while (true){
-                    nickname = tempNickName + "_" + i;
-                    Optional<User> nickNameCheck2 = userRepository.findByNickname(nickname);
-                    if (!nickNameCheck2.isPresent()) {
-                        break;
-                    }
-                    i++;
-                }
-            }
-
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);
 

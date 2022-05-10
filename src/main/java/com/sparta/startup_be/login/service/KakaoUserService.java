@@ -102,10 +102,7 @@ public class KakaoUserService {
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-//        object.convert json to object in java objectMapper.readValue
-        // readValue("String", TradePrice.class);
 
-        String provider = "kakao";
         Long id = jsonNode.get("id").asLong();
         String email = "";
         try {
@@ -116,7 +113,7 @@ public class KakaoUserService {
             email = email_front + "@kakao.com";
         }
         String nickname = jsonNode.get("properties")
-                .get("nickname").asText()  + "_" + provider;
+                .get("nickname").asText();
 
         return new SocialUserInfoDto(id, nickname, email);
     }
@@ -126,27 +123,11 @@ public class KakaoUserService {
         // DB 에 중복된 email이 있는지 확인
         String kakaoEmail = kakaoUserInfo.getEmail();
         String nickname = kakaoUserInfo.getNickname();
-        User kakaoUser = userRepository.findByUserEmailAndNickname(kakaoEmail, nickname)
+        User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-            Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
-
-            // 닉네임 중복 검사
-            if (nickNameCheck.isPresent()) {
-                String tempNickName = nickname;
-                int i = 1;
-                while (true){
-                    nickname = tempNickName + "_" + i;
-                    Optional<User> nickNameCheck2 = userRepository.findByNickname(nickname);
-                    if (!nickNameCheck2.isPresent()) {
-                        break;
-                    }
-                    i++;
-                }
-            }
-
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);

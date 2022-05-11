@@ -12,10 +12,12 @@ public class SearchDto {
 
     private List<EstateResponseDto> estateResponseDtoList;
     private int totalpage;
+    private int presentpage;
 
-    public SearchDto (List<EstateResponseDto> estateResponseDtoList , int totalpage) {
+    public SearchDto (List<EstateResponseDto> estateResponseDtoList , int totalpage,int presentpage) {
         this.estateResponseDtoList = estateResponseDtoList;
         this.totalpage = totalpage;
+        this.presentpage = presentpage;
     }
 
 }

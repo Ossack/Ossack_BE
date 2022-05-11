@@ -35,7 +35,8 @@ public class EstateResponseDto {
         this.buildingFloor = estate.getBuildingFloor();
         this.roomFloor = estate.getRoomFloor();
         this.buildingInfo = estate.getBuildingInfo();
-        this.area = estate.getArea();
+//        this.area =estate.getArea();
+        this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
         this.subwayInfo = estate.getSubwayInfo();
         this.images =estate.getImageList();
         this.mylike = mylike;
@@ -53,7 +54,7 @@ public class EstateResponseDto {
         this.buildingFloor = estate.getBuildingFloor();
         this.roomFloor = estate.getRoomFloor();
         this.buildingInfo = estate.getBuildingInfo();
-        this.area = estate.getArea();
+        this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
         this.subwayInfo = estate.getSubwayInfo();
         this.images =estate.getImageList();
         this.buildingDetail = estate.getBuildingDetail();

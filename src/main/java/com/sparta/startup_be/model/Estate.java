@@ -11,9 +11,9 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(indexes={
-        @Index( columnList ="gu"),
-        @Index( columnList ="dong"),
-        @Index( columnList ="id")
+        @Index(columnList ="gu"),
+        @Index(columnList ="dong"),
+        @Index(columnList ="id")
 })
 public class Estate {
 

@@ -28,6 +28,7 @@ public class RestApiExceptionHandler {
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
+        ex.printStackTrace();
         message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
         message.setMessage(ex.getMessage());
 

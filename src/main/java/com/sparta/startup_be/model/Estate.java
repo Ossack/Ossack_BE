@@ -28,12 +28,11 @@ public class Estate {
     private String gu;
     private String dong;
 
-    @Column
     private String monthly;
     @Column
     private String area;
-
     private String buildingInfo;
+    @Column(length = 1000)
     private String buildingDetail;
 
     @Column

@@ -3,11 +3,13 @@ package com.sparta.startup_be.controller;
 import com.sparta.startup_be.dto.CityResponseDto;
 import com.sparta.startup_be.dto.EstateResponseDto;
 import com.sparta.startup_be.dto.MapResponseDto;
+import com.sparta.startup_be.dto.SearchDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.service.EstateService;
 import com.sparta.startup_be.utils.ConvertAddress;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,7 +49,7 @@ public class EstateController {
 
     //검색 후 리스트 반환
     @GetMapping("/api/list/search/{officecnt}")
-    private List<EstateResponseDto> searchTowm(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails,@PathVariable int officecnt){
+    private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int officecnt){
         return estateService.searchTowm(query,userDetails,officecnt);
     }
 

@@ -8,6 +8,7 @@ import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.login.model.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class EstateService {
     }
 
 
-    public List<EstateResponseDto> searchTowm(String query, UserDetailsImpl userDetails,int officecnt) {
+    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int officecnt) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         List<Estate> estates = new ArrayList<>();
         if(query.contains("시")){
@@ -122,8 +123,10 @@ public class EstateService {
                 else {
                     totalpage = (estateResponseDtoList.size() / officecnt) +1;
                 }
-            estateResponseDtoList.subList(0,end);
-        return estateResponseDtoList;
+
+        estateResponseDtoList.subList(0,end);
+                SearchDto searchDto = new SearchDto(estateResponseDtoList ,totalpage);
+        return searchDto;
     }
 
     //핫한 매물 보기기

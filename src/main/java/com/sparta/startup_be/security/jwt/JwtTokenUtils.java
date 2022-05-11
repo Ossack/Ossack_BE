@@ -6,6 +6,7 @@ import com.sparta.startup_be.security.UserDetailsImpl;
 
 import java.util.Date;
 
+// 4번(로그인 성공시 jwt만듦)
 public final class JwtTokenUtils {
 
     private static final int SEC = 1;

@@ -60,8 +60,8 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "64a0648a5d36ca7749a5d4211f64da7e");
-        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
+        body.add("client_id", "9a9fb270cb1fbabb4a99ff23a44e9046");
+        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -98,7 +98,7 @@ public class KakaoUserService {
                 String.class
         );
 
-        // responseBody에 있는 정보를 꺼냄냄
+        // responseBody에 있는 정보를 꺼냄
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
@@ -108,9 +108,8 @@ public class KakaoUserService {
         try {
             email = jsonNode.get("kakao_account").get("email").asText();
         } catch (NullPointerException e) {
-            // 이메일 선택 동의 거부 할 경우 랜덤 이메일 생성
-            String email_front = UUID.randomUUID().toString();
-            email = email_front + "@kakao.com";
+            // 이메일 선택 동의 거부 할 경우 id로 이메일 생성
+            email = id + "@kakao.com";
         }
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();

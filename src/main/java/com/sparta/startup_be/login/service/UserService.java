@@ -1,13 +1,10 @@
 package com.sparta.startup_be.login.service;
 
-import com.sparta.startup_be.dto.ResultDto;
 import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.login.dto.SignupRequestDto;
 import com.sparta.startup_be.login.dto.UserRequestDto;
-import com.sparta.startup_be.login.dto.UserResponseDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -42,7 +39,7 @@ public class UserService {
         if(validatedDuplicateUserEmail(foundUser)) {
             message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
             message.setMessage(ILLEGAL_USER_NAME_DUPLICATION);
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
         }
 
         String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";

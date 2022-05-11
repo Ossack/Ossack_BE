@@ -1,8 +1,11 @@
 package com.sparta.startup_be.security.filter;
 
 
+import com.sparta.startup_be.security.FilterSkipMatcher;
 import com.sparta.startup_be.security.jwt.HeaderTokenExtractor;
 import com.sparta.startup_be.security.jwt.JwtPreProcessingToken;
+import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -15,17 +18,20 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Token 을 내려주는 Filter 가 아닌  client 에서 받아지는 Token 을 서버 사이드에서 검증하는 클레스 SecurityContextHolder 보관소에 해당
  * Token 값의 인증 상태를 보관 하고 필요할때 마다 인증 확인 후 권한 상태 확인 하는 기능
  */
+// jwt토큰을 넘겨주는 모든 경우
 public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
     private final HeaderTokenExtractor extractor;
 
     public JwtAuthFilter(
-            RequestMatcher requiresAuthenticationRequestMatcher,
+//            RequestMatcher requiresAuthenticationRequestMatcher,
+            FilterSkipMatcher requiresAuthenticationRequestMatcher,
             HeaderTokenExtractor extractor
     ) {
         super(requiresAuthenticationRequestMatcher);
@@ -41,15 +47,30 @@ public class JwtAuthFilter extends AbstractAuthenticationProcessingFilter {
 
         // JWT 값을 담아주는 변수 TokenPayload
         String tokenPayload = request.getHeader("Authorization");
+
+        // 토큰이 없을 때 예외처리
         if (tokenPayload == null) {
 //            response.sendRedirect("/user/loginView");
-            return null;
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json;charset=utf-8");
+
+            JSONObject json = new JSONObject();
+            String message = "토큰이 존재하지 않습니다.";
+
+            json.put("httpStatus", HttpStatus.UNAUTHORIZED);
+            json.put("errorMessage", message);
+
+            PrintWriter out = response.getWriter();
+            out.print(json);
+
+//            return null;
         }
 
         JwtPreProcessingToken jwtToken = new JwtPreProcessingToken(
                 extractor.extract(tokenPayload, request));
 
-        return super
+        // 인가를 받음 jwtauthprovider로 이동
+       return super
                 .getAuthenticationManager()
                 .authenticate(jwtToken);
     }

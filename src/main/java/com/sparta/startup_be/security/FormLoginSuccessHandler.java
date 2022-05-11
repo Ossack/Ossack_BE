@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 
+// 3번. 로그인 성공하면 여기로
 public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessHandler {
     public static final String AUTH_HEADER = "Authorization";
     public static final String TOKEN_TYPE = "BEARER";
@@ -25,8 +26,12 @@ public class FormLoginSuccessHandler extends SavedRequestAwareAuthenticationSucc
     public void onAuthenticationSuccess(final HttpServletRequest request, final HttpServletResponse response,
                                         final Authentication authentication) throws IOException {
         final UserDetailsImpl userDetails = ((UserDetailsImpl) authentication.getPrincipal());
+
+        // 4번 호출. -> jwt util로 이동
         // Token 생성
         final String token = JwtTokenUtils.generateJwtToken(userDetails);
+
+        // 토큰 헤더에 담아서 회원가입 끝
         response.addHeader(AUTH_HEADER, TOKEN_TYPE + " " + token);
 
         ObjectMapper objectMapper = new ObjectMapper();

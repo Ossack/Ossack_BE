@@ -103,7 +103,6 @@ public class EstateService {
             estates = estateRepository.searchAllBygu(query);
         }else{
             estates = estateRepository.searchAllBydong(query);
-
         }
 
         int i = 0;
@@ -112,20 +111,18 @@ public class EstateService {
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate,query, mylike);
             estateResponseDtoList.add(estateResponseDto);
             i++;
-            if (i == 10) break;
+
         }
 
         final int end = Math.min(officecnt+10,estateResponseDtoList.size());
         int totalpage = 0;
-                if(estateResponseDtoList.size() % officecnt ==0){
-                    totalpage = estateResponseDtoList.size() / officecnt;
+                if(estateResponseDtoList.size() % 10 ==0){
+                    totalpage = estateResponseDtoList.size() / 10;
                 }
                 else {
-                    totalpage = (estateResponseDtoList.size() / officecnt) +1;
+                    totalpage = (estateResponseDtoList.size() / 10) +1;
                 }
-
-        estateResponseDtoList.subList(0,end);
-                SearchDto searchDto = new SearchDto(estateResponseDtoList ,totalpage);
+                SearchDto searchDto = new SearchDto(estateResponseDtoList.subList(0,end),totalpage);
         return searchDto;
     }
 

@@ -13,6 +13,7 @@ public class FilterSkipMatcher implements RequestMatcher {
     private final OrRequestMatcher orRequestMatcher;
     private final RequestMatcher   processingMatcher;
 
+    // jwt 없이도 들어갈 수 있다?
     public FilterSkipMatcher(
             List<String> pathToSkip,
             String processingPath

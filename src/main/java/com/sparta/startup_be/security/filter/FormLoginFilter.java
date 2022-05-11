@@ -12,6 +12,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// 1번.
 public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
     final private ObjectMapper objectMapper;
 
@@ -34,6 +35,8 @@ public class FormLoginFilter extends UsernamePasswordAuthenticationFilter {
         }
 
         setDetails(request, authRequest);
+
+        // 2번 호출 (formloginauthprovider)
         return this.getAuthenticationManager().authenticate(authRequest);
     }
 }

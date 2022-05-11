@@ -60,8 +60,8 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "64a0648a5d36ca7749a5d4211f64da7e");
-        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
+        body.add("client_id", "9a9fb270cb1fbabb4a99ff23a44e9046");
+        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -98,25 +98,21 @@ public class KakaoUserService {
                 String.class
         );
 
-        // responseBody에 있는 정보를 꺼냄냄
+        // responseBody에 있는 정보를 꺼냄
         String responseBody = response.getBody();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseBody);
-//        object.convert json to object in java objectMapper.readValue
-        // readValue("String", TradePrice.class);
 
-        String provider = "kakao";
         Long id = jsonNode.get("id").asLong();
         String email = "";
         try {
             email = jsonNode.get("kakao_account").get("email").asText();
         } catch (NullPointerException e) {
-            // 이메일 선택 동의 거부 할 경우 랜덤 이메일 생성
-            String email_front = UUID.randomUUID().toString();
-            email = email_front + "@kakao.com";
+            // 이메일 선택 동의 거부 할 경우 id로 이메일 생성
+            email = id + "@kakao.com";
         }
         String nickname = jsonNode.get("properties")
-                .get("nickname").asText()  + "_" + provider;
+                .get("nickname").asText();
 
         return new SocialUserInfoDto(id, nickname, email);
     }
@@ -126,27 +122,11 @@ public class KakaoUserService {
         // DB 에 중복된 email이 있는지 확인
         String kakaoEmail = kakaoUserInfo.getEmail();
         String nickname = kakaoUserInfo.getNickname();
-        User kakaoUser = userRepository.findByUserEmailAndNickname(kakaoEmail, nickname)
+        User kakaoUser = userRepository.findByUserEmail(kakaoEmail)
                 .orElse(null);
 
         if (kakaoUser == null) {
             // 회원가입
-            Optional<User> nickNameCheck = userRepository.findByNickname(nickname);
-
-            // 닉네임 중복 검사
-            if (nickNameCheck.isPresent()) {
-                String tempNickName = nickname;
-                int i = 1;
-                while (true){
-                    nickname = tempNickName + "_" + i;
-                    Optional<User> nickNameCheck2 = userRepository.findByNickname(nickname);
-                    if (!nickNameCheck2.isPresent()) {
-                        break;
-                    }
-                    i++;
-                }
-            }
-
             // password: random UUID
             String password = UUID.randomUUID().toString();
             String encodedPassword = passwordEncoder.encode(password);

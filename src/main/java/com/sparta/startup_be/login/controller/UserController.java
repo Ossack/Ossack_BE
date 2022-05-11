@@ -56,26 +56,4 @@ public class UserController {
     public ResponseEntity<StatusMessage> idCheck(@RequestBody UserRequestDto userDto) {
         return userService.dupEmail(userDto);
     }
-
-    // 닉네임 중복 확인
-    @PostMapping("/api/nickname")
-    public ResponseEntity<StatusMessage> nnCheck(@RequestBody UserRequestDto userDto) {
-        return userService.dupNick(userDto);
-    }
-
-//    @GetMapping("/user/{id}")
-//    public ResponseEntity<StatusMessage> findById(@PathVariable Long id) {
-//        User user = userRepository.findById(id).orElseThrow(
-//                () -> new IllegalArgumentException(ILLEGAL_USER_NOT_EXIST)
-//        );
-//        StatusMessage message = new StatusMessage();
-//        HttpHeaders headers= new HttpHeaders();
-//        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-//
-//        message.setStatusCode(StatusMessage.StatusEnum.OK);
-//        message.setMessage("200");
-//        message.setData(user);
-//
-//        return new ResponseEntity<>(message, headers, HttpStatus.OK);
-//    }
 }

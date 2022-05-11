@@ -80,7 +80,7 @@ public class MypageService {
         String basicImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
         String profileImg = userDetails.getUser().getProfile();
 
-        // 기본 프로필 이외에
+        // 기본 프로필 이외의 프로필일 때 주소 추가
         if (!profileImg.equals(basicImg)) {
             profileImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/" + profileImg;
         }

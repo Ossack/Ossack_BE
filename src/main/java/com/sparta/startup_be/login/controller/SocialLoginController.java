@@ -35,10 +35,4 @@ public class SocialLoginController {
     public SocialUserInfoDto googleLogin(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
         return googleUserService.googleLogin(code, response);
     }
-//
-//    // 네이버 로그인
-//    @GetMapping("/user/naver/callback")
-//    public void naverLogin(@RequestParam String code, @RequestParam String state, HttpServletResponse response) throws JsonProcessingException{
-//        naverUserService.naverLogin(code, state, response);
-//    }
 }

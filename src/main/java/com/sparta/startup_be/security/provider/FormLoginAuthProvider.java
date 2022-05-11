@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.annotation.Resource;
 
+// 2번
 public class FormLoginAuthProvider implements AuthenticationProvider {
 
     @Resource(name="userDetailsServiceImpl")

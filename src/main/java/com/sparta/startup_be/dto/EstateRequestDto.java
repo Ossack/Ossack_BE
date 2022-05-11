@@ -22,7 +22,8 @@ public class EstateRequestDto {
     private String buildingFloor;
     private String roomFloor;
     private List<String> imageList;
-    private List<String> subwayList;
+    private String subwayInfo;
+    private String buildingDetail;
+    private String agent;
 //    private String ci
-
 }

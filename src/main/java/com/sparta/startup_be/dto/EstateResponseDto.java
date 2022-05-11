@@ -54,4 +54,5 @@ public class EstateResponseDto {
         this.images =estate.getImageList();
         this.mylike = mylike;
     }
+
 }

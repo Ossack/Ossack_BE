@@ -19,15 +19,12 @@ public class Estate {
 
     @Id
     private Long id;
-
     private String type;
     private String office;
-
     @Column
     private String city;
     private String gu;
     private String dong;
-
     private String monthly;
     @Column
     private String area;
@@ -50,6 +47,8 @@ public class Estate {
     private List<String> imageList;
 
     private String subwayInfo;
+    private String elevator;
+    private String date;
 
 
     public Estate(EstateRequestDto estate){

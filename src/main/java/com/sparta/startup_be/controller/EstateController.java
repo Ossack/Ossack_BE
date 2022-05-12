@@ -53,7 +53,7 @@ public class EstateController {
         return estateService.searchTowm(query,userDetails,officecnt-1);
     }
 
-    //level별 지도 조회
+    //level별 지도 조회(사무실, 공유오피스)
     @GetMapping("/api/{level}/map")
     private MapResponseDto showEstate2(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
                                       @PathVariable int level, @AuthenticationPrincipal UserDetailsImpl userDetails){

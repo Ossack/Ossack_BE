@@ -24,11 +24,15 @@ public class EstateResponseDto {
     private boolean mylike;
     private String buildingDetail;
     private String agent;
+    private String address;
+
+    private CoordinateResponseDto coordinateResponseDto;
 
     public EstateResponseDto(Estate estate,boolean mylike){
         this.estateid= estate.getId();
         this.title = estate.getCity();
         this.type = estate.getType();
+        this.address = estate.getCity()+" "+ estate.getGu()+" "+estate.getDong();
         this.monthly = estate.getMonthly();
         this.deposit = estate.getDeposit();
         this.rent_fee = estate.getRent_fee();
@@ -44,7 +48,29 @@ public class EstateResponseDto {
         this.agent = estate.getAgent();
     }
 
-    public EstateResponseDto(Estate estate, String city, boolean mylike){
+    public EstateResponseDto(Estate estate,boolean mylike,CoordinateResponseDto coordinateResponseDto){
+        this.address = estate.getCity()+" "+ estate.getGu()+" "+estate.getDong();
+        this.estateid= estate.getId();
+        this.title = estate.getCity();
+        this.type = estate.getType();
+        this.monthly = estate.getMonthly();
+        this.deposit = estate.getDeposit();
+        this.rent_fee = estate.getRent_fee();
+        this.buildingFloor = estate.getBuildingFloor();
+        this.roomFloor = estate.getRoomFloor();
+        this.buildingInfo = estate.getBuildingInfo();
+        this.coordinateResponseDto =coordinateResponseDto;
+//        this.area =estate.getArea();
+        this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
+        this.subwayInfo = estate.getSubwayInfo();
+        this.images =estate.getImageList();
+        this.mylike = mylike;
+        this.buildingDetail = estate.getBuildingDetail();
+        this.agent = estate.getAgent();
+    }
+
+    public EstateResponseDto(Estate estate, String city, boolean mylike,CoordinateResponseDto coordinateResponseDto){
+        this.address = estate.getCity()+" "+ estate.getGu()+" "+estate.getDong();
         this.estateid= estate.getId();
         this.title = city;
         this.type = estate.getType();
@@ -53,6 +79,7 @@ public class EstateResponseDto {
         this.rent_fee = estate.getRent_fee();
         this.buildingFloor = estate.getBuildingFloor();
         this.roomFloor = estate.getRoomFloor();
+        this.coordinateResponseDto =coordinateResponseDto;
         this.buildingInfo = estate.getBuildingInfo();
         this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
         this.subwayInfo = estate.getSubwayInfo();
@@ -60,7 +87,6 @@ public class EstateResponseDto {
         this.buildingDetail = estate.getBuildingDetail();
         this.mylike = mylike;
         this.agent = estate.getAgent();
-
     }
 
 }

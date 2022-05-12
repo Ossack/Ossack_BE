@@ -25,5 +25,7 @@ public class EstateRequestDto {
     private String subwayInfo;
     private String buildingDetail;
     private String agent;
+    private String elevator;
+    private String date;
 //    private String ci
 }

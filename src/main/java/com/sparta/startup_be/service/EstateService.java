@@ -1,5 +1,6 @@
 package com.sparta.startup_be.service;
 
+import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
 import com.sparta.startup_be.repository.EstateRepository;
@@ -90,8 +91,10 @@ public class EstateService {
         Estate estate = estateRepository.findById(estateid).orElseThrow(
                 () -> new IllegalArgumentException("사라진 매물입니다")
         );
+        Coordinate coordinate = coordinateRepository.findByEstateid(estateid);
+        CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
         boolean mylike = favoriteRepository.existsByEstateidAndUserid(estateid, user.getId());
-        return new EstateResponseDto(estate, mylike);
+        return new EstateResponseDto(estate, mylike,coordinateResponseDto);
     }
 
 
@@ -115,7 +118,9 @@ public class EstateService {
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
-            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, query, mylike);
+            Coordinate coordinate=coordinateRepository.findByEstateid(estate.getId());
+            CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, query, mylike,coordinateResponseDto);
             estateResponseDtoList.add(estateResponseDto);
             i++;
         }

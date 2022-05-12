@@ -14,6 +14,7 @@ public class SearchDto {
     private int totalpage;
     private int presentpage;
 
+
     public SearchDto (List<EstateResponseDto> estateResponseDtoList , int totalpage,int presentpage) {
         this.estateResponseDtoList = estateResponseDtoList;
         this.totalpage = totalpage;

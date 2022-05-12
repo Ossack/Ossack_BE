@@ -8,4 +8,6 @@ import java.util.List;
 public interface CoordinateRepository extends JpaRepository<Coordinate, Long> {
     List<Coordinate> findAllByXBetweenAndYBetween(Float minX, Float maxX, Float minY, Float maxY );
     List<Coordinate> findAllByXBetween(Float minX, Float maxX );
+
+    Coordinate findByEstateid(Long estateid);
 }

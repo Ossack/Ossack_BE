@@ -69,5 +69,7 @@ public class Estate {
         this.office = estate.getOffice();
         this.buildingDetail = estate.getBuildingDetail();
         this.agent = estate.getAgent();
+        this.elevator =estate.getElevator();
+        this.date =estate.getDate();
     }
 }

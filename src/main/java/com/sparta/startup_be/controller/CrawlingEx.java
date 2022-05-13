@@ -21,7 +21,7 @@ public class CrawlingEx {
         WebDriverUtil webDriverUtil2 = new WebDriverUtil(2);
         WebDriverUtil webDriverUtil3 = new WebDriverUtil(3);
         WebDriverUtil webDriverUtil4 = new WebDriverUtil(4);
-//        WebDriverUtil webDriverUtil5 = new WebDriverUtil(5);
+        WebDriverUtil webDriverUtil5 = new WebDriverUtil(5);
 //        WebDriverUtil webDriverUtil6 = new WebDriverUtil(6);
 //        WebDriverUtil webDriverUtil7 = new WebDriverUtil(7);
 //        WebDriverUtil webDriverUtil8 = new WebDriverUtil(0);
@@ -31,7 +31,7 @@ public class CrawlingEx {
         webDriverUtil2.start();
         webDriverUtil3.start();
         webDriverUtil4.start();
-//        webDriverUtil5.start();
+        webDriverUtil5.start();
 //        webDriverUtil6.start();
 //        webDriverUtil7.start();
 //        webDriverUtil8.start();
@@ -41,7 +41,7 @@ public class CrawlingEx {
         webDriverUtil2.join();
         webDriverUtil3.join();
         webDriverUtil4.join();
-//        webDriverUtil5.join();
+        webDriverUtil5.join();
 //        webDriverUtil6.join();
 //        webDriverUtil7.join();
 //        webDriverUtil8.join();
@@ -50,7 +50,7 @@ public class CrawlingEx {
         System.out.println(webDriverUtil2.getResult().size());
         System.out.println(webDriverUtil3.getResult().size());
         System.out.println(webDriverUtil4.getResult().size());
-//        System.out.println(webDriverUtil5.getResult().size());
+        System.out.println(webDriverUtil5.getResult().size());
 //        System.out.println(webDriverUtil6.getResult().size());
 //        System.out.println(webDriverUtil7.getResult().size());
 //        System.out.println(webDriverUtil8.getResult().size());
@@ -60,7 +60,7 @@ public class CrawlingEx {
         estateService.storeEstate(webDriverUtil2.getResult());
         estateService.storeEstate(webDriverUtil3.getResult());
         estateService.storeEstate(webDriverUtil4.getResult());
-//        estateService.storeEstate(webDriverUtil5.getResult());
+        estateService.storeEstate(webDriverUtil5.getResult());
 //        estateService.storeEstate(webDriverUtil6.getResult());
 //        estateService.storeEstate(webDriverUtil7.getResult());
 //        estateService.storeEstate(webDriverUtil8.getResult());

@@ -167,7 +167,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.05317076864321&SWLat=37.108502652287&NELng=128.2605043452823&NELat=37.95434466928463&Zoom=10&mode=1&category=1&list=true&articleId=&dataType=");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.64334533285788&SWLat=37.57934276351255&NELng=126.99110780811048&NELat=37.718416406239406&Zoom=13&mode=1&category=1&list=true&articleId=&dataType=  ");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -185,7 +185,9 @@ public class WebDriverUtil extends Thread {
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, document.body.scrollHeight)", item);
             Thread.sleep(10);
             j++;
-        } while (j != 1200);
+            System.out.println(j);
+        } while (j != 500);
+
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
         System.out.println(webElements.size());
@@ -196,9 +198,11 @@ public class WebDriverUtil extends Thread {
         for (WebElement webElement : webElements) {
 //            try {
                 if (i % 8 == num) {
+
                     String monthly = webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
-                    Thread.sleep(1000);
                     webElement.sendKeys(Keys.ENTER);
+                    Thread.sleep(1000);
+
                     //스크롤 선언
                     WebElement scroll = driver.findElement(By.className("content_area"));
 
@@ -230,11 +234,13 @@ public class WebDriverUtil extends Thread {
 
                     //전용면적 크롤링
                     String area = "";
+                    String area_1 ="";
                     while(true){
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 50)", scroll);
-                        area = driver.findElement(By.className("area")).getText().split("\n")[1];
-                        if(area.contains("㎡")) break;
+                        area_1 = driver.findElement(By.className("area")).getText();
+                        if(area_1.contains("㎡")) break;
                     }
+                    area = area_1.split("\n")[1];
                     System.out.println(i);
                     System.out.println(area);
 

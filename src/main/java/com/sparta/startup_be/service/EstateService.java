@@ -132,6 +132,7 @@ public class EstateService {
             totalpage = size/10 + 1;
         }
         SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, officecnt + 1);
+        System.out.println(searchDto.getEstateResponseDtoList().get(0));
         return searchDto;
     }
 

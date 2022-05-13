@@ -40,8 +40,11 @@ public class EstateResponseDto {
         this.roomFloor = estate.getRoomFloor();
         this.buildingInfo = estate.getBuildingInfo();
 //        this.area =estate.getArea();
-        this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
+        this.area =          Integer.parseInt(String.valueOf(Math.round(Double.parseDouble(estate.getArea().split("㎡")[0])/3.3)))+"평형";
+//        this.area = Double.parseDouble(estate.getArea().split("㎡")[0])/3.3+"평형";
+
         this.subwayInfo = estate.getSubwayInfo();
+
         this.images =estate.getImageList();
         this.mylike = mylike;
         this.buildingDetail = estate.getBuildingDetail();
@@ -61,8 +64,10 @@ public class EstateResponseDto {
         this.buildingInfo = estate.getBuildingInfo();
         this.coordinateResponseDto =coordinateResponseDto;
 //        this.area =estate.getArea();
-        this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
+        this.area =          Integer.parseInt(String.valueOf(Math.round(Double.parseDouble(estate.getArea().split("㎡")[0])/3.3)))+"평형";
         this.subwayInfo = estate.getSubwayInfo();
+//        this.area = Double.parseDouble(estate.getArea().split("㎡")[0])/3.3+"평형";
+
         this.images =estate.getImageList();
         this.mylike = mylike;
         this.buildingDetail = estate.getBuildingDetail();
@@ -81,8 +86,10 @@ public class EstateResponseDto {
         this.roomFloor = estate.getRoomFloor();
         this.coordinateResponseDto =coordinateResponseDto;
         this.buildingInfo = estate.getBuildingInfo();
-        this.area =Double.parseDouble(estate.getArea().split("㎡")[0])/3.3 +"평";
+        this.area =          Integer.parseInt(String.valueOf(Math.round(Double.parseDouble(estate.getArea().split("㎡")[0])/3.3)))+"평형";
         this.subwayInfo = estate.getSubwayInfo();
+//        this.area = Double.parseDouble(estate.getArea().split("㎡")[0])/3.3+"평형";
+
         this.images =estate.getImageList();
         this.buildingDetail = estate.getBuildingDetail();
         this.mylike = mylike;

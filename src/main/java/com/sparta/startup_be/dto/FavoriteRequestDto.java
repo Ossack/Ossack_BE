@@ -5,11 +5,11 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FavoriteDto {
+public class FavoriteRequestDto {
     private Long userid;
     private Long estateid;
 
-    public FavoriteDto(Long userid, Long estateid){
+    public FavoriteRequestDto(Long userid, Long estateid){
         this.userid = userid;
         this.estateid = estateid;
     }

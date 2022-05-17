@@ -1,7 +1,7 @@
 package com.sparta.startup_be.service;
 
 
-import com.sparta.startup_be.dto.FavoriteDto;
+import com.sparta.startup_be.dto.FavoriteRequestDto;
 import com.sparta.startup_be.dto.MylikeDto;
 import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.model.Favorite;
@@ -31,8 +31,8 @@ public class FavoriteService {
         if(favorite.isPresent()){
             throw new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_EXIST);
         }
-        FavoriteDto favoriteDto = new FavoriteDto(userid, estateid);
-        Favorite favorite1 = new Favorite(favoriteDto);
+        FavoriteRequestDto favoriteRequestDto = new FavoriteRequestDto(userid, estateid);
+        Favorite favorite1 = new Favorite(favoriteRequestDto);
         favoriteRepository.save(favorite1);
 
         MylikeDto mylikeDto = new MylikeDto(true);

@@ -21,7 +21,7 @@ public class WebDriverUtil extends Thread {
     private WebDriver driver;
     private List<Estate> result;
     public static String WEB_DRIVER_ID = "webdriver.chrome.driver"; // Properties 설정
-    public static String WEB_DRIVER_PATH = "chromedriver"; // WebDriver 경로
+    public static String WEB_DRIVER_PATH = "C:/Users/장윤희/Desktop/미누/chromedriver.exe"; // WebDriver 경로
     //C:/Users/장윤희/Desktop/미누/chromedriver.exe
     private int num;
     @Override
@@ -56,7 +56,7 @@ public class WebDriverUtil extends Thread {
 //        options.addArguments("window-size=1920,1080");
         options.setCapability("ignoreProtectedModeSettings", true);
         // weDriver 생성.
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
     }
 
@@ -100,7 +100,6 @@ public class WebDriverUtil extends Thread {
                         String type = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[1]/div/div[1]/div[2]/strong")).getText();
                         String a = driver.findElement(By.xpath("//*[@id=\"detailMy--fixed\"]/strong")).getText();
                         String monthly = driver.findElement(By.xpath("//*[@id=\"detailMy--fixed\"]/em")).getText();
-//                System.out.println(type+" "+a+" "+monthly);
                         String rent_fee = "";
                         if (monthly.equals("단기임대") || monthly.equals("월세")) {
                             rent_fee = a.split("\n")[2].replace(" ", "").replace("/", "").replace(",", "");
@@ -168,7 +167,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.05317076864321&SWLat=37.108502652287&NELng=128.2605043452823&NELat=37.95434466928463&Zoom=10&mode=1&category=1&list=true&articleId=&dataType=");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.64334533285788&SWLat=37.57934276351255&NELng=126.99110780811048&NELat=37.718416406239406&Zoom=13&mode=1&category=1&list=true&articleId=&dataType=  ");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -186,7 +185,9 @@ public class WebDriverUtil extends Thread {
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, document.body.scrollHeight)", item);
             Thread.sleep(10);
             j++;
-        } while (j != 50);
+            System.out.println(j);
+        } while (j != 500);
+
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
         System.out.println(webElements.size());
@@ -197,91 +198,90 @@ public class WebDriverUtil extends Thread {
         for (WebElement webElement : webElements) {
 //            try {
                 if (i % 8 == num) {
+
                     String monthly = webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
-                    Thread.sleep(1000);
                     webElement.sendKeys(Keys.ENTER);
+                    Thread.sleep(1000);
 
+                    //스크롤 선언
+                    WebElement scroll = driver.findElement(By.className("content_area"));
 
-                    String a = driver.findElement(By.className("detail_price")).getText();
-                    String deposit = a.split("/")[0].replace("보증금", "");
-                    String subwayInfo = webElement.findElement(By.xpath("//*[@id=\"summary\"]/div[2]/div[3]/p[1]")).getText();
-                    String rent_fee = "0";
-                    if (monthly.equals("월세")) {
-                        rent_fee = a.split("/")[1].replace("\n", "").replace("월세", "");
-                    }
-//                List<String> subwayString = new ArrayList<>();
-//                List<WebElement> subwayElements =driver.findElements(By.className("detail_facilities_item "));
-//                System.out.println(subwayElements.size());
-//                for(WebElement subway: subwayElements){
-//                    System.out.println("왜 안대냐");
-//                    System.out.println(subway.getText());
-//                    subwayString.add(subway.getText());
-//                }
+                    //이미지 크롤링
                     List<WebElement> images = driver.findElement(By.className("product_thumb_area")).findElements(By.className("swiper-slide"));
                     List<String> imageList = new ArrayList<>();
                     for (WebElement image : images) {
                         String imageUrl = image.getAttribute("style").split("\"")[1];
                         imageList.add(imageUrl);
                     }
+
+                    //보증금 월세 크롤링
+                    String a = driver.findElement(By.className("detail_price")).getText();
+                    String deposit = a.split("/")[0].replace("보증금", "");
+                    String rent_fee = "0";
+                    if (monthly.equals("월세")) {
+                        rent_fee = a.split("/")[1].replace("\n", "").replace("월세", "");
+                    }
+
+
+                    //지하철 정보 크롤링
+                    String subwayInfo = webElement.findElement(By.xpath("//*[@id=\"summary\"]/div[2]/div[3]/p[1]")).getText();
+                    //매물 번호 크롤링
                     Long id = Long.parseLong(driver.findElement(By.className("product_number")).getText().split(" ")[1]);
+                    //매물 간단 정보 크롤링
                     String info = driver.findElement(By.className("detail_title")).getText();
-                    WebElement scroll = driver.findElement(By.className("content_area"));
-
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 200)", scroll);
-                    String area = driver.findElement(By.className("area")).getText().split("\n")[1];
-//                    System.out.println(area);
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 200)", scroll);
-
-//            buildingFloor = Integer.parseInt(driver.findElement(By.className("floor")).getText()
-//                    .split("/")[1].replace("층", ""));      //*[@id="content"]/div/div[1]/div[2]/div[2]/div[4]/div[2]/span[2]
-//            roomFloor =  Integer.parseInt(driver.findElement(By.className("floor")).findElement(By.className("content")).getText()
-////                    .split("/")[0].replace("층", ""));
 
 
-                    String[] product = driver.findElement(By.className("product_more")).getText().split("\n");
-                    String buildingFloor = "";
-                    String roomFloor = "";
-//            System.out.println(product.split("\n"));
-                    for (String s : product) {
-                        if (s.contains("층")) {
-                            buildingFloor = s.split("/")[1].replace(" ", "").split("층")[0];
-                            roomFloor = s.split("/")[0].replace(" ", "");
-                            break;
+
+                    //전용면적 크롤링
+                    String area = "";
+                    String area_1 ="";
+                    while(true){
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 50)", scroll);
+                        area_1 = driver.findElement(By.className("area")).getText();
+                        if(area_1.contains("㎡")) break;
+                    }
+                    area = area_1.split("\n")[1];
+                    System.out.println(i);
+                    System.out.println(area);
+
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
+
+                    //정보 list 크롤링(엘리베이터 유무, 입주 가능일, 층수)
+                    List<WebElement> products = driver.findElement(By.className("product_more")).findElements(By.tagName("li"));
+                    String elevator ="";
+                    String date = "";
+                    String buildingFloor ="";
+                    String roomFloor ="";
+                    String type = products.get(0).getText();
+                    for(WebElement product : products){
+                        if(product.getText().contains("엘리베이터")){
+                            elevator=product.getText();
+                        }else if(product.getText().contains("즉시")){
+                            date = product.getText();
+                        }else if(product.getText().contains("층")){
+                            buildingFloor = product.getText().split("/")[1].replace("층","");
+                            roomFloor = product.getText().split("/")[0];
                         }
                     }
 
-                    String type = product[0];
-//            String floor = product.split("\n")[3];
-                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 500)", scroll);
 
-//                    driver.findElement(By.xpath("//*[@id=\"article-information\"]/div[2]/div[2]/div[2]/button")).sendKeys(Keys.ENTER);
+                    //빌딩 설명 크롤링
                     String buidlingDetail = webElement.findElement(By.xpath("//*[@id=\"article-information\"]/div[2]/div[2]/div[1]/div[1]")).getText();
 
+                    //주소 및 중개사 크롤링
                     String city = "";
                     String agent ="";
                     do {
                         city = driver.findElement(By.className("data_position")).getText();
                         agent = driver.findElement(By.className("agent_name")).getText();
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
-                    } while (agent.replace(" ","").equals("") && city.replace(" ","").equals(""));
-//                    System.out.println("city: "+city);
-//                    System.out.println(agent);
-//                    city = city.split("\n")[1];
-                    System.out.println("i=" + i);
-//            System.out.println("id="+id);
-//            System.out.println("area="+area);
-//            System.out.println("rent_fee="+rent_fee);
-//            System.out.println("deposit="+deposit);
-//            System.out.println("buildingFloor="+buildingFloor);
-//            System.out.println("info="+info);
-//            System.out.println("roomFloor="+roomFloor);
-//            System.out.println("id="+id);
-//            System.out.println("floor="+floor);
-//            System.out.println("imageList="+imageList);
-//                    System.out.println("city=" + city);
-//            System.out.println("type="+type);
+                    } while (agent.replace(" ","").equals("") || city.replace(" ","").equals(""));
+
+
                     EstateRequestDto estateDto = EstateRequestDto.builder()
-                            .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).imageList(imageList).subwayInfo(subwayInfo).buildingDetail(buidlingDetail)
+                            .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).imageList(imageList).subwayInfo(subwayInfo)
+                            .buildingDetail(buidlingDetail).elevator(elevator).date(date)
                             .deposit(deposit).city(city).rent_fee(rent_fee).type(type).buildingInfo(info).monthly(monthly).office("사무실").agent(agent)
                             .build();
                     Estate estate = new Estate(estateDto);
@@ -289,12 +289,7 @@ public class WebDriverUtil extends Thread {
 
 
                     driver.findElement(By.className("btn_prev")).click();
-//                System.out.println(driver.findElement(By.cssSelector("iframe")).getAttribute("id"));
-
                 }
-//            }catch(Exception e){
-//                System.out.println("i번째에서"+e+"발생");
-//            }
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 150)", item);
             i++;
         }

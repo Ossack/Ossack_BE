@@ -1,5 +1,6 @@
 package com.sparta.startup_be.service;
 
+import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
 import com.sparta.startup_be.repository.EstateRepository;
@@ -9,6 +10,7 @@ import com.sparta.startup_be.security.UserDetailsImpl;
 import com.sparta.startup_be.login.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -85,44 +87,52 @@ public class EstateService {
     }
 
     //리스트 선택후 조회
-    public EstateResponseDto showDetail(Long estateid, User user){
+    public EstateResponseDto showDetail(Long estateid, User user) {
         Estate estate = estateRepository.findById(estateid).orElseThrow(
                 () -> new IllegalArgumentException("사라진 매물입니다")
         );
-        boolean mylike = favoriteRepository.existsByEstateidAndUserid(estateid,user.getId());
-        return new EstateResponseDto(estate,mylike);
+        Coordinate coordinate = coordinateRepository.findByEstateid(estateid);
+        CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+        boolean mylike = favoriteRepository.existsByEstateidAndUserid(estateid, user.getId());
+        return new EstateResponseDto(estate, mylike,coordinateResponseDto);
     }
 
 
     public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int officecnt) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        if(query.equals("서울시")) query="서울특별시";
         List<Estate> estates = new ArrayList<>();
-        if(query.contains("시")){
-            estates = estateRepository.searchAllByCity(query);
-        }else if(query.contains("구")) {
-            estates = estateRepository.searchAllBygu(query);
-        }else{
-            estates = estateRepository.searchAllBydong(query);
+        final int start = 10 * officecnt;
+        int size = 0;
+        if (query.contains("시")) {
+            estates = estateRepository.searchAllByCityQuery(query,start);
+            size = estateRepository.countAllByCity(query);
+        } else if (query.contains("구")) {
+            estates = estateRepository.searchAllByGuQuery(query,start);
+            size = estateRepository.countAllByGu(query);
+        } else {
+            estates = estateRepository.searchAllByDongQuery(query,start);
+            size = estateRepository.countAllByDong(query);
         }
 
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
-            EstateResponseDto estateResponseDto = new EstateResponseDto(estate,query, mylike);
+            Coordinate coordinate=coordinateRepository.findByEstateid(estate.getId());
+            CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, query, mylike,coordinateResponseDto);
             estateResponseDtoList.add(estateResponseDto);
             i++;
-
         }
-
-        final int end = Math.min(officecnt+10,estateResponseDtoList.size());
+        final int end = Math.min(start + 10, estateResponseDtoList.size());
         int totalpage = 0;
-                if(estateResponseDtoList.size() % 10 ==0){
-                    totalpage = estateResponseDtoList.size() / 10;
-                }
-                else {
-                    totalpage = (estateResponseDtoList.size() / 10) +1;
-                }
-                SearchDto searchDto = new SearchDto(estateResponseDtoList.subList(0,end),totalpage);
+        if (size % 10 == 0) {
+            totalpage = size / 10;
+        } else {
+            totalpage = size/10 + 1;
+        }
+        SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, officecnt + 1);
+        System.out.println(searchDto.getEstateResponseDtoList().get(0));
         return searchDto;
     }
 
@@ -163,9 +173,8 @@ public class EstateService {
     }
 
 
-
     public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
-        long temp1 =System.currentTimeMillis();
+        long temp1 = System.currentTimeMillis();
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
         List<String> cities = new ArrayList<>();
@@ -200,13 +209,13 @@ public class EstateService {
 
 //        List<String> cities2 = new ArrayList<>();
 
-        long temp2 =System.currentTimeMillis();
+        long temp2 = System.currentTimeMillis();
         System.out.println("temp1:");
-        System.out.println( temp2-temp1);
+        System.out.println(temp2 - temp1);
 //        System.out.println("size"+cities2.size());
 //        Iterator<String> it = cities.iterator();
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
-        for(int i=0; i<cities.size(); i++) {
+        for (int i = 0; i < cities.size(); i++) {
             String title = cities.get(i);
             System.out.println(title);
             List<EstateResponseDto> estate = new ArrayList<>();
@@ -214,32 +223,32 @@ public class EstateService {
             float avg = 0f;
             if (level < 7) {
                 estate_cnt = estateRepository.countAllByDong(title);
-                 avg  = estateRepository.dongAvgQuery(title);
+                avg = estateRepository.dongAvgQuery(title);
             } else if (level == 7 || level == 8) {
                 estate_cnt = estateRepository.countAllByGu(title);
-                 avg = estateRepository.guAvgQuery(title);
+                avg = estateRepository.guAvgQuery(title);
             } else {
                 estate_cnt = estateRepository.countAllByCity(title);
-                 avg = estateRepository.cityAvgQuery(title);
+                avg = estateRepository.cityAvgQuery(title);
             }
             String response = convertAddress.convertAddress(title);
             CoordinateResponseDto coordinateResponseDtoDtoDto = convertAddress.fromJSONtoItems(response);
 
-            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt,avg);
+            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt, avg);
             cityResponseDtoList.add(cityResponseDto);
         }
-        long temp3 =System.currentTimeMillis();
+        long temp3 = System.currentTimeMillis();
         System.out.println("temp2:");
-        System.out.println( temp3-temp2);
+        System.out.println(temp3 - temp2);
         System.out.println("총:");
-        System.out.println( temp3-temp1);
+        System.out.println(temp3 - temp1);
         return new MapResponseDto(level, cityResponseDtoList);
     }
 
     //지도 검색 조회
     public CityResponseDto showSearchonMap(int level, String query, UserDetailsImpl userDetails) {
         List<Estate> estateList = estateRepository.searchAllByCity(query);
-        float avg =estateRepository.cityAvgQuery(query);
+        float avg = estateRepository.cityAvgQuery(query);
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
 //        for (Estate estate : estateList) {
 //            boolean myLike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
@@ -248,6 +257,6 @@ public class EstateService {
 //        }
         String response = convertAddress.convertAddress(query);
         CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
-        return new CityResponseDto(query, coordinateResponseDto, 0,avg);
+        return new CityResponseDto(query, coordinateResponseDto, 0, avg);
     }
 }

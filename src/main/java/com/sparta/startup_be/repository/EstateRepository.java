@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +19,12 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
 //     searchAllByCity(String city);
     @Query("select u from Estate u where u.city like :keyword")
     List<Estate> searchAllByCity(@Param("keyword")String city);
+    @Query(nativeQuery = true,value = "select u.* from estate u where u.city like :keyword order by u.id limit 10 offset :start")
+    List<Estate> searchAllByCityQuery(@Param("keyword")String city, @Param("start")int start);
+    @Query(nativeQuery = true,value = "select u.* from estate u where u.dong like :keyword order by u.id limit 10 offset :start")
+    List<Estate> searchAllByDongQuery(@Param("keyword")String city, @Param("start")int start);
+    @Query(nativeQuery = true,value = "select u.* from estate u where u.gu like :keyword order by u.id limit 10 offset :start")
+    List<Estate> searchAllByGuQuery(@Param("keyword")String city, @Param("start")int start);
     @Query("select count(u) from Estate u where u.city like :keyword")
     int countAllByCity(@Param("keyword")String city);
 

@@ -50,10 +50,11 @@ public class EstateController {
     //검색 후 리스트 반환
     @GetMapping("/api/list/search/{officecnt}")
     private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int officecnt){
-        return estateService.searchTowm(query,userDetails,officecnt);
+        System.out.println(query);
+        return estateService.searchTowm(query,userDetails,officecnt-1);
     }
 
-    //level별 지도 조회
+    //level별 지도 조회(사무실, 공유오피스)
     @GetMapping("/api/{level}/map")
     private MapResponseDto showEstate2(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
                                       @PathVariable int level, @AuthenticationPrincipal UserDetailsImpl userDetails){

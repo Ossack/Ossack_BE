@@ -15,7 +15,7 @@ import java.util.List;
         @Index(columnList ="dong"),
         @Index(columnList ="id")
 })
-public class Estate {
+public class Estate extends Timestamped {
 
     @Id
     private Long id;

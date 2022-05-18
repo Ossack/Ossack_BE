@@ -72,5 +72,11 @@ public class CrawlingEx {
         WebDriverUtil webDriverUtil = new WebDriverUtil(3);
        estateService.storeEstate(webDriverUtil.useDriverNemo());
     }
+
+    @GetMapping("/api/crawling/shared")
+    public void crawlingSharedOffice() throws InterruptedException {
+        WebDriverUtil webDriverUtil = new WebDriverUtil(0);
+        webDriverUtil.crawlingSharedOffice();
+    }
 }
 

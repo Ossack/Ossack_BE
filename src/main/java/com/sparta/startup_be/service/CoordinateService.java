@@ -28,6 +28,16 @@ public class CoordinateService {
             coordinateRepository.save(coordinate);
         }
     }
+
+    public void storeAddress(List<Estate> estateList) {
+        for (Estate estate : estateList) {
+            String address = estate.getDong();
+            String response = convertAddress.convertAddress(address);
+            CoordinateDto coordinateDto = convertAddress.fromJSONtoItems(response, estate.getId());
+            Coordinate coordinate = new Coordinate(coordinateDto);
+            coordinateRepository.save(coordinate);
+        }
+    }
 }
 
 

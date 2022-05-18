@@ -167,7 +167,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.64334533285788&SWLat=37.57934276351255&NELng=126.99110780811048&NELat=37.718416406239406&Zoom=13&mode=1&category=1&list=true&articleId=&dataType=  ");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.93304495708152&SWLat=37.405283425251525&NELng=127.07188575879455&NELat=37.459053183514435&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=  ");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());

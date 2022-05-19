@@ -1,6 +1,6 @@
 package com.sparta.startup_be.utils;
 
-import com.sparta.startup_be.dto.ApiDto;
+import com.sparta.startup_be.crawling.ApiDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.*;

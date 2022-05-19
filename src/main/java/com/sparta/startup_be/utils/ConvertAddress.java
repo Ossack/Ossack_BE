@@ -1,7 +1,7 @@
 package com.sparta.startup_be.utils;
 
-import com.sparta.startup_be.dto.CoordinateDto;
-import com.sparta.startup_be.dto.CoordinateResponseDto;
+import com.sparta.startup_be.coordinate.dto.CoordinateDto;
+import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.*;

@@ -2,10 +2,6 @@
 package com.sparta.startup_be.utils;
 
 
-import com.sparta.startup_be.dto.CoordinateDto;
-import com.sparta.startup_be.dto.CoordinateResponseDto;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

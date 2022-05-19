@@ -1,8 +1,8 @@
 
 package com.sparta.startup_be.utils;
 
-import com.sparta.startup_be.dto.EstateRequestDto;
-import com.sparta.startup_be.dto.SharedOfficeDto;
+import com.sparta.startup_be.estate.dto.EstateRequestDto;
+import com.sparta.startup_be.sharedOffice.dto.SharedOfficeDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.SharedOffice;
 import lombok.RequiredArgsConstructor;
@@ -243,18 +243,23 @@ public class WebDriverUtil extends Thread {
                         if(area_1.contains("㎡")) break;
                     }
                     area = area_1.split("\n")[1];
+                    String capacity = driver.findElement(By.className("data_point")).findElement(By.className("person")).findElement(By.className("content")).getText();
+                    String management_fee = driver.findElement(By.className("data_point")).findElement(By.className("management")).findElement(By.className("content")).getText();
                     System.out.println(i);
+                    System.out.println(capacity);
+                    System.out.println(management_fee);
                     System.out.println(area);
 
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
 
                     //정보 list 크롤링(엘리베이터 유무, 입주 가능일, 층수)
                     List<WebElement> products = driver.findElement(By.className("product_more")).findElements(By.tagName("li"));
-                    String elevator ="";
-                    String date = "";
-                    String buildingFloor ="";
-                    String roomFloor ="";
+                    String elevator ="개별문의";
+                    String date = "개별문의";
+                    String buildingFloor ="개별문의";
+                    String roomFloor ="개별문의";
                     String type = products.get(0).getText();
+                    String toilet = "개별문의";
                     for(WebElement product : products){
                         if(product.getText().contains("엘리베이터")){
                             elevator=product.getText();
@@ -263,8 +268,11 @@ public class WebDriverUtil extends Thread {
                         }else if(product.getText().contains("층")){
                             buildingFloor = product.getText().split("/")[1].replace("층","");
                             roomFloor = product.getText().split("/")[0];
+                        }else if(product.getText().contains("녀")){
+                            toilet = product.getText();
                         }
                     }
+                    System.out.println(toilet);
 
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 500)", scroll);
 
@@ -272,8 +280,8 @@ public class WebDriverUtil extends Thread {
                     String buidlingDetail = webElement.findElement(By.xpath("//*[@id=\"article-information\"]/div[2]/div[2]/div[1]/div[1]")).getText();
 
                     //주소 및 중개사 크롤링
-                    String city = "";
-                    String agent ="";
+                    String city = "개별문의";
+                    String agent ="개별문의";
                     do {
                         city = driver.findElement(By.className("data_position")).getText();
                         agent = driver.findElement(By.className("agent_name")).getText();
@@ -283,7 +291,7 @@ public class WebDriverUtil extends Thread {
 
                     EstateRequestDto estateDto = EstateRequestDto.builder()
                             .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).imageList(imageList).subwayInfo(subwayInfo)
-                            .buildingDetail(buidlingDetail).elevator(elevator).date(date)
+                            .buildingDetail(buidlingDetail).elevator(elevator).date(date).toilet(toilet).management_fee(management_fee).capacity(capacity)
                             .deposit(deposit).city(city).rent_fee(rent_fee).type(type).buildingInfo(info).monthly(monthly).office("사무실").agent(agent)
                             .build();
                     Estate estate = new Estate(estateDto);

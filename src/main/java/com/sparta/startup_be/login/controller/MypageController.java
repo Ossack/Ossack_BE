@@ -1,7 +1,7 @@
 package com.sparta.startup_be.login.controller;
 
 import com.sparta.startup_be.exception.StatusMessage;
-import com.sparta.startup_be.security.UserDetailsImpl;
+import com.sparta.startup_be.login.security.UserDetailsImpl;
 import com.sparta.startup_be.login.service.MypageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

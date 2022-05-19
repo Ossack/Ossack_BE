@@ -1,6 +1,6 @@
 package com.sparta.startup_be.model;
 
-import com.sparta.startup_be.dto.EstateRequestDto;
+import com.sparta.startup_be.estate.dto.EstateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

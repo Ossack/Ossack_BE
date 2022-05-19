@@ -1,10 +1,8 @@
 package com.sparta.startup_be.model;
 
-import com.sparta.startup_be.dto.SharedOfficeDto;
-import lombok.Builder;
+import com.sparta.startup_be.sharedOffice.dto.SharedOfficeDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;

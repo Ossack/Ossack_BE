@@ -30,10 +30,21 @@ public class EstateResponseDto {
     private String toilet;
     private String parking;
     private String capacity;
+    private String personIncharge;
+    private String phoneNumber;
+    private String agentNumber;
 
     private CoordinateResponseDto coordinateResponseDto;
 
     public EstateResponseDto(Estate estate,boolean mylike){
+        this.management_fee = estate.getManagement_fee();
+        this.toilet = estate.getToilet();
+        this.parking = estate.getParking();
+        this.capacity = estate.getCapacity();
+        this.personIncharge = estate.getPersonIncharge();
+        this.phoneNumber = estate.getPhoneNumber();
+        this.agentNumber = estate.getAgentNumber();
+
         this.estateid= estate.getId();
         this.title = estate.getCity();
         this.type = estate.getType();
@@ -77,6 +88,13 @@ public class EstateResponseDto {
         this.mylike = mylike;
         this.buildingDetail = estate.getBuildingDetail();
         this.agent = estate.getAgent();
+        this.management_fee = estate.getManagement_fee();
+        this.toilet = estate.getToilet();
+        this.parking = estate.getParking();
+        this.capacity = estate.getCapacity();
+        this.personIncharge = estate.getPersonIncharge();
+        this.phoneNumber = estate.getPhoneNumber();
+        this.agentNumber = estate.getAgentNumber();
     }
 
     public EstateResponseDto(Estate estate, String city, boolean mylike,CoordinateResponseDto coordinateResponseDto){
@@ -99,6 +117,13 @@ public class EstateResponseDto {
         this.buildingDetail = estate.getBuildingDetail();
         this.mylike = mylike;
         this.agent = estate.getAgent();
+        this.management_fee = estate.getManagement_fee();
+        this.toilet = estate.getToilet();
+        this.parking = estate.getParking();
+        this.capacity = estate.getCapacity();
+        this.personIncharge = estate.getPersonIncharge();
+        this.phoneNumber = estate.getPhoneNumber();
+        this.agentNumber = estate.getAgentNumber();
     }
 
 }

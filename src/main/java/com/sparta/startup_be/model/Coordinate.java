@@ -1,4 +1,4 @@
-package com.sparta.startup_be.coordinate;
+package com.sparta.startup_be.model;
 
 import com.sparta.startup_be.coordinate.dto.CoordinateDto;
 import lombok.Getter;

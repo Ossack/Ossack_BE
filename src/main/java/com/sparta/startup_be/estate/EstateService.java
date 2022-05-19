@@ -1,6 +1,6 @@
 package com.sparta.startup_be.estate;
 
-import com.sparta.startup_be.coordinate.Coordinate;
+import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.coordinate.CoordinateService;
 import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import com.sparta.startup_be.estate.dto.CityResponseDto;
@@ -107,6 +107,7 @@ public class EstateService {
         if(query.equals("서울시")) query="서울특별시";
         List<Estate> estates = new ArrayList<>();
         final int start = 10 * officecnt;
+        System.out.println(estateRepository.searchAllByGuQuery("서울특별시",0).size());
         int size = 0;
         if (query.contains("시")) {
             estates = estateRepository.searchAllByCityQuery(query,start);
@@ -118,6 +119,7 @@ public class EstateService {
             estates = estateRepository.searchAllByDongQuery(query,start);
             size = estateRepository.countAllByDong(query);
         }
+        System.out.println(size);
 
         int i = 0;
         for (Estate estate : estates) {

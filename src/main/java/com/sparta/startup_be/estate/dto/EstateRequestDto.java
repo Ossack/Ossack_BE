@@ -31,5 +31,8 @@ public class EstateRequestDto {
     private String toilet;
     private String parking;
     private String capacity;
+    private String personIncharge;
+    private String phoneNumber;
+    private String agentNumber;
 //    private String ci
 }

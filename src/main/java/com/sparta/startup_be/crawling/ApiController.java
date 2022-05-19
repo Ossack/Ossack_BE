@@ -23,6 +23,7 @@ public class ApiController {
 
     @GetMapping("/api/exnemo")
     public void getNemo() throws IOException {
-        nemoApi.nemoApi();
+        String result = nemoApi.nemoApi();
+        nemoApi.fromJSONtoItems(result);
     }
 }

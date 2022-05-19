@@ -1,6 +1,7 @@
 package com.sparta.startup_be.coordinate;
 
 import com.sparta.startup_be.coordinate.dto.CoordinateDto;
+import com.sparta.startup_be.model.Coordinate;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.estate.EstateRepository;
 import com.sparta.startup_be.utils.ConvertAddress;

@@ -29,7 +29,7 @@ public class Estate extends Timestamped {
     @Column
     private String area;
     private String buildingInfo;
-    @Column(length = 1000)
+    @Column(length = 1500)
     private String buildingDetail;
 
     @Column
@@ -54,6 +54,9 @@ public class Estate extends Timestamped {
     private String subwayInfo;
     private String elevator;
     private String date;
+    private String personIncharge;
+    private String phoneNumber;
+    private String agentNumber;
 
 
     public Estate(EstateRequestDto estate){
@@ -80,5 +83,8 @@ public class Estate extends Timestamped {
         this.toilet = estate.getToilet();
         this.parking = estate.getParking();
         this.capacity = estate.getCapacity();
+        this.personIncharge = estate.getPersonIncharge();
+        this.phoneNumber = estate.getPhoneNumber();
+        this.agentNumber = estate.getAgentNumber();
     }
 }

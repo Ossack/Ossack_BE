@@ -25,6 +25,10 @@ public class EstateResponseDto {
     private String buildingDetail;
     private String agent;
     private String address;
+    private String management_fee;
+    private String toilet;
+    private String parking;
+    private String capacity;
 
     private CoordinateResponseDto coordinateResponseDto;
 

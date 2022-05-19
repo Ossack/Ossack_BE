@@ -1,7 +1,9 @@
 
 package com.sparta.startup_be.controller;
 
+import com.sparta.startup_be.model.SharedOffice;
 import com.sparta.startup_be.service.EstateService;
+import com.sparta.startup_be.service.SharedOfficeService;
 import com.sparta.startup_be.utils.WebDriverUtil;
 import io.swagger.annotations.Api;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class CrawlingEx {
     private final EstateService estateService;
+    private final SharedOfficeService sharedOfficeService;
 
     @GetMapping("/api/ex")
     public void example() throws InterruptedException {
@@ -76,7 +79,7 @@ public class CrawlingEx {
     @GetMapping("/api/crawling/shared")
     public void crawlingSharedOffice() throws InterruptedException {
         WebDriverUtil webDriverUtil = new WebDriverUtil(0);
-        webDriverUtil.crawlingSharedOffice();
+        sharedOfficeService.storeSharedOffice(webDriverUtil.crawlingSharedOffice());
     }
 }
 

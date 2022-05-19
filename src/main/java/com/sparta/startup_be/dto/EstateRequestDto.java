@@ -27,5 +27,9 @@ public class EstateRequestDto {
     private String agent;
     private String elevator;
     private String date;
+    private String management_fee;
+    private String toilet;
+    private String parking;
+    private String capacity;
 //    private String ci
 }

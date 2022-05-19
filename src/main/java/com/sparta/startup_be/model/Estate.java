@@ -40,6 +40,11 @@ public class Estate extends Timestamped {
     private String buildingFloor;
     private String roomFloor;
     private String agent;
+    private String management_fee;
+    private String toilet;
+    private String parking;
+    private String capacity;
+
 
     @ElementCollection
     @CollectionTable
@@ -71,5 +76,9 @@ public class Estate extends Timestamped {
         this.agent = estate.getAgent();
         this.elevator =estate.getElevator();
         this.date =estate.getDate();
+        this.management_fee = estate.getManagement_fee();
+        this.toilet = estate.getToilet();
+        this.parking = estate.getParking();
+        this.capacity = estate.getCapacity();
     }
 }

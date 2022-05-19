@@ -2,6 +2,7 @@
 package com.sparta.startup_be.utils;
 
 import com.sparta.startup_be.dto.EstateRequestDto;
+import com.sparta.startup_be.dto.SharedOfficeDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.SharedOffice;
 import lombok.RequiredArgsConstructor;
@@ -306,8 +307,8 @@ public class WebDriverUtil extends Thread {
 
     public List<SharedOffice> crawlingSharedOffice() throws InterruptedException {
         driver.get("https://www.nemoapp.kr/Search?PageIndex=0&SWLng=126.83493927672092&SWLat=37.47725027878594&NELng=127.11293915376315&NELat=37.580241979314174&Zoom=13&category=2&list=true&branchId=&dataType=");
+        driver.manage().timeouts().implicitlyWait(20000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
 //        try {
 //            driver.findElement(By.className("nav_count")).click();
@@ -330,6 +331,7 @@ public class WebDriverUtil extends Thread {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollTo(0, 0)", item);
 
 
+
         List<SharedOffice> sharedOffices =new ArrayList<>();
         int i = 0;
         for (WebElement webElement : webElements) {
@@ -341,7 +343,8 @@ public class WebDriverUtil extends Thread {
 
                 //이미지 크롤링
                 List<WebElement> images = driver.findElement(By.className("product_thumb_area")).findElements(By.className("swiper-slide"));
-                List<String> imageList = new ArrayList<>();
+                List<String> imageList = new ArrayList<>(); //imageList선언
+                List<String> coveniences = new ArrayList<>(); //편의시설 List 선언
                 for (WebElement image : images) {
                     String imageUrl = image.getAttribute("style").split("\"")[1];
                     imageList.add(imageUrl);
@@ -375,15 +378,44 @@ public class WebDriverUtil extends Thread {
                 String parking = driver.findElement(By.className("parking")).findElement(By.className("content")).getText();
                 System.out.println(parking);
 
+
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
 
                 //상세설명크롤링
-                String detail = driver.findElement(By.className("description")).getText();
-                System.out.println(detail);
+                String detail ="";
+                while(true){
+                    driver.findElement(By.className("description")).getText();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                    if(!detail.equals(null)) break;
+                }
 
+                //편의시설 크롤링
+                List<WebElement> covenienceList = new ArrayList<>();
+                try {
+                    while (true) {
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                        covenienceList = driver.findElement(By.className("covenience_list")).findElements(By.tagName("li"));
+                        if (covenienceList.size() != 0) break;
+                    }
+                }catch(NoSuchElementException e){
+                    e.printStackTrace();
+                }
+                for(WebElement covenience : covenienceList){
+                    System.out.println(covenience.getText());
+                    coveniences.add(covenience.getText());
+                }
+
+                List<WebElement> webElements1 = driver.findElements(By.className("tbl_option"));
+                System.out.println(webElements1.size());
+
+                SharedOfficeDto sharedOfficeDto = SharedOfficeDto.builder()
+                        .detail(detail).floor(floor).imageList(imageList).minimum_days(minimum_days).convience(coveniences)
+                        .name(name).parking(parking).subwayInfo(subwayInfo).price(price).time(time).build();
+                SharedOffice sharedOffice =new SharedOffice(sharedOfficeDto);
+                sharedOffices.add(sharedOffice);
                 driver.findElement(By.className("btn_prev")).click();
             }
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 310)", item);
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 314)", item);
             i++;
         }
         log.info("++++++++++++++++++++++===================+++++++++++++ 끝 : ");

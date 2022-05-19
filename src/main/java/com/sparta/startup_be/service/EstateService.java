@@ -31,6 +31,7 @@ public class EstateService {
     private final FavoriteRepository favoriteRepository;
     private final CoordinateRepository coordinateRepository;
     private final ConvertAddress convertAddress;
+    private final CoordinateService coordinateService;
 
 
 //    public List<Estate> show(){
@@ -38,6 +39,7 @@ public class EstateService {
 //    }
 
     public void storeEstate(List<Estate> estates) {
+        coordinateService.storeAddress(estates);
         for (Estate estate : estates) {
             estateRepository.save(estate);
         }
@@ -132,7 +134,6 @@ public class EstateService {
             totalpage = size/10 + 1;
         }
         SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, officecnt + 1);
-        System.out.println(searchDto.getEstateResponseDtoList().get(0));
         return searchDto;
     }
 
@@ -223,18 +224,19 @@ public class EstateService {
             float avg = 0f;
             if (level < 7) {
                 estate_cnt = estateRepository.countAllByDong(title);
-                avg = estateRepository.dongAvgQuery(title);
+                avg = (float) (estateRepository.dongAvgQuery(title)/estateRepository.dongAreaAvgQuery(title)* 3.3);
             } else if (level == 7 || level == 8) {
                 estate_cnt = estateRepository.countAllByGu(title);
-                avg = estateRepository.guAvgQuery(title);
+                avg = (float) (estateRepository.guAvgQuery(title)/estateRepository.guAvgAreaQuery(title) *3.3);
             } else {
                 estate_cnt = estateRepository.countAllByCity(title);
-                avg = estateRepository.cityAvgQuery(title);
+                avg = (float) (estateRepository.cityAvgQuery(title)/estateRepository.cityAreaAvgQuery(title) * 3.3);
             }
+            avg = Integer.parseInt(String.valueOf(Math.round(avg)));
             String response = convertAddress.convertAddress(title);
             CoordinateResponseDto coordinateResponseDtoDtoDto = convertAddress.fromJSONtoItems(response);
 
-            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt, avg);
+            CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt, (int) avg);
             cityResponseDtoList.add(cityResponseDto);
         }
         long temp3 = System.currentTimeMillis();
@@ -255,8 +257,9 @@ public class EstateService {
 //            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, myLike);
 //            estateResponseDtoList.add(estateResponseDto);
 //        }
+        avg = Integer.parseInt(String.valueOf(Math.round(avg)));
         String response = convertAddress.convertAddress(query);
         CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
-        return new CityResponseDto(query, coordinateResponseDto, 0, avg);
+        return new CityResponseDto(query, coordinateResponseDto, 0, (int) avg);
     }
 }

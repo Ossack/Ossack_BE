@@ -2,7 +2,9 @@
 package com.sparta.startup_be.utils;
 
 import com.sparta.startup_be.dto.EstateRequestDto;
+import com.sparta.startup_be.dto.SharedOfficeDto;
 import com.sparta.startup_be.model.Estate;
+import com.sparta.startup_be.model.SharedOffice;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
@@ -167,7 +169,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.64334533285788&SWLat=37.57934276351255&NELng=126.99110780811048&NELat=37.718416406239406&Zoom=13&mode=1&category=1&list=true&articleId=&dataType=  ");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.93304495708152&SWLat=37.405283425251525&NELng=127.07188575879455&NELat=37.459053183514435&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=  ");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -191,7 +193,7 @@ public class WebDriverUtil extends Thread {
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
         System.out.println(webElements.size());
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollTo(0, 100)", item);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollTo(0, 0)", item);
 
         List<Estate> estates= new ArrayList<>();
         int i = 0;
@@ -301,6 +303,124 @@ public class WebDriverUtil extends Thread {
 
     private void quitDriver() {
         driver.quit(); // webDriver 종료
+    }
+
+    public List<SharedOffice> crawlingSharedOffice() throws InterruptedException {
+        driver.get("https://www.nemoapp.kr/Search?PageIndex=0&SWLng=126.83493927672092&SWLat=37.47725027878594&NELng=127.11293915376315&NELat=37.580241979314174&Zoom=13&category=2&list=true&branchId=&dataType=");
+        driver.manage().timeouts().implicitlyWait(20000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
+        driver.manage().window().maximize();
+        log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
+//        try {
+//            driver.findElement(By.className("nav_count")).click();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        Thread.sleep(1000);
+        WebElement item = driver.findElement(By.className("list_area"));
+        int j = 0;
+        do {
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, document.body.scrollHeight)", item);
+            Thread.sleep(10);
+            j++;
+            System.out.println(j);
+        } while (j != 500);
+
+
+        List<WebElement> webElements = driver.findElements(By.className("coworking_card"));
+        System.out.println(webElements.size());
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollTo(0, 0)", item);
+
+
+
+        List<SharedOffice> sharedOffices =new ArrayList<>();
+        int i = 0;
+        for (WebElement webElement : webElements) {
+//            try {
+            if (i % 8 == num) {
+                webElement.click();
+                //스크롤 선언
+                WebElement scroll = driver.findElement(By.className("content_area"));
+
+                //이미지 크롤링
+                List<WebElement> images = driver.findElement(By.className("product_thumb_area")).findElements(By.className("swiper-slide"));
+                List<String> imageList = new ArrayList<>(); //imageList선언
+                List<String> coveniences = new ArrayList<>(); //편의시설 List 선언
+                for (WebElement image : images) {
+                    String imageUrl = image.getAttribute("style").split("\"")[1];
+                    imageList.add(imageUrl);
+                }
+
+                //건물이름 크롤링
+                String name = driver.findElement(By.className("detail_name")).getText();
+                System.out.println(name);
+
+                //지하철 정보 크롤링
+                String subwayInfo = driver.findElement(By.className("detail_address")).getText();
+                System.out.println(subwayInfo);
+
+                //비용크롤링
+                String price = driver.findElement(By.className("detail_price")).getText();
+                System.out.println(price);
+
+                //이용시간 크롤링
+                String time = driver.findElement(By.className("product_data")).findElement(By.className("time")).findElement(By.className("content")).getText();
+                System.out.println(time);
+
+                //최소이용기간 크롤링
+                String minimum_days = driver.findElement(By.className("minimum_days")).findElement(By.className("content")).getText();
+                System.out.println(minimum_days);
+
+                //층수 크롤링
+                String floor = driver.findElement(By.className("floor")).findElement(By.className("content")).getText();
+                System.out.println(floor);
+
+                //주차비 크롤링
+                String parking = driver.findElement(By.className("parking")).findElement(By.className("content")).getText();
+                System.out.println(parking);
+
+
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
+
+                //상세설명크롤링
+                String detail ="";
+                while(true){
+                    driver.findElement(By.className("description")).getText();
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                    if(!detail.equals(null)) break;
+                }
+
+                //편의시설 크롤링
+                List<WebElement> covenienceList = new ArrayList<>();
+                try {
+                    while (true) {
+                        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                        covenienceList = driver.findElement(By.className("covenience_list")).findElements(By.tagName("li"));
+                        if (covenienceList.size() != 0) break;
+                    }
+                }catch(NoSuchElementException e){
+                    e.printStackTrace();
+                }
+                for(WebElement covenience : covenienceList){
+                    System.out.println(covenience.getText());
+                    coveniences.add(covenience.getText());
+                }
+
+                List<WebElement> webElements1 = driver.findElements(By.className("tbl_option"));
+                System.out.println(webElements1.size());
+
+                SharedOfficeDto sharedOfficeDto = SharedOfficeDto.builder()
+                        .detail(detail).floor(floor).imageList(imageList).minimum_days(minimum_days).convience(coveniences)
+                        .name(name).parking(parking).subwayInfo(subwayInfo).price(price).time(time).build();
+                SharedOffice sharedOffice =new SharedOffice(sharedOfficeDto);
+                sharedOffices.add(sharedOffice);
+                driver.findElement(By.className("btn_prev")).click();
+            }
+            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 314)", item);
+            i++;
+        }
+        log.info("++++++++++++++++++++++===================+++++++++++++ 끝 : ");
+        quitDriver();
+        return sharedOffices;
     }
 }
 

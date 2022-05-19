@@ -21,7 +21,7 @@ public class CoordinateEstate {
     public CoordinateEstate(CoordinateDto coordinateDto){
         this.x = coordinateDto.getX();
         this.y = coordinateDto.getY();
-        this.estateid = coordinateDto.getEstateid();
+        this.estateid = coordinateDto.getId();
     }
 
 

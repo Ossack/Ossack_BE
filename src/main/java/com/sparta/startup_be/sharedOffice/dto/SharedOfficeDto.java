@@ -19,4 +19,11 @@ public class SharedOfficeDto {
     private String detail;
     private List<String> imageList;
     private List<String> convience;
+    private String city;
+    private String gu;
+    private String dong;
+    private String personIncharge;
+    private String number;
+    private String agent;
+
 }

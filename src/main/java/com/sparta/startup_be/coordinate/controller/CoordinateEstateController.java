@@ -1,5 +1,6 @@
-package com.sparta.startup_be.coordinate;
+package com.sparta.startup_be.coordinate.controller;
 
+import com.sparta.startup_be.coordinate.service.CoordinateEstateService;
 import com.sparta.startup_be.estate.EstateRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,14 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Api (tags = {"좌표 계산하는 기능 Controller"})
 @RestController
 @RequiredArgsConstructor
-public class CoordinateController {
-    private final CoordinateService coordinateService;
-    private final EstateRepository estateRepository;
+public class CoordinateEstateController {
+    private final CoordinateEstateService coordinateEstateService;
 
     @ApiOperation(value = "좌표계산 메소드")
     @PostMapping("/api/convertAddress")
     private String convertAddress() {
-        coordinateService.convertAddress();
+        coordinateEstateService.convertAddress();
         return "성공";
     }
 

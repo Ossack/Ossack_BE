@@ -104,13 +104,7 @@ public class KakaoUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long id = jsonNode.get("id").asLong();
-        String email = "";
-        try {
-            email = jsonNode.get("kakao_account").get("email").asText();
-        } catch (NullPointerException e) {
-            // 이메일 선택 동의 거부 할 경우 id로 이메일 생성
-            email = id + "@kakao.com";
-        }
+        String email = jsonNode.get("kakao_account").get("email").asText();
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
 

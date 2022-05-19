@@ -42,13 +42,13 @@ public class EstateController {
 //    }
 
     //메인 페이지 키워드 검색
-    @GetMapping("/estate/search")
+    @GetMapping("/estates/search")
     private List<EstateResponseDto> searchKeyword(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.searchKeyword(query,userDetails);
     }
 
     //검색 후 리스트 반환
-    @GetMapping("/estate/search/{officecnt}")
+    @GetMapping("/estates/search/{officecnt}")
     private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int officecnt){
         System.out.println(query);
         return estateService.searchTowm(query,userDetails,officecnt-1);
@@ -74,7 +74,7 @@ public class EstateController {
     }
 
     // 지금 핫한 오피스
-    @GetMapping("/estate/hot")
+    @GetMapping("/estates/hot")
     private List<Map<String,Object>> showHot(@AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.searchHot(userDetails);
     }
@@ -85,7 +85,7 @@ public class EstateController {
 //        return convertAddress.fromJSONtoItems(resultString);
 //    }
 
-    @GetMapping("/estate/favorite")
+    @GetMapping("/estates/favorite")
     public List<EstateResponseDto> showFavorite(
             @AuthenticationPrincipal UserDetailsImpl userDetails
             ){

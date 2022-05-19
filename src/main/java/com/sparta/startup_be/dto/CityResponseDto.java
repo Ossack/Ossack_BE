@@ -11,16 +11,16 @@ import java.util.List;
 public class CityResponseDto {
     private String title;
 
-    private Float average;
+    private String average;
     private CoordinateResponseDto coordinate;
 
     private int estate_cnt;
 
 
-    public CityResponseDto(String title, CoordinateResponseDto coordinate, int estate_cnt,Float average){
+    public CityResponseDto(String title, CoordinateResponseDto coordinate, int estate_cnt,int average){
         this.title = title;
         this.coordinate = coordinate;
         this.estate_cnt = estate_cnt;
-        this.average = average;
+        this.average = ""+average;
     }
 }

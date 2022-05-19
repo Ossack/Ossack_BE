@@ -74,7 +74,7 @@ public class GoogleUserService {
         body.add("client_id" , "922925499099-ae2nodkaoccn3rcd933u331j6bjnupum.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "http://localhost:3000/user/google/callback");
+        body.add("redirect_uri", "https://ossack.shop/user/google/callback");
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기

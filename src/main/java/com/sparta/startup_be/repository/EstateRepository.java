@@ -53,6 +53,13 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     @Query("select avg (u.rent_fee) from Estate u where u.city like :keyword group by u.city")
     float cityAvgQuery(@Param("keyword")String city);
 
+    @Query("select avg (u.area) from Estate u where u.dong like :keyword group by u.dong")
+    float dongAreaAvgQuery(@Param("keyword")String dong);
+    @Query("select avg (u.area) from Estate u where u.gu like :keyword group by u.gu")
+    float guAvgAreaQuery(@Param("keyword")String gu);
+    @Query("select avg (u.area) from Estate u where u.city  like :keyword group by u.city")
+    float cityAreaAvgQuery(@Param("keyword")String city);
+
     @Query("select u from Estate u where u.gu like :keyword")
     List<Estate> searchAllBygu(@Param("keyword")String city);
 

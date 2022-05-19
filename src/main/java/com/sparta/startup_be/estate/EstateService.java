@@ -1,6 +1,6 @@
 package com.sparta.startup_be.estate;
 
-import com.sparta.startup_be.model.Coordinate;
+import com.sparta.startup_be.model.CoordinateEstate;
 import com.sparta.startup_be.coordinate.CoordinateService;
 import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import com.sparta.startup_be.estate.dto.CityResponseDto;
@@ -95,8 +95,8 @@ public class EstateService {
         Estate estate = estateRepository.findById(estateid).orElseThrow(
                 () -> new IllegalArgumentException("사라진 매물입니다")
         );
-        Coordinate coordinate = coordinateRepository.findByEstateid(estateid);
-        CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+        CoordinateEstate coordinateEstate = coordinateRepository.findByEstateid(estateid);
+        CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateEstate);
         boolean mylike = favoriteRepository.existsByEstateidAndUserid(estateid, user.getId());
         return new EstateResponseDto(estate, mylike,coordinateResponseDto);
     }
@@ -124,8 +124,8 @@ public class EstateService {
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
-            Coordinate coordinate=coordinateRepository.findByEstateid(estate.getId());
-            CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+            CoordinateEstate coordinateEstate =coordinateRepository.findByEstateid(estate.getId());
+            CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateEstate);
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate, query, mylike,coordinateResponseDto);
             estateResponseDtoList.add(estateResponseDto);
             i++;

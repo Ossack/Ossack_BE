@@ -1,6 +1,6 @@
 package com.sparta.startup_be.coordinate.dto;
 
-import com.sparta.startup_be.model.Coordinate;
+import com.sparta.startup_be.model.CoordinateEstate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,8 +15,8 @@ public class CoordinateResponseDto {
         this.lng = lng;
     }
 
-    public CoordinateResponseDto(Coordinate coordinate){
-        this.lat = coordinate.getY();
-        this.lng = coordinate.getX();
+    public CoordinateResponseDto(CoordinateEstate coordinateEstate){
+        this.lat = coordinateEstate.getY();
+        this.lng = coordinateEstate.getX();
     }
 }

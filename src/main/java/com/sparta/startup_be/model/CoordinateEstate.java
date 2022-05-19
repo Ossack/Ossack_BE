@@ -10,7 +10,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Coordinate {
+public class CoordinateEstate {
 
     @Id
     private Long estateid;;
@@ -18,7 +18,7 @@ public class Coordinate {
     private double x;
     private double y;
 
-    public Coordinate(CoordinateDto coordinateDto){
+    public CoordinateEstate(CoordinateDto coordinateDto){
         this.x = coordinateDto.getX();
         this.y = coordinateDto.getY();
         this.estateid = coordinateDto.getEstateid();

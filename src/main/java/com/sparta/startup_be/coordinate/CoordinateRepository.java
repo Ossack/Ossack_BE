@@ -1,13 +1,13 @@
 package com.sparta.startup_be.coordinate;
 
-import com.sparta.startup_be.model.Coordinate;
+import com.sparta.startup_be.model.CoordinateEstate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CoordinateRepository extends JpaRepository<Coordinate, Long> {
-    List<Coordinate> findAllByXBetweenAndYBetween(Float minX, Float maxX, Float minY, Float maxY );
-    List<Coordinate> findAllByXBetween(Float minX, Float maxX );
+public interface CoordinateRepository extends JpaRepository<CoordinateEstate, Long> {
+    List<CoordinateEstate> findAllByXBetweenAndYBetween(Float minX, Float maxX, Float minY, Float maxY );
+    List<CoordinateEstate> findAllByXBetween(Float minX, Float maxX );
 
-    Coordinate findByEstateid(Long estateid);
+    CoordinateEstate findByEstateid(Long estateid);
 }

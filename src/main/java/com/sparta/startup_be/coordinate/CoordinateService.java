@@ -1,7 +1,7 @@
 package com.sparta.startup_be.coordinate;
 
 import com.sparta.startup_be.coordinate.dto.CoordinateDto;
-import com.sparta.startup_be.model.Coordinate;
+import com.sparta.startup_be.model.CoordinateEstate;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.estate.EstateRepository;
 import com.sparta.startup_be.utils.ConvertAddress;
@@ -23,8 +23,8 @@ public class CoordinateService {
             String address = estate.getDong();
             String response = convertAddress.convertAddress(address);
             CoordinateDto coordinateDto = convertAddress.fromJSONtoItems(response, estate.getId());
-            Coordinate coordinate = new Coordinate(coordinateDto);
-            coordinateRepository.save(coordinate);
+            CoordinateEstate coordinateEstate = new CoordinateEstate(coordinateDto);
+            coordinateRepository.save(coordinateEstate);
         }
     }
 
@@ -33,8 +33,8 @@ public class CoordinateService {
             String address = estate.getDong();
             String response = convertAddress.convertAddress(address);
             CoordinateDto coordinateDto = convertAddress.fromJSONtoItems(response, estate.getId());
-            Coordinate coordinate = new Coordinate(coordinateDto);
-            coordinateRepository.save(coordinate);
+            CoordinateEstate coordinateEstate = new CoordinateEstate(coordinateDto);
+            coordinateRepository.save(coordinateEstate);
         }
     }
 }

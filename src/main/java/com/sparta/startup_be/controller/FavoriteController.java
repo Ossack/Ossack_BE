@@ -20,14 +20,14 @@ import java.nio.charset.Charset;
 public class FavoriteController {
     private final FavoriteService favoriteService;
 
-    @PostMapping("/favorite/{estateid}")
+    @PostMapping("/estates/{estateid}/like")
     public ResponseEntity<StatusMessage> pressLike(@PathVariable Long estateid,
                                                    @AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userid = userDetails.getUser().getId();
         return favoriteService.pressLike(estateid, userid);
     }
 
-    @DeleteMapping("/favorite/{estateid}")
+    @PostMapping("/estates/{estateid}/unlike")
     public ResponseEntity<StatusMessage> unpresslike(@PathVariable Long estateid,
                               @AuthenticationPrincipal UserDetailsImpl userDetails){
         Long userid = userDetails.getUser().getId();

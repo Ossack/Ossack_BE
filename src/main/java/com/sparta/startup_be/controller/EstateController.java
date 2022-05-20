@@ -42,33 +42,35 @@ public class EstateController {
 //    }
 
     //메인 페이지 키워드 검색
-    @GetMapping("/estates/search")
+    @GetMapping("/estates")
     private List<EstateResponseDto> searchKeyword(@RequestParam String query,@AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.searchKeyword(query,userDetails);
     }
 
     //검색 후 리스트 반환
-    @GetMapping("/estates/search/{officecnt}")
+    @GetMapping("/estates/{officecnt}")
     private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int officecnt){
         System.out.println(query);
         return estateService.searchTowm(query,userDetails,officecnt-1);
     }
 
     //level별 지도 조회(사무실, 공유오피스)
-    @GetMapping("/map/{level}")
+    @GetMapping("/map")
     private MapResponseDto showEstate2(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
-                                      @PathVariable int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                      @RequestParam int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails);
     }
 
+
+
     //검색 복록 지도 조회
-    @GetMapping("/map/search/{level}")
-    private CityResponseDto showSearchonMap(@PathVariable int level, @RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    @GetMapping("/map/search")
+    private CityResponseDto showSearchonMap(@RequestParam int level, @RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showSearchonMap(level,query,userDetails);
     }
 
     //리스트 선택 후 디테일 조회
-    @GetMapping("/detail/{estateid}")
+    @GetMapping("/estates/{estateid}")
     private EstateResponseDto showDetail(@PathVariable Long estateid, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showDetail(estateid,userDetails.getUser());
     }

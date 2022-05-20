@@ -15,7 +15,7 @@ public class CoordinateEstateController {
     private final CoordinateEstateService coordinateEstateService;
 
     @ApiOperation(value = "좌표계산 메소드")
-    @PostMapping("/api/convertAddress")
+    @PostMapping("/estate/convertAddress")
     private String convertAddress() {
         coordinateEstateService.convertAddress();
         return "성공";

@@ -344,7 +344,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 10);
+        } while (j != 1100);
 
 
         List<WebElement> webElements = driver.findElements(By.className("coworking_card"));
@@ -452,7 +452,7 @@ public class WebDriverUtil extends Thread {
 //                System.out.println(number);
                     //공인중개사
                     String agentInfo = driver.findElement(By.className("agent_address")).getText();
-                    String agent = agentInfo.split("[(]")[0].split(" ","");
+                    String agent = agentInfo.split("[(]")[0].replace(" ","");
 //                System.out.println(agent);
                     String personIncharge = agentInfo.split("[(]")[1].replace("(","").replace(")","").replace(" ","").replace("대표","");
 //                System.out.println(personIncharge);

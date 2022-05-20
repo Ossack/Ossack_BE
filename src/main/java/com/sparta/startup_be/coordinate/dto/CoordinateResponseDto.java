@@ -1,6 +1,7 @@
 package com.sparta.startup_be.coordinate.dto;
 
 import com.sparta.startup_be.model.CoordinateEstate;
+import com.sparta.startup_be.model.CoordinateSharedOffice;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,5 +19,10 @@ public class CoordinateResponseDto {
     public CoordinateResponseDto(CoordinateEstate coordinateEstate){
         this.lat = coordinateEstate.getY();
         this.lng = coordinateEstate.getX();
+    }
+
+    public CoordinateResponseDto(CoordinateSharedOffice coordinateSharedOffice){
+        this.lat = coordinateSharedOffice.getY();
+        this.lng = coordinateSharedOffice.getX();
     }
 }

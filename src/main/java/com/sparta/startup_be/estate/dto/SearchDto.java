@@ -1,6 +1,7 @@
 package com.sparta.startup_be.estate.dto;
 
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
+import com.sparta.startup_be.sharedOffice.dto.SharedOfficeResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +21,7 @@ public class SearchDto {
         this.totalpage = totalpage;
         this.presentpage = presentpage;
     }
+
+
 
 }

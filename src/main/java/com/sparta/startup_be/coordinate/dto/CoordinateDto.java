@@ -8,11 +8,11 @@ import lombok.Setter;
 public class CoordinateDto {
     private double x;
     private double y;
-    private Long estateid;
+    private Long id;
 
-    public CoordinateDto(double x, double y,Long estateid){
+    public CoordinateDto(double x, double y,Long id){
         this.x = x;
         this.y = y;
-        this.estateid= estateid;
+        this.id= id;
     }
 }

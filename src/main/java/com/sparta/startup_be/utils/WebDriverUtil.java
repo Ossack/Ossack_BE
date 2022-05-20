@@ -327,7 +327,7 @@ public class WebDriverUtil extends Thread {
     }
 
     public List<SharedOffice> crawlingSharedOffice() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?PageIndex=0&SWLng=126.83493927672092&SWLat=37.47725027878594&NELng=127.11293915376315&NELat=37.580241979314174&Zoom=13&category=2&list=true&branchId=&dataType=");
+        driver.get("https://www.nemoapp.kr/Search?PageIndex=0&SWLng=126.4535483683688&SWLat=37.3233896658737&NELng=127.5658939958555&NELat=37.753466376953554&Zoom=11&category=2&list=true&branchId=&dataType=");
         driver.manage().timeouts().implicitlyWait(20000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         driver.manage().window().maximize();
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -344,7 +344,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 500);
+        } while (j != 1100);
 
 
         List<WebElement> webElements = driver.findElements(By.className("coworking_card"));
@@ -373,31 +373,31 @@ public class WebDriverUtil extends Thread {
 
                 //건물이름 크롤링
                 String name = driver.findElement(By.className("detail_name")).getText();
-                System.out.println(name);
+//                System.out.println(name);
 
                 //지하철 정보 크롤링
                 String subwayInfo = driver.findElement(By.className("detail_address")).getText();
-                System.out.println(subwayInfo);
+//                System.out.println(subwayInfo);
 
                 //비용크롤링
                 String price = driver.findElement(By.className("detail_price")).getText();
-                System.out.println(price);
+//                System.out.println(price);
 
                 //이용시간 크롤링
                 String time = driver.findElement(By.className("product_data")).findElement(By.className("time")).findElement(By.className("content")).getText();
-                System.out.println(time);
+//                System.out.println(time);
 
                 //최소이용기간 크롤링
                 String minimum_days = driver.findElement(By.className("minimum_days")).findElement(By.className("content")).getText();
-                System.out.println(minimum_days);
+//                System.out.println(minimum_days);
 
                 //층수 크롤링
                 String floor = driver.findElement(By.className("floor")).findElement(By.className("content")).getText();
-                System.out.println(floor);
+//                System.out.println(floor);
 
                 //주차비 크롤링
                 String parking = driver.findElement(By.className("parking")).findElement(By.className("content")).getText();
-                System.out.println(parking);
+//                System.out.println(parking);
 
 
                 ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 400)", scroll);
@@ -416,7 +416,7 @@ public class WebDriverUtil extends Thread {
                     while (true) {
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
                         covenienceList = driver.findElement(By.className("covenience_list")).findElements(By.tagName("li"));
-                        if (!covenienceList.get(0).getText().replace(" ","").replace("\n","").equals("")) break;
+                        if (!covenienceList.get(covenienceList.size()-1).getText().replace(" ","").replace("\n","").equals("")) break;
                     }
                 }catch(NoSuchElementException e){
                     e.printStackTrace();
@@ -424,17 +424,63 @@ public class WebDriverUtil extends Thread {
                 }
                 System.out.println(covenienceList.size());
                 for(WebElement covenience : covenienceList){
-                    System.out.println(covenience.getText());
+//                    System.out.println(covenience.getText());
                     coveniences.add(covenience.getText());
                 }
+
+
+                String address = "개별문의";
+                while (true) {
+                    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
+                    address = driver.findElement(By.className("data_position")).getText();
+                    if (!address.replace(" ","").replace("\n","").equals("")) break;
+                }
+//                System.out.println(address);
+
+//                System.out.println(driver.findElement(By.tagName("tr")).getText());
 //                List<WebElement> webElements1 = driver.findElements(By.className("tbl_option"));
 //                System.out.println(webElements1.size());
+//
+//                for(int k = 0 ; k<webElements1.size(); k++){
+//                    String text = webElements1.get(k).findElement(By.tagName("tr")).getText();
+//                    System.out.println(text);
+//                }
+                try {
+                    driver.findElement(By.className("btn_contact")).click();
+                    //전화번호 크롤링
+                    String number = driver.findElement(By.className("agent_telephone")).getText().replace(" ","").replace("대표번호","");
+//                System.out.println(number);
+                    //공인중개사
+                    String agentInfo = driver.findElement(By.className("agent_address")).getText();
+                    String agent = agentInfo.split("[(]")[0].replace(" ","");
+//                System.out.println(agent);
+                    String personIncharge = agentInfo.split("[(]")[1].replace("(","").replace(")","").replace(" ","").replace("대표","");
+//                System.out.println(personIncharge);
+                    driver.findElement(By.className("btn_close")).click();
 
-                SharedOfficeDto sharedOfficeDto = SharedOfficeDto.builder()
-                        .detail(detail).floor(floor).imageList(imageList).minimum_days(minimum_days).convience(coveniences)
-                        .name(name).parking(parking).subwayInfo(subwayInfo).price(price).time(time).build();
-                SharedOffice sharedOffice =new SharedOffice(sharedOfficeDto);
-                sharedOffices.add(sharedOffice);
+                    SharedOfficeDto sharedOfficeDto = SharedOfficeDto.builder()
+                            .detail(detail)
+                            .floor(floor)
+                            .imageList(imageList)
+                            .minimum_days(minimum_days)
+                            .convience(coveniences)
+                            .agent(agent)
+                            .number(number)
+                            .city(address.split(" ")[0])
+                            .gu(address.split(" ")[1])
+                            .dong(address.split(" ")[2])
+                            .personIncharge(personIncharge)
+                            .name(name)
+                            .parking(parking)
+                            .subwayInfo(subwayInfo)
+                            .price(price)
+                            .time(time)
+                            .build();
+                    SharedOffice sharedOffice =new SharedOffice(sharedOfficeDto);
+                    sharedOffices.add(sharedOffice);
+                }catch(NoSuchElementException e){
+                    e.printStackTrace();
+                }
                 driver.findElement(By.className("btn_prev")).click();
             }
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 314)", item);

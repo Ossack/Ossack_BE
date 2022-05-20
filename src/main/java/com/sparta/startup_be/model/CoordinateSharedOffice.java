@@ -7,22 +7,18 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-@Entity
 @Getter
 @NoArgsConstructor
-public class Coordinate {
-
+@Entity
+public class CoordinateSharedOffice {
     @Id
-    private Long estateid;;
+    private Long sharedofficeid;
+    private Double x;
+    private Double y;
 
-    private double x;
-    private double y;
-
-    public Coordinate(CoordinateDto coordinateDto){
+    public CoordinateSharedOffice(CoordinateDto coordinateDto){
         this.x = coordinateDto.getX();
         this.y = coordinateDto.getY();
-        this.estateid = coordinateDto.getEstateid();
+        this.sharedofficeid = coordinateDto.getId();
     }
-
-
 }

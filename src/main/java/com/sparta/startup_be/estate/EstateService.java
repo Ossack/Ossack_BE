@@ -1,7 +1,7 @@
 package com.sparta.startup_be.estate;
 
-import com.sparta.startup_be.model.Coordinate;
-import com.sparta.startup_be.coordinate.CoordinateService;
+import com.sparta.startup_be.model.CoordinateEstate;
+import com.sparta.startup_be.coordinate.service.CoordinateEstateService;
 import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import com.sparta.startup_be.estate.dto.CityResponseDto;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sparta.startup_be.coordinate.CoordinateRepository;
+import com.sparta.startup_be.coordinate.repository.CoordinateEstateRepository;
 import com.sparta.startup_be.utils.ConvertAddress;
 
 import java.util.*;
@@ -31,9 +31,9 @@ public class EstateService {
     private final EstateRepository estateRepository;
     private final UserRepository userRepository;
     private final FavoriteRepository favoriteRepository;
-    private final CoordinateRepository coordinateRepository;
+    private final CoordinateEstateRepository coordinateEstateRepository;
     private final ConvertAddress convertAddress;
-    private final CoordinateService coordinateService;
+    private final CoordinateEstateService coordinateEstateService;
 
 
 //    public List<Estate> show(){
@@ -41,7 +41,7 @@ public class EstateService {
 //    }
 
     public void storeEstate(List<Estate> estates) {
-        coordinateService.storeAddress(estates);
+        coordinateEstateService.storeAddress(estates);
         for (Estate estate : estates) {
             estateRepository.save(estate);
         }
@@ -95,8 +95,8 @@ public class EstateService {
         Estate estate = estateRepository.findById(estateid).orElseThrow(
                 () -> new IllegalArgumentException("사라진 매물입니다")
         );
-        Coordinate coordinate = coordinateRepository.findByEstateid(estateid);
-        CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+        CoordinateEstate coordinateEstate = coordinateEstateRepository.findByEstateid(estateid);
+        CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateEstate);
         boolean mylike = favoriteRepository.existsByEstateidAndUserid(estateid, user.getId());
         return new EstateResponseDto(estate, mylike,coordinateResponseDto);
     }
@@ -124,8 +124,8 @@ public class EstateService {
         int i = 0;
         for (Estate estate : estates) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
-            Coordinate coordinate=coordinateRepository.findByEstateid(estate.getId());
-            CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinate);
+            CoordinateEstate coordinateEstate = coordinateEstateRepository.findByEstateid(estate.getId());
+            CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateEstate);
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate, query, mylike,coordinateResponseDto);
             estateResponseDtoList.add(estateResponseDto);
             i++;

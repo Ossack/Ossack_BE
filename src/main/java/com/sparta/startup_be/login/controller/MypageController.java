@@ -16,14 +16,14 @@ public class MypageController {
     private final MypageService mypageService;
 
     // 프로필 이미지 수정
-    @PutMapping("/api/user/profile")
+    @PutMapping("/user/profile")
     public ResponseEntity<StatusMessage> updateImg (@RequestParam("imageFile") MultipartFile multipartFile,
                                                     @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.updateProfile(multipartFile, userDetails);
     }
 
     // 회원 로그인 여부 확인
-    @GetMapping("/api/islogin")
+    @GetMapping("/user/islogin")
     public ResponseEntity<StatusMessage> isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.isLogin(userDetails);
     }

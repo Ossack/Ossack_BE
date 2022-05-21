@@ -86,7 +86,6 @@ public class EstateService {
             i++;
             if (i == 4) break;
         }
-
         return estateResponseDtoList;
     }
 
@@ -102,11 +101,11 @@ public class EstateService {
     }
 
 
-    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int officecnt) {
+    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         if(query.equals("서울시")) query="서울특별시";
         List<Estate> estates = new ArrayList<>();
-        final int start = 10 * officecnt;
+        final int start = 10 * pagenum;
         System.out.println(estateRepository.searchAllByGuQuery("서울특별시",0).size());
         int size = 0;
         if (query.contains("시")) {
@@ -137,7 +136,7 @@ public class EstateService {
         } else {
             totalpage = size/10 + 1;
         }
-        SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, officecnt + 1);
+        SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, pagenum + 1);
         return searchDto;
     }
 

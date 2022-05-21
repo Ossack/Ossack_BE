@@ -26,7 +26,7 @@ public class UserController {
     }
 
     // 이메일 중복 확인
-    @PostMapping("/api/idcheck")
+    @PostMapping("/user/idcheck")
     public ResponseEntity<StatusMessage> idCheck(@RequestBody UserRequestDto userDto) {
         return userService.dupEmail(userDto);
     }

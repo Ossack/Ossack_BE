@@ -169,7 +169,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.96048262132093&SWLat=37.46440243051975&NELng=127.1342296678897&NELat=37.53360211645057&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=  ");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.8806479732157&SWLat=37.455626972343524&NELng=127.01954435183183&NELat=37.509457827234726&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=  ");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -188,7 +188,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 1000);
+        } while (j != 1200);
 
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
@@ -198,7 +198,7 @@ public class WebDriverUtil extends Thread {
         List<Estate> estates= new ArrayList<>();
         int i = 0;
         for (WebElement webElement : webElements) {
-//            try {
+            try {
                 if (i % 8 == num) {
 
                     String monthly = webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
@@ -233,14 +233,13 @@ public class WebDriverUtil extends Thread {
                     String info = driver.findElement(By.className("detail_title")).getText();
 
 
-
                     //전용면적 크롤링
                     String area = "";
-                    String area_1 ="";
-                    while(true){
+                    String area_1 = "";
+                    while (true) {
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 50)", scroll);
                         area_1 = driver.findElement(By.className("area")).getText();
-                        if(area_1.contains("㎡")) break;
+                        if (area_1.contains("㎡")) break;
                     }
                     area = area_1.split("\n")[1];
                     String capacity = driver.findElement(By.className("data_point")).findElement(By.className("person")).findElement(By.className("content")).getText();
@@ -252,29 +251,28 @@ public class WebDriverUtil extends Thread {
 
                     //정보 list 크롤링(엘리베이터 유무, 입주 가능일, 층수)
                     List<WebElement> products = driver.findElement(By.className("product_more")).findElements(By.tagName("li"));
-                    String elevator ="개별문의";
+                    String elevator = "개별문의";
                     String date = "개별문의";
-                    String buildingFloor ="개별문의";
-                    String roomFloor ="개별문의";
+                    String buildingFloor = "개별문의";
+                    String roomFloor = "개별문의";
                     String type = products.get(0).getText();
                     String toilet = "개별문의";
                     String parking = "개별문의";
-                    for(WebElement product : products){
-                        System.out.println(product.getText());
-                        if(product.getText().contains("엘리베이터")){
-                            elevator=product.getText();
-                        }else if(product.getText().contains("즉시")){
+                    for (WebElement product : products) {
+                        if (product.getText().contains("엘리베이터")) {
+                            elevator = product.getText();
+                        } else if (product.getText().contains("즉시")) {
                             date = product.getText();
-                        }else if(product.getText().contains("층")){
-                            buildingFloor = product.getText().split("/")[1].replace("층","");
+                        } else if (product.getText().contains("층")) {
+                            buildingFloor = product.getText().split("/")[1].replace("층", "");
                             roomFloor = product.getText().split("/")[0];
-                        }else if(product.getText().contains("녀")){
+                        } else if (product.getText().contains("녀")) {
                             toilet = product.getText();
-                        }else if(product.getText().contains("주차")){
-                            parking=product.getText();
+                        } else if (product.getText().contains("주차")) {
+                            parking = product.getText();
                         }
                     }
-                    System.out.println(parking);
+//                    System.out.println(parking);
 
 
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 500)", scroll);
@@ -284,12 +282,12 @@ public class WebDriverUtil extends Thread {
 
                     //주소 및 중개사 크롤링
                     String city = "개별문의";
-                    String agent ="개별문의";
+                    String agent = "개별문의";
                     do {
                         city = driver.findElement(By.className("data_position")).getText();
                         agent = driver.findElement(By.className("agent_name")).getText();
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
-                    } while (agent.replace(" ","").equals("") || city.replace(" ","").equals(""));
+                    } while (agent.replace(" ", "").equals("") || city.replace(" ", "").equals(""));
 
                     WebElement button = driver.findElement(By.className("btn_contact"));
                     button.click();
@@ -313,6 +311,9 @@ public class WebDriverUtil extends Thread {
 
                     driver.findElement(By.className("btn_prev")).click();
                 }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 150)", item);
             i++;
         }

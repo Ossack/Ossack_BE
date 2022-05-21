@@ -31,7 +31,11 @@ public interface SharedOfficeRepository extends JpaRepository<SharedOffice,Long>
     @Query("select count(u) from SharedOffice u where u.dong like :keyword")
     int countAllByDongQuery(@Param("keyword")String dong);
 
-    //지역별 평균
+    @Query(nativeQuery = true,value = "select count(u.id) from shared_office u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword")
+    int countAllByQuery(@Param("keyword")String city);
+
+    @Query(nativeQuery = true,value = "select u.* from shared_office u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword order by u.id limit 10 offset :start")
+    List<SharedOffice> searchAllByQuery(@Param("keyword")String city, @Param("start")int start);
 
 
 

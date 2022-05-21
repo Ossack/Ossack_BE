@@ -1,9 +1,11 @@
 package com.sparta.startup_be.favorite;
 
 
+import com.sparta.startup_be.estate.EstateRepository;
 import com.sparta.startup_be.favorite.dto.FavoriteRequestDto;
 import com.sparta.startup_be.favorite.dto.MylikeDto;
 import com.sparta.startup_be.exception.StatusMessage;
+import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -24,13 +26,20 @@ import static com.sparta.startup_be.exception.ExceptionMessage.ILLEGAL_ALREADY_L
 @Service
 public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
+    private final EstateRepository estateRepository;
 
     public ResponseEntity<StatusMessage> pressLike(Long estateid, Long userid){
         Optional<Favorite> favorite = favoriteRepository.findByUseridAndEstateid(userid, estateid);
         if(favorite.isPresent()){
             throw new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_EXIST);
         }
-        FavoriteRequestDto favoriteRequestDto = new FavoriteRequestDto(userid, estateid);
+        Optional<Estate> estate = estateRepository.findById(estateid);
+        FavoriteRequestDto favoriteRequestDto = new FavoriteRequestDto();
+        if(estate.isPresent()){
+             favoriteRequestDto = new FavoriteRequestDto(userid, estateid,"사무실");
+        }else {
+             favoriteRequestDto = new FavoriteRequestDto(userid, estateid,"공유오피스");
+        }
         Favorite favorite1 = new Favorite(favoriteRequestDto);
         favoriteRepository.save(favorite1);
 

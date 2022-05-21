@@ -1,10 +1,8 @@
 package com.sparta.startup_be.model;
 
-import com.sparta.startup_be.dto.SharedOfficeDto;
-import lombok.Builder;
+import com.sparta.startup_be.sharedOffice.dto.SharedOfficeDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -36,6 +34,13 @@ public class SharedOffice extends Timestamped {
     @JoinColumn
     private List<String> imageList;
 
+    private String personIncharge;
+    private String number;
+    private String agent;
+    private String city;
+    private String gu;
+    private String dong;
+
 
     public SharedOffice(SharedOfficeDto sharedOfficeDto){
         this.name = sharedOfficeDto.getName();
@@ -48,5 +53,11 @@ public class SharedOffice extends Timestamped {
         this.detail = sharedOfficeDto.getDetail();
         this.imageList = sharedOfficeDto.getImageList();
         this.convience =sharedOfficeDto.getConvience();
+        this.personIncharge = sharedOfficeDto.getPersonIncharge();
+        this.number = sharedOfficeDto.getNumber();
+        this.agent = sharedOfficeDto.getAgent();
+        this.city = sharedOfficeDto.getCity();
+        this.gu = sharedOfficeDto.getGu();
+        this.dong = sharedOfficeDto.getDong();
     }
 }

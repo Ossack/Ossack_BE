@@ -1,7 +1,7 @@
 package com.sparta.startup_be.model;
 
 
-import com.sparta.startup_be.dto.FavoriteRequestDto;
+import com.sparta.startup_be.favorite.dto.FavoriteRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

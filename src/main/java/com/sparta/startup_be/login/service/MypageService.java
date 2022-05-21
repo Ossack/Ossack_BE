@@ -4,7 +4,7 @@ import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.login.dto.UserResponseDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
+import com.sparta.startup_be.login.security.UserDetailsImpl;
 import com.sparta.startup_be.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;

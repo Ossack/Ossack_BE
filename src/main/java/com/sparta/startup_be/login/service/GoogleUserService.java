@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.startup_be.login.dto.SocialUserInfoDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
-import com.sparta.startup_be.security.jwt.JwtTokenUtils;
+import com.sparta.startup_be.login.security.UserDetailsImpl;
+import com.sparta.startup_be.login.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -25,7 +25,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -74,7 +73,7 @@ public class GoogleUserService {
         body.add("client_id" , "922925499099-ae2nodkaoccn3rcd933u331j6bjnupum.apps.googleusercontent.com");
         body.add("client_secret", "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");
         body.add("code", code);
-        body.add("redirect_uri", "http://localhost:3000/user/google/callback");
+        body.add("redirect_uri", "https://ossack.shop/user/google/callback");
         body.add("grant_type", "authorization_code");
 
         // POST 요청 보내기

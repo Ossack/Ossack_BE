@@ -49,10 +49,10 @@ public class EstateController {
     }
 
     //검색 후 리스트 반환
-    @GetMapping("/estates/{officecnt}")
-    private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int officecnt){
+    @GetMapping("/estates/{pagenum}")
+    private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int pagenum){
         System.out.println(query);
-        return estateService.searchTowm(query,userDetails,officecnt-1);
+        return estateService.searchTowm(query,userDetails,pagenum-1);
     }
 
     //level별 지도 조회(사무실, 공유오피스)
@@ -61,8 +61,6 @@ public class EstateController {
                                        @RequestParam int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
         return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails);
     }
-
-
 
     //검색 복록 지도 조회
     @GetMapping("/map/search")

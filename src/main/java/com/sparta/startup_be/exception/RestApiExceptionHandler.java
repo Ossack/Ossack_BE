@@ -28,6 +28,7 @@ public class RestApiExceptionHandler {
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
+        ex.printStackTrace();
         message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
         message.setMessage(ex.getMessage());
 
@@ -42,6 +43,8 @@ public class RestApiExceptionHandler {
 
         message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
         message.setMessage(ex.getMessage());
+        ex.printStackTrace();
+
 
         return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
     }
@@ -51,6 +54,7 @@ public class RestApiExceptionHandler {
         StatusMessage message = new StatusMessage();
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        ex.printStackTrace();
 
         message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
         message.setMessage(ex.getMessage());
@@ -65,6 +69,7 @@ public class RestApiExceptionHandler {
         errors.put("statusCode", String.valueOf(HttpStatus.BAD_REQUEST));
         ex.getBindingResult().getAllErrors()
                 .forEach(c -> errors.put(((FieldError) c).getField(), c.getDefaultMessage()));
+        ex.printStackTrace();
 
         return ResponseEntity.badRequest().body(errors);
     }

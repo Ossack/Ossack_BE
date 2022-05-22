@@ -1,6 +1,6 @@
 package com.sparta.startup_be.model;
 
-import com.sparta.startup_be.dto.EstateRequestDto;
+import com.sparta.startup_be.estate.dto.EstateRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,28 +11,25 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Table(indexes={
-        @Index( columnList ="gu"),
-        @Index( columnList ="dong"),
-        @Index( columnList ="id")
+        @Index(columnList ="gu"),
+        @Index(columnList ="dong"),
+        @Index(columnList ="id")
 })
-public class Estate {
+public class Estate extends Timestamped {
 
     @Id
     private Long id;
-
     private String type;
     private String office;
-
     @Column
     private String city;
     private String gu;
     private String dong;
-
     private String monthly;
     @Column
     private String area;
     private String buildingInfo;
-    @Column(length = 1000)
+    @Column(length = 1500)
     private String buildingDetail;
 
     @Column
@@ -43,6 +40,11 @@ public class Estate {
     private String buildingFloor;
     private String roomFloor;
     private String agent;
+    private String management_fee;
+    private String toilet;
+    private String parking;
+    private String capacity;
+
 
     @ElementCollection
     @CollectionTable
@@ -50,6 +52,11 @@ public class Estate {
     private List<String> imageList;
 
     private String subwayInfo;
+    private String elevator;
+    private String date;
+    private String personIncharge;
+    private String phoneNumber;
+    private String agentNumber;
 
 
     public Estate(EstateRequestDto estate){
@@ -70,5 +77,14 @@ public class Estate {
         this.office = estate.getOffice();
         this.buildingDetail = estate.getBuildingDetail();
         this.agent = estate.getAgent();
+        this.elevator =estate.getElevator();
+        this.date =estate.getDate();
+        this.management_fee = estate.getManagement_fee();
+        this.toilet = estate.getToilet();
+        this.parking = estate.getParking();
+        this.capacity = estate.getCapacity();
+        this.personIncharge = estate.getPersonIncharge();
+        this.phoneNumber = estate.getPhoneNumber();
+        this.agentNumber = estate.getAgentNumber();
     }
 }

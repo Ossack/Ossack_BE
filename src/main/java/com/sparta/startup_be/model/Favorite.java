@@ -1,7 +1,7 @@
 package com.sparta.startup_be.model;
 
 
-import com.sparta.startup_be.dto.FavoriteDto;
+import com.sparta.startup_be.favorite.dto.FavoriteRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,8 +23,8 @@ public class Favorite {
     @Column
     private Long estateid;
 
-    public Favorite(FavoriteDto favoriteDto){
-        this.estateid= favoriteDto.getEstateid();
-        this.userid = favoriteDto.getUserid();
+    public Favorite(FavoriteRequestDto favoriteRequestDto){
+        this.estateid= favoriteRequestDto.getEstateid();
+        this.userid = favoriteRequestDto.getUserid();
     }
 }

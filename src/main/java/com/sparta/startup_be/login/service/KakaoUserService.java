@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.startup_be.login.dto.SocialUserInfoDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
-import com.sparta.startup_be.security.UserDetailsImpl;
-import com.sparta.startup_be.security.jwt.JwtTokenUtils;
+import com.sparta.startup_be.login.security.UserDetailsImpl;
+import com.sparta.startup_be.login.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,7 +24,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletResponse;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -61,7 +60,7 @@ public class KakaoUserService {
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
         body.add("client_id", "9a9fb270cb1fbabb4a99ff23a44e9046");
-        body.add("redirect_uri", "http://localhost:8080/user/kakao/callback");
+        body.add("redirect_uri", "http://localhost:3000/user/kakao/callback");
         body.add("code", code);
 
         // HTTP 요청 보내기
@@ -104,13 +103,7 @@ public class KakaoUserService {
         JsonNode jsonNode = objectMapper.readTree(responseBody);
 
         Long id = jsonNode.get("id").asLong();
-        String email = "";
-        try {
-            email = jsonNode.get("kakao_account").get("email").asText();
-        } catch (NullPointerException e) {
-            // 이메일 선택 동의 거부 할 경우 id로 이메일 생성
-            email = id + "@kakao.com";
-        }
+        String email = jsonNode.get("kakao_account").get("email").asText();
         String nickname = jsonNode.get("properties")
                 .get("nickname").asText();
 

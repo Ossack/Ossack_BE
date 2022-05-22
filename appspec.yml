@@ -1,0 +1,27 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/Ossack
+    overwrite: yes
+
+permissions:
+  - object: /
+    pattern: "**"
+    owner: ubuntu
+    group: ubuntu
+
+## 새로 추가한 부분 ###
+hooks:
+  ApplicationStart:
+    - location: scripts/start.sh
+      timeout: 180
+      runas: ubuntu
+
+    - location: scripts/health_check.sh
+      timeout: 180
+      runas: ubuntu
+
+    - location: scripts/switch.sh
+      timeout: 180
+      runas: ubuntu

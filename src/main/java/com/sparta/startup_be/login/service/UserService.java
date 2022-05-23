@@ -84,10 +84,10 @@ public class UserService {
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
         if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
 
-            message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
+            message.setStatusCode(StatusMessage.StatusEnum.OK);
             message.setMessage("이미 존재하는 이메일입니다.");
 
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
         }
 
         message.setStatusCode(StatusMessage.StatusEnum.OK);

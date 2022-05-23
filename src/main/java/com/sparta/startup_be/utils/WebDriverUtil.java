@@ -169,7 +169,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.37750881982002&SWLat=37.19974438959163&NELng=127.76725760136937&NELat=37.75303924779393&Zoom=11&mode=1&category=1&list=true&articleId=&dataType=");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=125.83038254030575&SWLat=36.94101354879302&NELng=128.6127086563856&NELat=38.044019161159085&Zoom=10&mode=1&category=1&list=true&articleId=&dataType=");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -188,7 +188,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 3000);
+        } while (j != 5000);
 
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
@@ -199,7 +199,7 @@ public class WebDriverUtil extends Thread {
         int i = 0;
         for (WebElement webElement : webElements) {
 //            try {
-                if (i % 8 == num) {
+                if (i % 5 == num) {
 
                     String monthly = webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
                     webElement.sendKeys(Keys.ENTER);

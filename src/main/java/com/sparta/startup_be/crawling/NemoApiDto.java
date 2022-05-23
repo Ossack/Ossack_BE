@@ -1,9 +1,14 @@
 package com.sparta.startup_be.crawling;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.json.JSONObject;
 
 import java.util.List;
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class NemoApiDto {
     private String name;
     private String price;

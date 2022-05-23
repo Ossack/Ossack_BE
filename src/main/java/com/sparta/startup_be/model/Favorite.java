@@ -23,8 +23,11 @@ public class Favorite {
     @Column
     private Long estateid;
 
+    private String type;
+
     public Favorite(FavoriteRequestDto favoriteRequestDto){
         this.estateid= favoriteRequestDto.getEstateid();
         this.userid = favoriteRequestDto.getUserid();
+        this.type =favoriteRequestDto.getType();
     }
 }

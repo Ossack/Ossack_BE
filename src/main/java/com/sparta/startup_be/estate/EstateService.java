@@ -101,7 +101,7 @@ public class EstateService {
     }
 
 
-    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum) {
+    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum,String monthly) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         if(query.equals("서울시")) query="서울특별시";
         List<Estate> estates = new ArrayList<>();
@@ -110,13 +110,13 @@ public class EstateService {
         int size = 0;
         if (query.contains("시")) {
             estates = estateRepository.searchAllByCityQuery(query,start);
-            size = estateRepository.countAllByCity(query);
+            size = estateRepository.countAllByCity(query,monthly);
         } else if (query.contains("구")) {
             estates = estateRepository.searchAllByGuQuery(query,start);
-            size = estateRepository.countAllByGu(query);
+            size = estateRepository.countAllByGu(query,monthly);
         } else {
             estates = estateRepository.searchAllByDongQuery(query,start);
-            size = estateRepository.countAllByDong(query);
+            size = estateRepository.countAllByDong(query,monthly);
         }
         System.out.println(size);
 
@@ -177,7 +177,7 @@ public class EstateService {
     }
 
 
-    public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
+    public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails,String depositlimit, String feelimit,String monthly) {
         long temp1 = System.currentTimeMillis();
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
@@ -226,13 +226,13 @@ public class EstateService {
             int estate_cnt = 0;
             float avg = 0f;
             if (level < 7) {
-                estate_cnt = estateRepository.countAllByDong(title);
+                estate_cnt = estateRepository.countAllByDong(title,monthly);
                 avg = (float) (estateRepository.dongAvgQuery(title)/estateRepository.dongAreaAvgQuery(title)* 3.3);
             } else if (level == 7 || level == 8) {
-                estate_cnt = estateRepository.countAllByGu(title);
+                estate_cnt = estateRepository.countAllByGu(title,monthly);
                 avg = (float) (estateRepository.guAvgQuery(title)/estateRepository.guAvgAreaQuery(title) *3.3);
             } else {
-                estate_cnt = estateRepository.countAllByCity(title);
+                estate_cnt = estateRepository.countAllByCity(title,monthly);
                 avg = (float) (estateRepository.cityAvgQuery(title)/estateRepository.cityAreaAvgQuery(title) * 3.3);
             }
             avg = Integer.parseInt(String.valueOf(Math.round(avg)));

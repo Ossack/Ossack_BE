@@ -25,14 +25,14 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
     List<Estate> searchAllByDongQuery(@Param("keyword")String city, @Param("start")int start);
     @Query(nativeQuery = true,value = "select u.* from estate u where u.gu like :keyword order by u.id limit 10 offset :start")
     List<Estate> searchAllByGuQuery(@Param("keyword")String city, @Param("start")int start);
-    @Query("select count(u) from Estate u where u.city like :keyword")
-    int countAllByCity(@Param("keyword")String city);
+    @Query("select count(u) from Estate u where u.city like :keyword and u.monthly like :monthly")
+    int countAllByCity(@Param("keyword")String city,@Param("monthly")String monthly);
 
     @Query("select count(u) from Estate u where u.gu like :keyword")
-    int countAllByGu(@Param("keyword")String gu);
+    int countAllByGu(@Param("keyword")String gu,@Param("monthly")String monthly);
 
     @Query("select count(u) from Estate u where u.dong like :keyword")
-    int countAllByDong(@Param("keyword")String dong);
+    int countAllByDong(@Param("keyword")String dong,@Param("monthly")String monthly);
 //    @Query(find)
 
 //    @Query(nativeQuery = true,value = "select distinct e.city from estate e," +

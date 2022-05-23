@@ -50,16 +50,17 @@ public class EstateController {
 
     //검색 후 리스트 반환
     @GetMapping("/estates/{pagenum}")
-    private SearchDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int pagenum){
+    private SearchDto searchTowm(@RequestParam String query,@RequestParam String monthly, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int pagenum){
         System.out.println(query);
-        return estateService.searchTowm(query,userDetails,pagenum-1);
+        return estateService.searchTowm(query,userDetails,pagenum-1,monthly);
     }
 
     //level별 지도 조회(사무실, 공유오피스)
     @GetMapping("/map")
     private MapResponseDto showEstate2(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
-                                       @RequestParam int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails);
+                                       @RequestParam int level, @RequestParam String depositlimit, @RequestParam String feelimit,@RequestParam String monthly,
+                                       @AuthenticationPrincipal UserDetailsImpl userDetails){
+        return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails,depositlimit,feelimit,monthly);
     }
 
     //검색 복록 지도 조회

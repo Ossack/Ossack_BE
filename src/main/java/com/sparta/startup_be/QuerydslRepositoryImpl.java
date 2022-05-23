@@ -55,6 +55,18 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
+    public int countAllByQuery(String city) {
+        QEstate qEstate = new QEstate("e");
+        return (int) queryFactory
+                .from(qEstate)
+                .select(qEstate)
+                .where(qEstate.city.contains(city)
+                        .or(qEstate.dong.contains(city)
+                                .or(qEstate.gu.contains(city))))
+                .stream().count();
+    }
+
+    @Override
     public List<String> findDongQuery(double minX, double maxX, double minY, double maxY) {
         QEstate qEstate = new QEstate("e");
         QCoordinateEstate qCoordinateEstate = new QCoordinateEstate("q");
@@ -90,5 +102,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(qCoordinateEstate.y.between(minY,maxY)))
                 .distinct().fetch();
     }
+
+    @Override
+    public List<Estate> searchAllByCity(String city) {
+        QEstate qEstate = new QEstate("q");
+        return queryFactory.from(qEstate)
+                .select(qEstate)
+                .where(qEstate.city.contains(city)
+                        .or(qEstate.dong.contains(city)
+                                .or(qEstate.gu.contains(city))))
+                .fetch();
+    }
+
 
 }

@@ -20,11 +20,11 @@ public interface EstateRepository extends JpaRepository<Estate, Long>, QuerydslR
     int countAllByMonthlyAndCity(String monthly, String city);
 
     //     searchAllByCity(String city);
-    @Query(nativeQuery = true, value = " select u.* from estate u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword order by u.id limit 10 offset :start")
-    List<Estate> searchALlByQuery(@Param("keyword") String city, @Param("start") int start);
-
-    @Query(nativeQuery = true, value = "select count(u.id) from estate u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword")
-    int countAllByQuery(@Param("keyword") String city);
+//    @Query(nativeQuery = true, value = " select u.* from estate u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword order by u.id limit 10 offset :start")
+//    List<Estate> searchALlByQuery(@Param("keyword") String city, @Param("start") int start);
+//
+//    @Query(nativeQuery = true, value = "select count(u.id) from estate u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword")
+//    int countAllByQuery(@Param("keyword") String city);
 
     @Query("select u from Estate u where u.city like :keyword")
     List<Estate> searchAllByCity(@Param("keyword") String city);

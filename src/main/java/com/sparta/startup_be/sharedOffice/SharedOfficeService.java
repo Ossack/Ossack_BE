@@ -5,7 +5,6 @@ import com.sparta.startup_be.coordinate.repository.CoordinateSharedOfficeReposit
 import com.sparta.startup_be.estate.dto.CityResponseDto;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.estate.dto.MapResponseDto;
-import com.sparta.startup_be.estate.dto.SearchDto;
 import com.sparta.startup_be.favorite.FavoriteRepository;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.security.UserDetailsImpl;
@@ -81,20 +80,19 @@ public class SharedOfficeService {
 
     public SearchSharedOfficeResponseDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum) {
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
-        if(query.equals("서울시")) query="서울특별시";
-        List<SharedOffice> sharedOffices = new ArrayList<>();
         final int start = 10 * pagenum;
-        int size = 0;
-        if (query.contains("시")) {
-            sharedOffices = sharedOfficeRepository.searchAllByCityQuery(query,start);
-            size = sharedOfficeRepository.countAllByCityQuery(query);
-        } else if (query.contains("구")) {
-            sharedOffices = sharedOfficeRepository.searchAllByGuQuery(query,start);
-            size = sharedOfficeRepository.countAllByGuQuery(query);
-        } else {
-            sharedOffices = sharedOfficeRepository.searchAllByDongQuery(query,start);
-            size = sharedOfficeRepository.countAllByDongQuery(query);
-        }
+        List<SharedOffice> sharedOffices = sharedOfficeRepository.searchAllByQuery(query,start);
+        int size = sharedOfficeRepository.countAllByQuery(query);
+//        if (query.contains("시")) {
+//            sharedOffices = sharedOfficeRepository.searchAllByCityQuery(query,start);
+//            size = sharedOfficeRepository.countAllByCityQuery(query);
+//        } else if (query.contains("구")) {
+//            sharedOffices = sharedOfficeRepository.searchAllByGuQuery(query,start);
+//            size = sharedOfficeRepository.countAllByGuQuery(query);
+//        } else {
+//            sharedOffices = sharedOfficeRepository.searchAllByDongQuery(query,start);
+//            size = sharedOfficeRepository.countAllByDongQuery(query);
+//        }
 
         for (SharedOffice sharedOffice : sharedOffices) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(sharedOffice.getId(), userDetails.getId());
@@ -104,8 +102,7 @@ public class SharedOfficeService {
             sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
         }
 
-        final int end = Math.min(start + 10, sharedOfficeResponseDtos.size());
-        int totalpage = 0;
+        int totalpage;
         if (size % 10 == 0) {
             totalpage = size / 10;
         } else {
@@ -129,13 +126,30 @@ public class SharedOfficeService {
     }
 
     public List<SharedOfficeResponseDto> showMySharedOffice(User user){
-        List<Favorite> favorites = favoriteRepository.findByUserid(user.getId());
+        List<Favorite> favorites = favoriteRepository.findAllByUseridAndType(user.getId(),"공유오피스");
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
         for(int i=0; i<favorites.size(); i++){
             SharedOffice sharedOffice = sharedOfficeRepository.findById(favorites.get(i).getEstateid()).orElseThrow(
                     ()-> new IllegalArgumentException("이미 사라진 매물입니다")
             );
             SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice,true);
+            sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
+        }
+        return sharedOfficeResponseDtos;
+    }
+
+    public List<SharedOfficeResponseDto> showFavorite(UserDetailsImpl userDetails) {
+
+        // 찜한 매물 목록
+        List<Favorite> favoriteList = favoriteRepository.findAllByUseridAndType(userDetails.getId(),"공유오피스");
+
+        List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
+        for (int i = 0; i < favoriteList.size(); i++) {
+            favoriteList.get(i).getEstateid();
+            System.out.println(favoriteList.get(i).getEstateid());
+            SharedOffice sharedOffice = sharedOfficeRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
+                    () -> new NullPointerException("게시글이 없습니다"));
+            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, true);
             sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
         }
         return sharedOfficeResponseDtos;

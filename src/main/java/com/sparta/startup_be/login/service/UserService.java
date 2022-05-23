@@ -88,13 +88,15 @@ public class UserService {
             // 유효성 검사에 실패했을 경우 Error를 리스트 형식으로 가져온다.
             List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
 
-            message.setStatusCode(StatusMessage.StatusEnum.INTERNAL_SERVER_ERROR);
+            message.setStatusCode(StatusMessage.StatusEnum.OK);
             message.setMessage(errors.get(0));
 
-            return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
         }
 
         if (userRepository.findByUserEmail(idcheckDto.getUserEmail()).isPresent()) {
+
 
             message.setStatusCode(StatusMessage.StatusEnum.OK);
             message.setMessage("이미 존재하는 이메일입니다.");

@@ -33,9 +33,9 @@ public class Estate extends Timestamped {
     private String buildingDetail;
 
     @Column
-    private String deposit;
+    private int deposit;
     @Column
-    private String rent_fee;
+    private int rent_fee;
     @Column
     private String buildingFloor;
     private String roomFloor;

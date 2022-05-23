@@ -12,8 +12,7 @@ public class StartUpBeApplication {
 
     // S3
     public static final String APPLICATION_LOCATIONS = "spring.config.location="
-            + "classpath:application.properties,"
-            + "classpath:aws.yml";
+            + "classpath:application.properties";
 
     // S3
     // application.properties와 aws.yml 두개의 파일 모두를 설정 파일로 읽어서 사용

@@ -1,7 +1,7 @@
 package com.sparta.startup_be.login.service;
 
 import com.sparta.startup_be.exception.StatusMessage;
-import com.sparta.startup_be.login.dto.SignupRequestDto;
+import com.sparta.startup_be.login.dto.IdcheckDto;
 import com.sparta.startup_be.login.dto.UserRequestDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
@@ -29,16 +29,16 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 회원가입
-    public ResponseEntity<StatusMessage> signup(SignupRequestDto requestDto, BindingResult bindingResult) {
+    public ResponseEntity<StatusMessage> signup(UserRequestDto requestDto, BindingResult bindingResult) {
         StatusMessage message = new StatusMessage();
         HttpHeaders headers= new HttpHeaders();
+        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
         // 유효성 검증을 통해 유효하지 않은 결과를 JudgeSuccessDto에 담아서 클라이언트에게 보내준다.
         if (bindingResult.hasErrors()) {
             // 유효성 검사에 실패했을 경우 Error를 리스트 형식으로 가져온다.
             List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
 
-            headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
             message.setStatusCode(StatusMessage.StatusEnum.INTERNAL_SERVER_ERROR);
             message.setMessage(errors.get(0));
 
@@ -49,7 +49,7 @@ public class UserService {
         String nickname = requestDto.getNickname();
         Optional<User> foundUser = userRepository.findByUserEmail(userEmail);
 
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+
 
         // userEmail 중복 체크
         if(validatedDuplicateUserEmail(foundUser)) {
@@ -78,21 +78,35 @@ public class UserService {
     }
 
     // 이메일 중복 확인
-    public ResponseEntity<StatusMessage> dupEmail(UserRequestDto userDto) {
+    public ResponseEntity<StatusMessage> dupEmail(IdcheckDto idcheckDto, BindingResult bindingResult) {
         StatusMessage message = new StatusMessage();
         HttpHeaders headers= new HttpHeaders();
         headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-        if (userRepository.findByUserEmail(userDto.getUserEmail()).isPresent()) {
+
+        // 유효성 검증을 통해 유효하지 않은 결과를 JudgeSuccessDto에 담아서 클라이언트에게 보내준다.
+        if (bindingResult.hasErrors()) {
+            // 유효성 검사에 실패했을 경우 Error를 리스트 형식으로 가져온다.
+            List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
+
+            message.setStatusCode(StatusMessage.StatusEnum.INTERNAL_SERVER_ERROR);
+            message.setMessage(errors.get(0));
+
+            return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        if (userRepository.findByUserEmail(idcheckDto.getUserEmail()).isPresent()) {
+
 
             message.setStatusCode(StatusMessage.StatusEnum.OK);
             message.setMessage("이미 존재하는 이메일입니다.");
+            message.setData(false);
 
             return new ResponseEntity<>(message, headers, HttpStatus.OK);
         }
 
         message.setStatusCode(StatusMessage.StatusEnum.OK);
         message.setMessage("사용할 수 있는 이메일입니다.");
-        message.setData(userDto.getUserEmail());
+        message.setData(true);
 
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
 

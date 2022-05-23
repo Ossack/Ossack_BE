@@ -5,6 +5,10 @@ plugins {
     id 'java'
 }
 
+jar {
+    enabled=false
+}
+
 group = 'com.sparta'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
@@ -72,8 +76,16 @@ dependencies {
     implementation 'io.springfox:springfox-boot-starter:3.0.0'
     implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 
+<<<<<<< HEAD
     implementation "com.querydsl:querydsl-jpa"
     implementation "com.querydsl:querydsl-apt"
+=======
+    // encryption
+    implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.3'
+
+
+
+>>>>>>> c753f4084fbe0e0bbc3933782b1cd73f76e33ec6
 
 }
 

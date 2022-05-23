@@ -40,20 +40,21 @@ public class FavoriteService {
         } else {
             favoriteRequestDto = new FavoriteRequestDto(userid, estateid, "공유오피스");
         }
-        Favorite favorite1 = new Favorite(favoriteRequestDto);
-        favoriteRepository.save(favorite1);
+            Favorite favorite1 = new Favorite(favoriteRequestDto);
+            favoriteRepository.save(favorite1);
 
-        MylikeDto mylikeDto = new MylikeDto(true);
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+            MylikeDto mylikeDto = new MylikeDto(true);
+            StatusMessage message = new StatusMessage();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("좋아요 완료");
-        message.setData(mylikeDto);
+            message.setStatusCode(StatusMessage.StatusEnum.OK);
+            message.setMessage("좋아요 완료");
+            message.setData(mylikeDto);
 
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
-    }
+            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        }
+
 
 
     @Transactional
@@ -75,3 +76,4 @@ public class FavoriteService {
         return new ResponseEntity<>(message, headers, HttpStatus.OK);
     }
 }
+

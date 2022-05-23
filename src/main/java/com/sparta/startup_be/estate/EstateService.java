@@ -103,21 +103,19 @@ public class EstateService {
 
     public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum,String monthly) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
-        if(query.equals("서울시")) query="서울특별시";
-        List<Estate> estates = new ArrayList<>();
         final int start = 10 * pagenum;
-        System.out.println(estateRepository.searchAllByGuQuery("서울특별시",0).size());
-        int size = 0;
-        if (query.contains("시")) {
-            estates = estateRepository.searchAllByCityQuery(query,start);
-            size = estateRepository.countAllByCity(query,monthly);
-        } else if (query.contains("구")) {
-            estates = estateRepository.searchAllByGuQuery(query,start);
-            size = estateRepository.countAllByGu(query,monthly);
-        } else {
-            estates = estateRepository.searchAllByDongQuery(query,start);
-            size = estateRepository.countAllByDong(query,monthly);
-        }
+        List<Estate> estates = estateRepository.searchALlByQuery(query,start);;
+        int size =estateRepository.countAllByQuery(query);
+//        if (query.contains("시")) {
+//            estates = estateRepository.searchAllByCityQuery(query,start);
+//            size = estateRepository.countAllByCity(query);
+//        } else if (query.contains("구")) {
+//            estates = estateRepository.searchAllByGuQuery(query,start);
+//            size = estateRepository.countAllByGu(query);
+//        } else {
+//            estates = estateRepository.searchAllByDongQuery(query,start);
+//            size = estateRepository.countAllByDong(query);
+//        }
         System.out.println(size);
 
         int i = 0;
@@ -162,12 +160,11 @@ public class EstateService {
     public List<EstateResponseDto> showFavorite(UserDetailsImpl userDetails) {
 
         // 찜한 매물 목록
-        List<Favorite> favoriteList = favoriteRepository.findByUserid(userDetails.getId());
+        List<Favorite> favoriteList = favoriteRepository.findAllByUseridAndType(userDetails.getId(),"사무실");
 
         List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
         for (int i = 0; i < favoriteList.size(); i++) {
             favoriteList.get(i).getEstateid();
-//            System.out.println(favoriteList.get(i).getEstateid());
             Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
                     () -> new NullPointerException("게시글이 없습니다"));
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate, true);

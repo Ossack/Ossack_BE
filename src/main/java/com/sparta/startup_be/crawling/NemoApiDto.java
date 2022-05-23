@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.json.JSONObject;
 
 import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor

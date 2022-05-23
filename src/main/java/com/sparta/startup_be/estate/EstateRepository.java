@@ -17,16 +17,17 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
 //    List<Estate> findAllByMonthly(String monthly);
     int countAllByMonthlyAndCity(String monthly, String city);
 //     searchAllByCity(String city);
+    @Query(nativeQuery = true,value=" select u.* from estate u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword order by u.id limit 10 offset :start")
+    List<Estate> searchALlByQuery(@Param("keyword") String city, @Param("start")int start);
+    @Query(nativeQuery = true,value = "select count(u.id) from estate u where u.city rlike :keyword or u.gu rlike :keyword or u.dong rlike :keyword")
+    int countAllByQuery(@Param("keyword") String city);
+
     @Query("select u from Estate u where u.city like :keyword")
     List<Estate> searchAllByCity(@Param("keyword")String city);
-    @Query(nativeQuery = true,value = "select u.* from estate u where u.city like :keyword order by u.id limit 10 offset :start")
-    List<Estate> searchAllByCityQuery(@Param("keyword")String city, @Param("start")int start);
-    @Query(nativeQuery = true,value = "select u.* from estate u where u.dong like :keyword order by u.id limit 10 offset :start")
-    List<Estate> searchAllByDongQuery(@Param("keyword")String city, @Param("start")int start);
-    @Query(nativeQuery = true,value = "select u.* from estate u where u.gu like :keyword order by u.id limit 10 offset :start")
-    List<Estate> searchAllByGuQuery(@Param("keyword")String city, @Param("start")int start);
-    @Query("select count(u) from Estate u where u.city like :keyword and u.monthly like :monthly")
-    int countAllByCity(@Param("keyword")String city,@Param("monthly")String monthly);
+
+
+    @Query("select count(u) from Estate u where u.city like :keyword")
+    int countAllByCity(@Param("keyword")String city);
 
     @Query("select count(u) from Estate u where u.gu like :keyword")
     int countAllByGu(@Param("keyword")String gu,@Param("monthly")String monthly);
@@ -65,14 +66,14 @@ public interface EstateRepository extends JpaRepository<Estate, Long> {
 
 
     @Query(nativeQuery = true,value = "select distinct e.city from estate e," +
-            " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+            " coordinate_estate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
     List<String> findCity(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
 
     @Query(nativeQuery = true,value = "select distinct e.gu from estate e," +
-            " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+            " coordinate_estate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
     List<String> findGu(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
 
     @Query(nativeQuery = true,value = "select distinct e.dong from estate e," +
-            " coordinate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+            " coordinate_estate c  where e.id=c.estateid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
     List<String> findDong(@Param("minX") float minX, @Param("maxX") float maxX, @Param("minY") float minY, @Param("maxY") float maxY);
 }

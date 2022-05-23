@@ -48,6 +48,13 @@ public class SharedOfficeController {
         return sharedOfficeService.showMySharedOffice(userDetail.getUser());
     }
 
+    @GetMapping("/sharedoffice/favorite")
+    public List<SharedOfficeResponseDto> showFavorite(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ){
+        return sharedOfficeService.showFavorite(userDetails);
+    }
+
 //    @GetMapping("/map/sharedoffices/{level}")
 //    public List
 }

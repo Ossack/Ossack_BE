@@ -19,37 +19,44 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     //해당 좌쵸 내 시,구,동 조회
     @Override
-    public int countCityQuery(String city,String monthly,String depositlimt,String feelimit) {
+    public int countCityQuery(String city,String monthly,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("e");
         int count = (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
                 .where(qEstate.city.contains(city)
-                        .and(qEstate.monthly.contains(monthly)))
+//                        .and(qEstate.monthly.contains(monthly)
+                                .and(qEstate.deposit.between(0,depositlimit)
+                                        .and(qEstate.rent_fee.between(0,feelimit))))
                 .stream()
                 .count();
         return count;
     }
     @Override
-    public int countGuQuery(String city,String monthly,String depositlimt,String feelimit) {
+    public int countGuQuery(String city,String monthly,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("e");
         int count = (int) queryFactory.
                 from(qEstate)
                 .select(qEstate)
                 .where(qEstate.gu.contains(city)
-                        .and(qEstate.monthly.contains(monthly)))
+//                        .and(qEstate.monthly.contains(monthly)
+                                .and(qEstate.deposit.between(0,depositlimit)
+                                        .and(qEstate.rent_fee.between(0,feelimit))))
                 .stream()
                 .count();
         return count;
     }
     @Override
-    public int countDongQuery(String city,String monthly,String depositlimt,String feelimit) {
+    public int countDongQuery(String city,String monthly,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("e");
         int count = (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
                 .where(qEstate.dong.contains(city)
-                        .and(qEstate.monthly.contains(monthly)))
+//                        .and(qEstate.monthly.contains(monthly)
+                                .and(qEstate.deposit.between(0,depositlimit)
+                                        .and(qEstate.rent_fee.between(0,feelimit))))
+//                                .and(qEstate.rent_fee.)))
                 .stream().count();
         return count;
     }
@@ -104,13 +111,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public List<Estate> searchAllByCity(String city) {
+    public List<Estate> searchAllByQuery(String city,int start,String monthly,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate)
                 .where(qEstate.city.contains(city)
                         .or(qEstate.dong.contains(city)
-                                .or(qEstate.gu.contains(city))))
+                                .or(qEstate.gu.contains(city)
+//                                        .and(qEstate.monthly.contains(monthly)
+                                            .and(qEstate.deposit.between(0,depositlimit)
+                                                .and(qEstate.rent_fee.between(0,feelimit))))))
+                .limit(10).offset(start)
                 .fetch();
     }
 

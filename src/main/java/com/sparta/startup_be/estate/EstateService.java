@@ -101,10 +101,22 @@ public class EstateService {
     }
 
 
-    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum, String monthly) {
+    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum, String monthly,String depositlimit,String feelimit) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         final int start = 10 * pagenum;
-        List<Estate> estates = estateRepository.searchALlByQuery(query,start);;
+        int defaultDepositfee =1000000;
+        int defaultFeelimit =1000000;
+        String defaultmonthly =null;
+        if(!monthly.equals("undefined")){
+            defaultmonthly=monthly;
+        }
+        if(!depositlimit.equals("undefined")){
+            defaultDepositfee=Integer.parseInt(depositlimit);
+        }
+        if(!feelimit.equals("undefined")){
+            defaultFeelimit=Integer.parseInt(feelimit);
+        }
+        List<Estate> estates = estateRepository.searchAllByQuery(query,start,defaultmonthly,defaultDepositfee,defaultFeelimit);
         int size =estateRepository.countAllByQuery(query);
 //        if (query.contains("시")) {
 //            estates = estateRepository.searchAllByCityQuery(query,start);
@@ -192,14 +204,26 @@ public class EstateService {
             List<EstateResponseDto> estate = new ArrayList<>();
             int estate_cnt = 0;
             float avg = 0f;
+            int defaultDepositfee =1000000;
+            int defaultFeelimit =1000000;
+            String defaultmonthly ="";
+            if(!monthly.equals("undefined")){
+                defaultmonthly=monthly;
+            }
+            if(!depositlimit.equals("undefined")){
+                defaultDepositfee=Integer.parseInt(depositlimit);
+            }
+            if(!feelimit.equals("undefined")){
+                defaultFeelimit=Integer.parseInt(feelimit);
+            }
             if (level < 7) {
-                estate_cnt = estateRepository.countDongQuery(title,monthly,depositlimit,feelimit);
+                estate_cnt = estateRepository.countDongQuery(title,monthly,defaultDepositfee,defaultFeelimit);
                 avg = (float) (estateRepository.dongAvgQuery(title)/estateRepository.dongAreaAvgQuery(title)* 3.3);
             } else if (level == 7 || level == 8) {
-                estate_cnt = estateRepository.countGuQuery(title,monthly,depositlimit,feelimit);
+                estate_cnt = estateRepository.countGuQuery(title,monthly,defaultDepositfee,defaultFeelimit);
                 avg = (float) (estateRepository.guAvgQuery(title)/estateRepository.guAvgAreaQuery(title) *3.3);
             } else {
-                estate_cnt = estateRepository.countCityQuery(title,monthly,depositlimit,feelimit);
+                estate_cnt = estateRepository.countCityQuery(title,monthly,defaultDepositfee,defaultFeelimit);
                 avg = (float) (estateRepository.cityAvgQuery(title)/estateRepository.cityAreaAvgQuery(title) * 3.3);
             }
             avg = Integer.parseInt(String.valueOf(Math.round(avg)));

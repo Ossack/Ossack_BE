@@ -47,10 +47,9 @@ public class EstateController {
 
     //검색 후 리스트 반환
     @GetMapping("/estates/{pagenum}")
-    private SearchDto searchTowm(@RequestParam String query, @RequestParam String monthly, @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable int pagenum){
-        System.out.println(query);
-        System.out.println(monthly);
-        return estateService.searchTowm(query,userDetails,pagenum-1,monthly);
+    private SearchDto searchTowm(@RequestParam String query, @RequestParam String monthly, @AuthenticationPrincipal UserDetailsImpl userDetails,
+                                 @RequestParam String depositlimit, @RequestParam String feelimit,@PathVariable int pagenum){
+        return estateService.searchTowm(query,userDetails,pagenum-1,monthly,depositlimit.replace(",",""),feelimit.replace(",",""));
     }
 
     //level별 지도 조회(사무실, 공유오피스)

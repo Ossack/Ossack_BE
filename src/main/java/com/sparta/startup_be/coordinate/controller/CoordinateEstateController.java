@@ -1,7 +1,6 @@
 package com.sparta.startup_be.coordinate.controller;
 
 import com.sparta.startup_be.coordinate.service.CoordinateEstateService;
-import com.sparta.startup_be.estate.EstateRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;

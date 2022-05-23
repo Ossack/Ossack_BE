@@ -1,5 +1,6 @@
 package com.sparta.startup_be.estate.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import com.sparta.startup_be.model.Estate;
 import lombok.Getter;
@@ -36,6 +37,7 @@ public class EstateResponseDto {
 
     private CoordinateResponseDto coordinateResponseDto;
 
+    @QueryProjection
     public EstateResponseDto(Estate estate,boolean mylike){
         this.management_fee = estate.getManagement_fee();
         this.toilet = estate.getToilet();
@@ -125,5 +127,6 @@ public class EstateResponseDto {
         this.phoneNumber = estate.getPhoneNumber();
         this.agentNumber = estate.getAgentNumber();
     }
+
 
 }

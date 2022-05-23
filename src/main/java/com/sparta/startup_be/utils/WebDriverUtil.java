@@ -169,11 +169,7 @@ public class WebDriverUtil extends Thread {
 
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-<<<<<<< HEAD
         driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=125.83038254030575&SWLat=36.94101354879302&NELng=128.6127086563856&NELat=38.044019161159085&Zoom=10&mode=1&category=1&list=true&articleId=&dataType=");
-=======
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.8806479732157&SWLat=37.455626972343524&NELng=127.01954435183183&NELat=37.509457827234726&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=  ");
->>>>>>> 27e19519b6f92a5ab228847f5de427377ecaed43
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -192,11 +188,8 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-<<<<<<< HEAD
-        } while (j != 5000);
-=======
         } while (j != 1200);
->>>>>>> 27e19519b6f92a5ab228847f5de427377ecaed43
+
 
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
@@ -206,13 +199,9 @@ public class WebDriverUtil extends Thread {
         List<Estate> estates= new ArrayList<>();
         int i = 0;
         for (WebElement webElement : webElements) {
-<<<<<<< HEAD
-//            try {
-                if (i % 5 == num) {
-=======
             try {
-                if (i % 8 == num) {
->>>>>>> 27e19519b6f92a5ab228847f5de427377ecaed43
+                if (i % 5 == num) {
+
 
                     String monthly = webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
                     webElement.sendKeys(Keys.ENTER);

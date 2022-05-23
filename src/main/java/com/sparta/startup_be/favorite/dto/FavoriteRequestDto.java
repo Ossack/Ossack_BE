@@ -16,10 +16,6 @@ public class FavoriteRequestDto {
     public FavoriteRequestDto(Long userid, Long estateid,String type){
         this.userid = userid;
         this.estateid = estateid;
-<<<<<<< HEAD
         this.type = type;
-=======
-        this.type =type;
->>>>>>> 27e19519b6f92a5ab228847f5de427377ecaed43
     }
 }

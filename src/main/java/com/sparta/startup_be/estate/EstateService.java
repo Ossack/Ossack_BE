@@ -1,12 +1,12 @@
 package com.sparta.startup_be.estate;
 
-import com.sparta.startup_be.model.CoordinateEstate;
-import com.sparta.startup_be.coordinate.service.CoordinateEstateService;
-import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import com.sparta.startup_be.estate.dto.CityResponseDto;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.estate.dto.MapResponseDto;
 import com.sparta.startup_be.estate.dto.SearchDto;
+import com.sparta.startup_be.model.CoordinateEstate;
+import com.sparta.startup_be.coordinate.service.CoordinateEstateService;
+import com.sparta.startup_be.coordinate.dto.CoordinateResponseDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.Favorite;
 import com.sparta.startup_be.favorite.FavoriteRepository;
@@ -101,7 +101,7 @@ public class EstateService {
     }
 
 
-    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum,String monthly) {
+    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum, String monthly) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         final int start = 10 * pagenum;
         List<Estate> estates = estateRepository.searchALlByQuery(query,start);;
@@ -148,12 +148,6 @@ public class EstateService {
     }
 
     //구별로 모아보기
-    public List<Estate> guAverage(String query) {
-        //        for(Estate estate : estates){
-//            System.out.println(estate.getCity());
-//        }
-        return estateRepository.searchAllByCity(query);
-    }
 
 
     // 찜한것 보기
@@ -174,42 +168,19 @@ public class EstateService {
     }
 
 
-    public MapResponseDto showEstate(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails,String depositlimit, String feelimit,String monthly) {
+    public MapResponseDto showEstate(double minX, double maxX, double minY, double maxY, int level, UserDetailsImpl userDetails, String depositlimit, String feelimit, String monthly) {
         long temp1 = System.currentTimeMillis();
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
         List<String> cities = new ArrayList<>();
 
         if (level < 7) {
-            cities = estateRepository.findDong(minX, maxX, minY, maxY);
+            cities = estateRepository.findDongQuery(minX, maxX, minY, maxY);
         } else if (level == 7 || level == 8) {
-            cities = estateRepository.findGu(minX, maxX, minY, maxY);
+            cities = estateRepository.findGuQuery(minX, maxX, minY, maxY);
         } else {
-            cities = estateRepository.findCity(minX, maxX, minY, maxY);
+            cities = estateRepository.findCityQuery(minX, maxX, minY, maxY);
         }
-//        List<Coordinate> coordinates = coordinateRepository.findAllByXBetweenAndYBetween(minX, maxX, minY, maxY);
-////        List<Coordinate> coordinates = coordinateRepository.findAllByXBetween(minX,maxX);
-////        System.out.println(coordinates.size());
-//        long temp1 = System.currentTimeMillis();
-//        System.out.println(temp1 - start);
-//        Set<String> cities = new HashSet<>();
-//        for (Coordinate coordinate : coordinates) {
-//            Estate estate2 = estateRepository.findById(coordinate.getEstateid()).orElseThrow(
-//                    () -> new IllegalArgumentException("하이")
-//            );
-//            String city = "";
-//            if (level < 7) {
-//                city = estate2.getCity();
-//            } else if (level == 7 || level == 8) {
-//                city = estate2.getCity().split(" ")[0] + " " + estate2.getCity().split(" ")[1];
-//            } else {
-//                city = estate2.getCity().split(" ")[0];
-//            }
-//            cities.add(city);
-//        }
-
-//        List<String> cities2 = new ArrayList<>();
-
         long temp2 = System.currentTimeMillis();
         System.out.println("temp1:");
         System.out.println(temp2 - temp1);
@@ -218,18 +189,17 @@ public class EstateService {
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         for (int i = 0; i < cities.size(); i++) {
             String title = cities.get(i);
-            System.out.println(title);
             List<EstateResponseDto> estate = new ArrayList<>();
             int estate_cnt = 0;
             float avg = 0f;
             if (level < 7) {
-                estate_cnt = estateRepository.countAllByDong(title,monthly);
+                estate_cnt = estateRepository.countDongQuery(title,monthly,depositlimit,feelimit);
                 avg = (float) (estateRepository.dongAvgQuery(title)/estateRepository.dongAreaAvgQuery(title)* 3.3);
             } else if (level == 7 || level == 8) {
-                estate_cnt = estateRepository.countAllByGu(title,monthly);
+                estate_cnt = estateRepository.countGuQuery(title,monthly,depositlimit,feelimit);
                 avg = (float) (estateRepository.guAvgQuery(title)/estateRepository.guAvgAreaQuery(title) *3.3);
             } else {
-                estate_cnt = estateRepository.countAllByCity(title,monthly);
+                estate_cnt = estateRepository.countCityQuery(title,monthly,depositlimit,feelimit);
                 avg = (float) (estateRepository.cityAvgQuery(title)/estateRepository.cityAreaAvgQuery(title) * 3.3);
             }
             avg = Integer.parseInt(String.valueOf(Math.round(avg)));

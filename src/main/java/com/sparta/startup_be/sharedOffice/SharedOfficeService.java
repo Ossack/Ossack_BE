@@ -5,7 +5,6 @@ import com.sparta.startup_be.coordinate.repository.CoordinateSharedOfficeReposit
 import com.sparta.startup_be.estate.dto.CityResponseDto;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.estate.dto.MapResponseDto;
-import com.sparta.startup_be.estate.dto.SearchDto;
 import com.sparta.startup_be.favorite.FavoriteRepository;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.security.UserDetailsImpl;
@@ -127,7 +126,7 @@ public class SharedOfficeService {
     }
 
     public List<SharedOfficeResponseDto> showMySharedOffice(User user){
-        List<Favorite> favorites = favoriteRepository.findByUserid(user.getId());
+        List<Favorite> favorites = favoriteRepository.findAllByUseridAndType(user.getId(),"공유오피스");
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
         for(int i=0; i<favorites.size(); i++){
             SharedOffice sharedOffice = sharedOfficeRepository.findById(favorites.get(i).getEstateid()).orElseThrow(

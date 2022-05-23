@@ -1,13 +1,9 @@
 package com.sparta.startup_be.sharedOffice;
 
-import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.estate.dto.MapResponseDto;
-import com.sparta.startup_be.estate.dto.SearchDto;
 import com.sparta.startup_be.login.security.UserDetailsImpl;
-import com.sparta.startup_be.model.SharedOffice;
 import com.sparta.startup_be.sharedOffice.dto.SearchSharedOfficeResponseDto;
 import com.sparta.startup_be.sharedOffice.dto.SharedOfficeResponseDto;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

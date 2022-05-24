@@ -156,6 +156,7 @@ public class EstateService {
                     () -> new NullPointerException("게시글이 없습니다"));
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate, true);
             estateResponseDtos.add(estateResponseDto);
+            
         }
         return estateResponseDtos;
     }

@@ -28,7 +28,8 @@ public class FavoriteService {
     private final FavoriteRepository favoriteRepository;
     private final EstateRepository estateRepository;
 
-    public ResponseEntity<StatusMessage> pressLike(Long estateid, Long userid) {
+
+    public ResponseEntity<MylikeDto> pressLike(Long estateid, Long userid){
         Optional<Favorite> favorite = favoriteRepository.findByUseridAndEstateid(userid, estateid);
         if (favorite.isPresent()) {
             throw new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_EXIST);
@@ -43,37 +44,24 @@ public class FavoriteService {
             Favorite favorite1 = new Favorite(favoriteRequestDto);
             favoriteRepository.save(favorite1);
 
-            MylikeDto mylikeDto = new MylikeDto(true);
-            StatusMessage message = new StatusMessage();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        MylikeDto mylikeDto = new MylikeDto(true);
 
-            message.setStatusCode(StatusMessage.StatusEnum.OK);
-            message.setMessage("좋아요 완료");
-            message.setData(mylikeDto);
-
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
-        }
-
+        return ResponseEntity.status(200)
+                .body(mylikeDto);
+    }
 
 
     @Transactional
-    public ResponseEntity<StatusMessage> unpressLike(Long estateid, Long userid) {
-        Favorite favorite = favoriteRepository.findByUseridAndEstateid(userid, estateid).orElseThrow(
-                () -> new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_CANCEL)
+    public ResponseEntity<MylikeDto> unpressLike(Long estateid,Long userid){
+        Favorite favorite = favoriteRepository.findByUseridAndEstateid(userid,estateid).orElseThrow(
+                ()-> new IllegalArgumentException(ILLEGAL_ALREADY_LIKE_CANCEL)
         );
         favoriteRepository.deleteByUseridAndEstateid(userid, estateid);
 
         MylikeDto mylikeDto = new MylikeDto(false);
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
 
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("좋아요 취소");
-        message.setData(mylikeDto);
-
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        return ResponseEntity.status(200)
+                .body(mylikeDto);
     }
 }
 

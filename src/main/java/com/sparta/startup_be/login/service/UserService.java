@@ -29,47 +29,31 @@ public class UserService {
     private final UserRepository userRepository;
 
     // 회원가입
-    public ResponseEntity<StatusMessage> signup(UserRequestDto requestDto, BindingResult bindingResult) {
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
+    public ResponseEntity<String> signup(UserRequestDto requestDto, BindingResult bindingResult) {
         // 유효성 검증을 통해 유효하지 않은 결과를 JudgeSuccessDto에 담아서 클라이언트에게 보내준다.
         if (bindingResult.hasErrors()) {
             // 유효성 검사에 실패했을 경우 Error를 리스트 형식으로 가져온다.
             List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
-
-            message.setStatusCode(StatusMessage.StatusEnum.INTERNAL_SERVER_ERROR);
-            message.setMessage(errors.get(0));
-
-            return new ResponseEntity<>(message, headers, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(400).body(errors.get(0));
         }
 
         String userEmail = requestDto.getUserEmail();
         String nickname = requestDto.getNickname();
         Optional<User> foundUser = userRepository.findByUserEmail(userEmail);
 
-
-
         // userEmail 중복 체크
         if(validatedDuplicateUserEmail(foundUser)) {
-            message.setStatusCode(StatusMessage.StatusEnum.BAD_REQUEST);
-            message.setMessage(ILLEGAL_USER_NAME_DUPLICATION);
-            return new ResponseEntity<>(message, headers, HttpStatus.BAD_REQUEST);
+            return ResponseEntity.status(200).body("중복된 아이디 입니다");
         }
 
         String profile = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
-
         // 패스워드 암호화
         String password = passwordEncoder.encode(requestDto.getPassword());
 
         User user = new User(userEmail, nickname, profile, password);
         userRepository.save(user);
 
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("회원가입 성공");
-
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        return ResponseEntity.status(200).body("회원가입 성공");
     }
 
     // 유저이름 중복 체크
@@ -78,38 +62,19 @@ public class UserService {
     }
 
     // 이메일 중복 확인
-    public ResponseEntity<StatusMessage> dupEmail(IdcheckDto idcheckDto, BindingResult bindingResult) {
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
+    public ResponseEntity<String> dupEmail(IdcheckDto idcheckDto, BindingResult bindingResult) {
         // 유효성 검증을 통해 유효하지 않은 결과를 JudgeSuccessDto에 담아서 클라이언트에게 보내준다.
         if (bindingResult.hasErrors()) {
             // 유효성 검사에 실패했을 경우 Error를 리스트 형식으로 가져온다.
             List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
 
-            message.setStatusCode(StatusMessage.StatusEnum.OK);
-            message.setMessage(errors.get(0));
-
-
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+            return ResponseEntity.status(400).body(errors.get(0));
         }
 
         if (userRepository.findByUserEmail(idcheckDto.getUserEmail()).isPresent()) {
-
-
-            message.setStatusCode(StatusMessage.StatusEnum.OK);
-            message.setMessage("이미 존재하는 이메일입니다.");
-            message.setData(false);
-
-            return new ResponseEntity<>(message, headers, HttpStatus.OK);
+            return ResponseEntity.status(200).body("false");
         }
 
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("사용할 수 있는 이메일입니다.");
-        message.setData(true);
-
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
-
+        return ResponseEntity.status(200).body("true");
     }
 }

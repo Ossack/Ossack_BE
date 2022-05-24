@@ -20,14 +20,14 @@ public class UserController {
 
     // 회원가입 등록
     @PostMapping("/user/signup")
-    public ResponseEntity<StatusMessage> join(
+    public ResponseEntity<String> join(
             @Validated @RequestBody UserRequestDto requestDto, BindingResult bindingResult) {
         return userService.signup(requestDto, bindingResult);
     }
 
     // 이메일 중복 확인
     @PostMapping("/user/idcheck")
-    public ResponseEntity<StatusMessage> idCheck(
+    public ResponseEntity<String> idCheck(
             @Validated @RequestBody IdcheckDto idcheckDto, BindingResult bindingResult) {
         return userService.dupEmail(idcheckDto, bindingResult);
     }

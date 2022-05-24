@@ -62,114 +62,8 @@ public class WebDriverUtil extends Thread {
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
     }
 
-    public List<Estate> useDriver(String url) throws InterruptedException {
-        driver.get(url);
-//        driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
-        log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
-        try {
-            driver.findElement(By.className("btn_option")).sendKeys(Keys.ENTER);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        WebElement item = driver.findElement(By.className("article_box"));
-        int m = Integer.parseInt(driver.findElement(By.xpath("//*[@id=\"_listContainer\"]/div/div[1]/a/h3/strong")).getText().replace("+", ""));
-        int j = 0;
-        while (true) {
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, document.body.scrollHeight)", item);
-            Thread.sleep(1);
-            j++;
-            if (j == 500) break;
-        }
-        List<Estate> estates = new ArrayList<>();
-
-        List<WebElement> webElements = driver.findElements(By.className("item_area"));
-
-        System.out.println(webElements.size());
-        int i = 0;
-        try {
-            for (WebElement webElement : webElements) {
-                i++;
-                System.out.println("i=" + i);
-                if (i % 5 == 0) {
-                    Thread.sleep(500);
-                    if (!webElement.findElement(By.className("merit_area")).getText().contains("중개사") && !webElement.findElement(By.className("agent_name")).getText().contains("피터팬")) {
-                        webElement.findElement(By.className("item_link")).sendKeys(Keys.CONTROL + "\n");
-                        driver.switchTo().window((String) driver.getWindowHandles().toArray()[1]);
-                        driver.switchTo().frame(driver.findElement(By.id("_newMobile")));
-                        Thread.sleep(1000);
-
-                        String type = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[1]/div/div[1]/div[2]/strong")).getText();
-                        String a = driver.findElement(By.xpath("//*[@id=\"detailMy--fixed\"]/strong")).getText();
-                        String monthly = driver.findElement(By.xpath("//*[@id=\"detailMy--fixed\"]/em")).getText();
-                        String rent_fee = "";
-                        if (monthly.equals("단기임대") || monthly.equals("월세")) {
-                            rent_fee = a.split("\n")[2].replace(" ", "").replace("/", "").replace(",", "");
-                        }
-
-//                List<String> subwayString = new ArrayList<>();
-//                List<WebElement> subwayElements =driver.findElements(By.className("detail_facilities_item "));
-//                System.out.println(subwayElements.size());
-//                for(WebElement subway: subwayElements){
-//                    System.out.println("왜 안대냐");
-//                    System.out.println(subway.getText());
-//                    subwayString.add(subway.getText());
-//                }
-                        String deposit = a.split("\n")[0];
-                        List<WebElement> images = driver.findElements(By.className("detail_photo_item"));
-                        List<String> imageList = new ArrayList<>();
-                        for (WebElement image : images) {
-                            String imageUrl = image.getAttribute("style").split("\"")[1];
-                            imageList.add(imageUrl);
-                        }
-                        String info = driver.findElement(By.className("detail_summary_item")).getText();
-                        String area = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[1]/div/span[2]")).getText().split("\n")[1];
-                        String buildingFloor = "";
-                        String roomFloor = "";
-                        Long id = 0L;
-                        try {
-                            buildingFloor = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[3]/div[2]/span[2]"))
-                                    .getText().split("/")[1].replace("층", "");      //*[@id="content"]/div/div[1]/div[2]/div[2]/div[4]/div[2]/span[2]
-                            roomFloor = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[3]/div[2]/span[2]"))
-                                    .getText().split("/")[0].replace("B", "");
-                            id = Long.parseLong(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[11]/div/span[2]")).getText());
-                        } catch (IndexOutOfBoundsException e) {
-                            buildingFloor = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[4]/div[2]/span[2]"))
-                                    .getText().split("/")[1].replace("층", "");      //*[@id="content"]/div/div[1]/div[2]/div[2]/div[4]/div[2]/span[2]
-                            roomFloor = driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[4]/div[2]/span[2]"))
-                                    .getText().split("/")[0].replace("B", "");
-                            id = Long.parseLong(driver.findElement(By.xpath("//*[@id=\"content\"]/div/div[1]/div[2]/div[2]/div[12]/div/span[2]")).getText());
-                        }
-                        String city = driver.findElement(By.className("detail_info_branch")).getText();
-                        i++;
-                        System.out.println("i=" + i);
-                        EstateRequestDto estateDto = EstateRequestDto.builder()
-                                .id(id).area(area).buildingFloor(buildingFloor).roomFloor(roomFloor).imageList(imageList)
-                                .deposit(deposit).city(city).rent_fee(rent_fee).type(type).buildingInfo(info).monthly(monthly)
-                                .build();
-                        Estate estate = new Estate(estateDto);
-                        estates.add(estate);
-
-                        driver.quit();
-
-//                System.out.println(driver.findElement(By.cssSelector("iframe")).getAttribute("id"));
-
-                    }
-
-                }
-            }
-        }catch(Exception e){
-            System.out.println("i+"+e.toString());
-        }
-        log.info("++++++++++++++++++++++===================+++++++++++++ 끝 : ");
-
-        quitDriver();
-        return estates;
-    }
-
-
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.96048262132093&SWLat=37.46440243051975&NELng=127.1342296678897&NELat=37.53360211645057&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=  ");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.9323935310909&SWLat=37.526739358468056&NELng=127.07145895675797&NELat=37.58050863560339&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -188,7 +82,8 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 1000);
+        } while (j != 1200);
+
 
 
         List<WebElement> webElements = driver.findElements(By.className("article_row"));
@@ -198,8 +93,9 @@ public class WebDriverUtil extends Thread {
         List<Estate> estates= new ArrayList<>();
         int i = 0;
         for (WebElement webElement : webElements) {
-//            try {
-                if (i % 8 == num) {
+            try {
+                if (i % 5 == num) {
+
 
                     String monthly = webElement.findElement(By.className("primary")).findElement(By.className("type")).getText();
                     webElement.sendKeys(Keys.ENTER);
@@ -218,11 +114,30 @@ public class WebDriverUtil extends Thread {
 
                     //보증금 월세 크롤링
                     String a = driver.findElement(By.className("detail_price")).getText();
-                    String deposit = a.split("/")[0].replace("보증금", "");
-                    String rent_fee = "0";
-                    if (monthly.equals("월세")) {
-                        rent_fee = a.split("/")[1].replace("\n", "").replace("월세", "");
+                    String depositStr = a.split("/")[0].replace("매매","").replace("보증금", "").replace(",","").replace(" ","");
+                    if(depositStr.contains("억")){
+                        if(depositStr.split("억").length==1){
+                            depositStr =depositStr.replace("억","")+"0000";
+                        }else {
+                            depositStr =depositStr.replace("억","");
+                        }
                     }
+                    int deposit = Integer.parseInt(depositStr);
+                    int rent_fee = 0;
+
+                    String rent_feeStr=a.split("/")[1].replace("\n", "").replace("월세", "").replace(" ","")
+                            .replace(",","");
+                    if(monthly.equals("월세")) {
+                        if (rent_feeStr.contains("억")) {
+                            if (rent_feeStr.split("억").length != 1) {
+                                rent_feeStr = rent_feeStr.replace("억", "");
+                            }else{
+                                rent_feeStr = rent_feeStr.replace("억", "")+"0000";
+                            }
+                        }
+                        rent_fee=Integer.parseInt(rent_feeStr);
+                    }
+
 
 
                     //지하철 정보 크롤링
@@ -233,14 +148,13 @@ public class WebDriverUtil extends Thread {
                     String info = driver.findElement(By.className("detail_title")).getText();
 
 
-
                     //전용면적 크롤링
                     String area = "";
-                    String area_1 ="";
-                    while(true){
+                    String area_1 = "";
+                    while (true) {
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 50)", scroll);
                         area_1 = driver.findElement(By.className("area")).getText();
-                        if(area_1.contains("㎡")) break;
+                        if (area_1.contains("㎡")) break;
                     }
                     area = area_1.split("\n")[1];
                     String capacity = driver.findElement(By.className("data_point")).findElement(By.className("person")).findElement(By.className("content")).getText();
@@ -252,29 +166,28 @@ public class WebDriverUtil extends Thread {
 
                     //정보 list 크롤링(엘리베이터 유무, 입주 가능일, 층수)
                     List<WebElement> products = driver.findElement(By.className("product_more")).findElements(By.tagName("li"));
-                    String elevator ="개별문의";
+                    String elevator = "개별문의";
                     String date = "개별문의";
-                    String buildingFloor ="개별문의";
-                    String roomFloor ="개별문의";
+                    String buildingFloor = "개별문의";
+                    String roomFloor = "개별문의";
                     String type = products.get(0).getText();
                     String toilet = "개별문의";
                     String parking = "개별문의";
-                    for(WebElement product : products){
-                        System.out.println(product.getText());
-                        if(product.getText().contains("엘리베이터")){
-                            elevator=product.getText();
-                        }else if(product.getText().contains("즉시")){
+                    for (WebElement product : products) {
+                        if (product.getText().contains("엘리베이터")) {
+                            elevator = product.getText();
+                        } else if (product.getText().contains("즉시")) {
                             date = product.getText();
-                        }else if(product.getText().contains("층")){
-                            buildingFloor = product.getText().split("/")[1].replace("층","");
+                        } else if (product.getText().contains("층")) {
+                            buildingFloor = product.getText().split("/")[1].replace("층", "");
                             roomFloor = product.getText().split("/")[0];
-                        }else if(product.getText().contains("녀")){
+                        } else if (product.getText().contains("녀")) {
                             toilet = product.getText();
-                        }else if(product.getText().contains("주차")){
-                            parking=product.getText();
+                        } else if (product.getText().contains("주차")) {
+                            parking = product.getText();
                         }
                     }
-                    System.out.println(parking);
+//                    System.out.println(parking);
 
 
                     ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 500)", scroll);
@@ -284,12 +197,12 @@ public class WebDriverUtil extends Thread {
 
                     //주소 및 중개사 크롤링
                     String city = "개별문의";
-                    String agent ="개별문의";
+                    String agent = "개별문의";
                     do {
                         city = driver.findElement(By.className("data_position")).getText();
                         agent = driver.findElement(By.className("agent_name")).getText();
                         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 100)", scroll);
-                    } while (agent.replace(" ","").equals("") || city.replace(" ","").equals(""));
+                    } while (agent.replace(" ", "").equals("") || city.replace(" ", "").equals(""));
 
                     WebElement button = driver.findElement(By.className("btn_contact"));
                     button.click();
@@ -313,6 +226,9 @@ public class WebDriverUtil extends Thread {
 
                     driver.findElement(By.className("btn_prev")).click();
                 }
+            }catch(Exception e){
+                e.printStackTrace();
+            }
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollBy(0, 150)", item);
             i++;
         }

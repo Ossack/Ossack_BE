@@ -1,6 +1,5 @@
 package com.sparta.startup_be.sharedOffice.dto;
 
-import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 

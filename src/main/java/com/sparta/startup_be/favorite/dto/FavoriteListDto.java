@@ -14,8 +14,8 @@ public class FavoriteListDto {
     private String roomFloor;
     private String type;
     private String monthly;
-    private String deposit;
-    private String rent_fee;
+    private int deposit;
+    private int rent_fee;
     private List<String> imageUrl;
     private boolean mylike;
 

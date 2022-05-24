@@ -67,6 +67,7 @@ public class UserService {
         if (bindingResult.hasErrors()) {
             // 유효성 검사에 실패했을 경우 Error를 리스트 형식으로 가져온다.
             List<String> errors = bindingResult.getAllErrors().stream().map(e -> e.getDefaultMessage()).collect(Collectors.toList());
+
             return ResponseEntity.status(400).body(errors.get(0));
         }
 

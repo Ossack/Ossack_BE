@@ -38,11 +38,11 @@ public class SharedOfficeService {
         List<String> cities = new ArrayList<>();
 
         if (level < 7) {
-            cities = sharedOfficeRepository.findDongQuery(minX, maxX, minY, maxY);
+            cities = sharedOfficeRepository.findSharedOfficebyDongQuery(minX, maxX, minY, maxY);
         } else if (level == 7 || level == 8) {
-            cities = sharedOfficeRepository.findGuQuery(minX, maxX, minY, maxY);
+            cities = sharedOfficeRepository.findSharedOfficebyGuQuery(minX, maxX, minY, maxY);
         } else {
-            cities = sharedOfficeRepository.findCityQuery(minX, maxX, minY, maxY);
+            cities = sharedOfficeRepository.findSharedOfficebyCityQuery(minX, maxX, minY, maxY);
         }
         long temp2 = System.currentTimeMillis();
         System.out.println("temp1:");
@@ -83,16 +83,7 @@ public class SharedOfficeService {
         final int start = 10 * pagenum;
         List<SharedOffice> sharedOffices = sharedOfficeRepository.searchAllByQuery(query,start);
         int size = sharedOfficeRepository.countAllByQuery(query);
-//        if (query.contains("시")) {
-//            sharedOffices = sharedOfficeRepository.searchAllByCityQuery(query,start);
-//            size = sharedOfficeRepository.countAllByCityQuery(query);
-//        } else if (query.contains("구")) {
-//            sharedOffices = sharedOfficeRepository.searchAllByGuQuery(query,start);
-//            size = sharedOfficeRepository.countAllByGuQuery(query);
-//        } else {
-//            sharedOffices = sharedOfficeRepository.searchAllByDongQuery(query,start);
-//            size = sharedOfficeRepository.countAllByDongQuery(query);
-//        }
+
 
         for (SharedOffice sharedOffice : sharedOffices) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(sharedOffice.getId(), userDetails.getId());

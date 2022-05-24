@@ -3,9 +3,7 @@ package com.sparta.startup_be;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
-import com.sparta.startup_be.model.Estate;
-import com.sparta.startup_be.model.QCoordinateEstate;
-import com.sparta.startup_be.model.QEstate;
+import com.sparta.startup_be.model.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -123,6 +121,45 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                                                 .and(qEstate.rent_fee.between(0,feelimit))))))
                 .limit(10).offset(start)
                 .fetch();
+    }
+
+    @Override
+    public List<String> findSharedOfficebyCityQuery(double minX, double maxX, double minY, double maxY) {
+        QSharedOffice qSharedOffice = new QSharedOffice("s");
+        QCoordinateSharedOffice qCoordinateSharedOffice = new QCoordinateSharedOffice("q");
+        return queryFactory.from(qSharedOffice)
+                .select(qSharedOffice.city)
+                .join(qCoordinateSharedOffice)
+                .on(qSharedOffice.id.eq(qCoordinateSharedOffice.sharedofficeid))
+                .where(qCoordinateSharedOffice.x.between(minX,maxX)
+                        .and(qCoordinateSharedOffice.y.between(minY,maxY)))
+                .distinct().fetch();
+    }
+
+    @Override
+    public List<String> findSharedOfficebyGuQuery(double minX, double maxX, double minY, double maxY) {
+        QSharedOffice qSharedOffice = new QSharedOffice("s");
+        QCoordinateSharedOffice qCoordinateSharedOffice = new QCoordinateSharedOffice("q");
+        return queryFactory.from(qSharedOffice)
+                .select(qSharedOffice.gu)
+                .join(qCoordinateSharedOffice)
+                .on(qSharedOffice.id.eq(qCoordinateSharedOffice.sharedofficeid))
+                .where(qCoordinateSharedOffice.x.between(minX,maxX)
+                        .and(qCoordinateSharedOffice.y.between(minY,maxY)))
+                .distinct().fetch();
+    }
+
+    @Override
+    public List<String> findSharedOfficebyDongQuery(double minX, double maxX, double minY, double maxY) {
+        QSharedOffice qSharedOffice = new QSharedOffice("s");
+        QCoordinateSharedOffice qCoordinateSharedOffice = new QCoordinateSharedOffice("q");
+        return queryFactory.from(qSharedOffice)
+                .select(qSharedOffice.dong)
+                .join(qCoordinateSharedOffice)
+                .on(qSharedOffice.id.eq(qCoordinateSharedOffice.sharedofficeid))
+                .where(qCoordinateSharedOffice.x.between(minX,maxX)
+                        .and(qCoordinateSharedOffice.y.between(minY,maxY)))
+                .distinct().fetch();
     }
 
 

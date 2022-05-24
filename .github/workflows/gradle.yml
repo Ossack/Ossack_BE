@@ -17,7 +17,7 @@ on:
     branches: [ dev ]
 
 env:
-  S3_BUCKET_NAME: mwmw1
+  S3_BUCKET_NAME: ossack
   PROJECT_NAME: Ossack
 
 jobs:

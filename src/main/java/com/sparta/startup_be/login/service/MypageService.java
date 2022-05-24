@@ -1,22 +1,18 @@
 package com.sparta.startup_be.login.service;
 
-import com.sparta.startup_be.exception.StatusMessage;
 import com.sparta.startup_be.login.dto.UserResponseDto;
 import com.sparta.startup_be.login.model.User;
 import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.login.security.UserDetailsImpl;
 import com.sparta.startup_be.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.nio.charset.Charset;
 import java.util.UUID;
 
 @Service
@@ -25,9 +21,9 @@ public class MypageService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
 
-    // 프로필 이미지 수정
+    // 프로필 사진만 수정
     @Transactional
-    public ResponseEntity<StatusMessage> updateProfile(MultipartFile multipartFile, UserDetailsImpl userDetails){
+    public void updateProfile(MultipartFile multipartFile, String nickname, UserDetailsImpl userDetails) {
         User user = userRepository.findById(userDetails.getUser().getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 사용자가 존재하지 않습니다.")
         );
@@ -38,24 +34,34 @@ public class MypageService {
         // 새로운 이미지 > S3 업로드 > 이미지 Url 생성
         String fileName = createFileName(multipartFile.getOriginalFilename());
         String imageUrl = s3Uploader.updateFile(multipartFile, oldImgName, fileName);
-        User profile = new User(user.getId(), user.getUserEmail(), user.getNickname(), imageUrl);
 
         // 새로운 이미지 Url을 파싱해서 파일명으로만 DB에 저장
-        String [] newImgUrl = imageUrl.split("/");
-        String imageKey = newImgUrl[newImgUrl.length-1];
-        user.update(user.getId(), imageKey);
+        String[] newImgUrl = imageUrl.split("/");
+        String imageKey = newImgUrl[newImgUrl.length - 1];
+        user.update(user.getId(), nickname, imageKey);
+    }
 
-        UserResponseDto userResponseDto = new UserResponseDto(profile);
+    // 닉네임만 수정 또는 프로필 사진 삭제
+    @Transactional
+    public void deleteImg(String profileImgUrl, String nickname, UserDetailsImpl userDetails) {
+        String defaultImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+        User user = userRepository.findById(userDetails.getId()).orElseThrow(
+                () -> new IllegalArgumentException("해당 유저가 없습니다")
+        );
 
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
+        // 사진 삭제시 profileUrl이 안들어옴 -> 기본이미지로 변경
+        if (profileImgUrl == null || profileImgUrl.equals("")) {
 
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("수정 완료");
-        message.setData(userResponseDto);
+            // user에서 기존 이미지(파일명) 불러오기
+            String oldImg = user.getProfile();
+            s3Uploader.deleteImage(oldImg);
 
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+            // 디폴트 이미지
+            user.update(user.getId(), nickname, defaultImg);
+        } // 사진 유지 profileUrl이 들어옴 -> 그러면 그대로 해줘
+        else {
+            user.update(user.getId(), nickname, profileImgUrl);
+        }
     }
 
     // 이미지 파일명 변환 관련 메소드
@@ -72,11 +78,10 @@ public class MypageService {
         } catch (StringIndexOutOfBoundsException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 형식의 파일(" + fileName + ") 입니다.");
         }
-
     }
 
     // 회원 정보 조회
-    public ResponseEntity<StatusMessage> isLogin(UserDetailsImpl userDetails) {
+    public ResponseEntity<UserResponseDto> isLogin(UserDetailsImpl userDetails) {
         String basicImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
         String profileImg = userDetails.getUser().getProfile();
 
@@ -86,15 +91,6 @@ public class MypageService {
         }
         UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), profileImg);
 
-        StatusMessage message = new StatusMessage();
-        HttpHeaders headers= new HttpHeaders();
-        headers.setContentType(new MediaType("application", "json", Charset.forName("UTF-8")));
-
-        message.setStatusCode(StatusMessage.StatusEnum.OK);
-        message.setMessage("유저 정보 조회");
-        message.setData(userResponseDto);
-
-        return new ResponseEntity<>(message, headers, HttpStatus.OK);
+        return ResponseEntity.status(200).body(userResponseDto);
     }
-
 }

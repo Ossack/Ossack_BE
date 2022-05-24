@@ -42,4 +42,18 @@ public class S3Uploader {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"파일 업로드에 실패하셨습니다");
         }
     }
+//
+//    // 기존 s3에 있는 이미지 삭제
+//    public String deleteFile(String currentFilePath, String basicImg) {
+//        ObjectMetadata objectMetadata = new ObjectMetadata();
+//        objectMetadata.setContentLength(multipartFile.getSize());
+//        objectMetadata.setContentType(multipartFile.getContentType());
+//
+//        // 기존 이미지 삭제
+//        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, currentFilePath));
+//    }
+
+    public void deleteImage(String fileName){
+        amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+    }
 }

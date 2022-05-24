@@ -43,7 +43,13 @@ public class User {
     }
 
     // 이미지 수정 메서드
-    public void update(Long id, String imageKey) {
+    public void update(Long id, String nickname, String imageKey) {
+        this.id = id;
+        this.nickname = nickname;
+        this.profile = imageKey;
+    }
+
+    public void delete(Long id, String imageKey) {
         this.id = id;
         this.profile = imageKey;
     }

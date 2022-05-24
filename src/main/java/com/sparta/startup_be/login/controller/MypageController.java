@@ -39,6 +39,7 @@ public class MypageController {
     // 회원 로그인 여부 확인
     @GetMapping("/user/islogin")
     public ResponseEntity<UserResponseDto> isLogin(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        System.out.println(53);
         return mypageService.isLogin(userDetails);
     }
 }

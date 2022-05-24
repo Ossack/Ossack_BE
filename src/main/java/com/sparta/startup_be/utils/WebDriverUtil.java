@@ -58,12 +58,12 @@ public class WebDriverUtil extends Thread {
 //        options.addArguments("window-size=1920,1080");
         options.setCapability("ignoreProtectedModeSettings", true);
         // weDriver 생성.
-        driver = new ChromeDriver();
+        driver = new ChromeDriver(options);
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
     }
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=126.9323935310909&SWLat=37.526739358468056&NELng=127.07145895675797&NELat=37.58050863560339&Zoom=14&mode=1&category=1&list=true&articleId=&dataType=");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=125.81608613027379&SWLat=37.09858746853276&NELng=128.03958724357463&NELat=37.96025215433923&Zoom=10&mode=1&category=1&list=true&articleId=&dataType=");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -82,7 +82,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 1200);
+        } while (j != 800);
 
 
 
@@ -113,7 +113,7 @@ public class WebDriverUtil extends Thread {
                     }
 
                     //보증금 월세 크롤링
-                    String a = driver.findElement(By.className("detail_price")).getText();
+                    String a = driver.findElement(By.className("detail_price")).getText().replace("\n","");
                     String depositStr = a.split("/")[0].replace("매매","").replace("보증금", "").replace(",","").replace(" ","");
                     if(depositStr.contains("억")){
                         if(depositStr.split("억").length==1){
@@ -125,9 +125,10 @@ public class WebDriverUtil extends Thread {
                     int deposit = Integer.parseInt(depositStr);
                     int rent_fee = 0;
 
-                    String rent_feeStr=a.split("/")[1].replace("\n", "").replace("월세", "").replace(" ","")
-                            .replace(",","");
+                    String rent_feeStr="0";
                     if(monthly.equals("월세")) {
+                        rent_feeStr=a.split("/")[1].replace("\n", "").replace("월세", "").replace(" ","")
+                                .replace(",","");
                         if (rent_feeStr.contains("억")) {
                             if (rent_feeStr.split("억").length != 1) {
                                 rent_feeStr = rent_feeStr.replace("억", "");
@@ -135,9 +136,8 @@ public class WebDriverUtil extends Thread {
                                 rent_feeStr = rent_feeStr.replace("억", "")+"0000";
                             }
                         }
-                        rent_fee=Integer.parseInt(rent_feeStr);
                     }
-
+                    rent_fee=Integer.parseInt(rent_feeStr);
 
 
                     //지하철 정보 크롤링

@@ -46,25 +46,6 @@ public class EstateService {
             estateRepository.save(estate);
         }
     }
-
-    //지역검색하기
-    public String average(String query) {
-        List<Estate> estates = estateRepository.findAllByCity(query);
-        double sum_fee = 0;
-        double sum_deposit = 0;
-        for (Estate estate : estates) {
-            if (estate.getMonthly().equals("월세")) {
-//                sum_fee += estate.getRent_fee()/estate.getArea();
-            }
-//            else{
-//                sum_deposit += Integer.parseInt(estate.getDeposit().replace(",","")) / estate.getArea();
-//            }
-        }
-        double avg_fee = sum_fee / estateRepository.countAllByMonthlyAndCity("월세", query) * 3.3;
-        double avg_deposit = sum_deposit / estateRepository.countAllByMonthlyAndCity("전세", query) * 3.3;
-        return "월세 평균은" + avg_fee + "이고, 전세보증금 평균은" + avg_deposit + "입니다.";
-    }
-
     //메인페이지 해당 동 조회
     public List<EstateResponseDto> searchKeyword(String query, UserDetailsImpl userDetails) {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
@@ -170,7 +151,7 @@ public class EstateService {
 
         List<EstateResponseDto> estateResponseDtos = new ArrayList<>();
         for (int i = 0; i < favoriteList.size(); i++) {
-            favoriteList.get(i).getEstateid();
+            System.out.println(favoriteList.get(i).getEstateid());
             Estate estate = estateRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
                     () -> new NullPointerException("게시글이 없습니다"));
             EstateResponseDto estateResponseDto = new EstateResponseDto(estate, true);

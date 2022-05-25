@@ -9,6 +9,7 @@ import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.login.security.UserDetailsImpl;
 import com.sparta.startup_be.login.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -29,6 +30,9 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class KakaoUserService {
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    String kakaoClientId;
+
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
@@ -59,7 +63,7 @@ public class KakaoUserService {
         // HTTP Body 생성
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("grant_type", "authorization_code");
-        body.add("client_id", "9a9fb270cb1fbabb4a99ff23a44e9046");
+        body.add("client_id", kakaoClientId);
         body.add("redirect_uri", "https://ossack.shop/user/kakao/callback");
         body.add("code", code);
 

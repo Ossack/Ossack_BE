@@ -62,14 +62,17 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public int countAllByQuery(String city) {
+    public int countAllByQuery(String city,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("e");
         return (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
-                .where(qEstate.city.contains(city)
+                .where((qEstate.city.contains(city)
                         .or(qEstate.dong.contains(city)
-                                .or(qEstate.gu.contains(city))))
+                                .or(qEstate.gu.contains(city))
+//                                        .and(qEstate.monthly.contains(monthly)
+                                .and(qEstate.deposit.between(0,depositlimit)
+                                        .and(qEstate.rent_fee.between(0,feelimit))))))
                 .stream().count();
     }
 
@@ -115,9 +118,9 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
         QEstate qEstate = new QEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate)
-                .where(qEstate.city.contains(city)
+                .where((qEstate.city.contains(city)
                         .or(qEstate.dong.contains(city)
-                                .or(qEstate.gu.contains(city)
+                                .or(qEstate.gu.contains(city))
 //                                        .and(qEstate.monthly.contains(monthly)
                                             .and(qEstate.deposit.between(0,depositlimit)
                                                 .and(qEstate.rent_fee.between(0,feelimit))))))
@@ -162,6 +165,31 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .where(qCoordinateSharedOffice.x.between(minX,maxX)
                         .and(qCoordinateSharedOffice.y.between(minY,maxY)))
                 .distinct().fetch();
+    }
+
+    @Override
+    public int countSharedOfficeByQuery(String city) {
+        QSharedOffice qSharedOffice = new QSharedOffice("e");
+        return (int) queryFactory
+                .from(qSharedOffice)
+                .select(qSharedOffice)
+                .where(qSharedOffice.city.contains(city)
+                        .or(qSharedOffice.dong.contains(city)
+                                .or(qSharedOffice.gu.contains(city))))
+                .stream().count();
+    }
+
+    @Override
+    public List<SharedOffice> searchSharedOfficeByQuery(String city, int start) {
+        QSharedOffice qSharedOffice = new QSharedOffice("q");
+        return queryFactory.from(qSharedOffice)
+                .select(qSharedOffice)
+                .where(qSharedOffice.city.contains(city)
+                        .or(qSharedOffice.dong.contains(city)
+                                .or(qSharedOffice.gu.contains(city)
+                                        .or(qSharedOffice.name.contains(city)))))
+                .limit(10).offset(start)
+                .fetch();
     }
 
 

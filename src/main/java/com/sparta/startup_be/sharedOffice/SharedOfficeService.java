@@ -12,6 +12,7 @@ import com.sparta.startup_be.model.*;
 import com.sparta.startup_be.sharedOffice.dto.SearchSharedOfficeResponseDto;
 import com.sparta.startup_be.sharedOffice.dto.SharedOfficeResponseDto;
 import com.sparta.startup_be.utils.ConvertAddress;
+import com.sparta.startup_be.utils.NaverSearchApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,13 +26,15 @@ public class SharedOfficeService {
     private final ConvertAddress convertAddress;
     private final FavoriteRepository favoriteRepository;
     private final CoordinateSharedOfficeRepository coordinateSharedOfficeRepository;
+
+    private final NaverSearchApi naverSearchApi;
     public void storeSharedOffice(List<SharedOffice> sharedOffices) {
         for (SharedOffice sharedOffice : sharedOffices) {
             sharedOfficeRepository.save(sharedOffice);
         }
     }
 
-    public MapResponseDto showSharedOffice(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) {
+    public MapResponseDto showSharedOffice(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) throws InterruptedException {
         long temp1 = System.currentTimeMillis();
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
@@ -52,7 +55,6 @@ public class SharedOfficeService {
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         for (int i = 0; i < cities.size(); i++) {
             String title = cities.get(i);
-            System.out.println(title);
             List<EstateResponseDto> estate = new ArrayList<>();
             int estate_cnt = 0;
             float avg = 0f;
@@ -64,9 +66,7 @@ public class SharedOfficeService {
                 estate_cnt = sharedOfficeRepository.countAllByCityQuery(title);
             }
             avg = Integer.parseInt(String.valueOf(Math.round(avg)));
-            String response = convertAddress.convertAddress(title);
-            CoordinateResponseDto coordinateResponseDtoDtoDto = convertAddress.fromJSONtoItems(response);
-
+            CoordinateResponseDto coordinateResponseDtoDtoDto = naverSearchApi.getCoordinate(title);
             CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt, (int) avg);
             cityResponseDtoList.add(cityResponseDto);
         }
@@ -78,8 +78,9 @@ public class SharedOfficeService {
         return new MapResponseDto(level, cityResponseDtoList);
     }
 
-    public SearchSharedOfficeResponseDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum) {
+    public SearchSharedOfficeResponseDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum) throws InterruptedException {
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
+        query = naverSearchApi.getQuery(query);
         final int start = 10 * pagenum;
         List<SharedOffice> sharedOffices = sharedOfficeRepository.searchAllByQuery(query,start);
         int size = sharedOfficeRepository.countAllByQuery(query);
@@ -89,7 +90,8 @@ public class SharedOfficeService {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(sharedOffice.getId(), userDetails.getId());
             CoordinateSharedOffice coordinateSharedOffice = coordinateSharedOfficeRepository.findBySharedofficeid(sharedOffice.getId());
             CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateSharedOffice);
-            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, query, mylike,coordinateResponseDto);
+            String address = naverSearchApi.getAddress(sharedOffice.getName());
+            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, query, mylike,coordinateResponseDto,address);
             sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
         }
 
@@ -100,36 +102,36 @@ public class SharedOfficeService {
             totalpage = size/10 + 1;
         }
         SearchSharedOfficeResponseDto searchSharedOfficeResponseDto = new SearchSharedOfficeResponseDto(sharedOfficeResponseDtos, totalpage, pagenum + 1);
-        System.out.println(searchSharedOfficeResponseDto.getPresentpage());
-        System.out.println(searchSharedOfficeResponseDto.getTotalpage());
-        System.out.println(searchSharedOfficeResponseDto.getSharedOfficeResponseDtos().size());
         return searchSharedOfficeResponseDto;
     }
 
-    public SharedOfficeResponseDto showdetail(Long shareofficeid, UserDetailsImpl userDetails){
+    public SharedOfficeResponseDto showdetail(Long shareofficeid, UserDetailsImpl userDetails) throws InterruptedException {
         SharedOffice sharedOffice = sharedOfficeRepository.findById(shareofficeid).orElseThrow(
                 ()-> new IllegalArgumentException("사라진 정보입니다.")
         );
         CoordinateSharedOffice coordinateSharedOffice = coordinateSharedOfficeRepository.findBySharedofficeid(shareofficeid);
         CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateSharedOffice);
         boolean mylike = favoriteRepository.existsByEstateidAndUserid(shareofficeid, userDetails.getId());
-        return new SharedOfficeResponseDto(sharedOffice,"",mylike,coordinateResponseDto);
+        String address = naverSearchApi.getAddress(sharedOffice.getName());
+        return new SharedOfficeResponseDto(sharedOffice,"",mylike,coordinateResponseDto,address);
     }
 
-    public List<SharedOfficeResponseDto> showMySharedOffice(User user){
+    public List<SharedOfficeResponseDto> showMySharedOffice(User user) throws InterruptedException {
         List<Favorite> favorites = favoriteRepository.findAllByUseridAndType(user.getId(),"공유오피스");
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
         for(int i=0; i<favorites.size(); i++){
             SharedOffice sharedOffice = sharedOfficeRepository.findById(favorites.get(i).getEstateid()).orElseThrow(
                     ()-> new IllegalArgumentException("이미 사라진 매물입니다")
             );
-            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice,true);
+            String city =sharedOffice.getCity()+" "+ sharedOffice.getGu() +" "+ sharedOffice.getDong();
+            String address = naverSearchApi.getAddress(sharedOffice.getName());
+            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice,true,address);
             sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
         }
         return sharedOfficeResponseDtos;
     }
 
-    public List<SharedOfficeResponseDto> showFavorite(UserDetailsImpl userDetails) {
+    public List<SharedOfficeResponseDto> showFavorite(UserDetailsImpl userDetails) throws InterruptedException {
 
         // 찜한 매물 목록
         List<Favorite> favoriteList = favoriteRepository.findAllByUseridAndType(userDetails.getId(),"공유오피스");
@@ -137,10 +139,11 @@ public class SharedOfficeService {
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
         for (int i = 0; i < favoriteList.size(); i++) {
             favoriteList.get(i).getEstateid();
-            System.out.println(favoriteList.get(i).getEstateid());
             SharedOffice sharedOffice = sharedOfficeRepository.findById(favoriteList.get(i).getEstateid()).orElseThrow(
                     () -> new NullPointerException("게시글이 없습니다"));
-            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, true);
+            String address = naverSearchApi.getAddress(sharedOffice.getName());
+
+            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, true,address);
             sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
         }
         return sharedOfficeResponseDtos;

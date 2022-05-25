@@ -15,4 +15,10 @@ public class CoordinateDto {
         this.y = y;
         this.id= id;
     }
+    public CoordinateDto(CoordinateResponseDto coordinateResponseDto,Long id){
+        this.y = coordinateResponseDto.getLat();
+        this.x = coordinateResponseDto.getLng();
+        this.id= id;
+
+    }
 }

@@ -13,6 +13,7 @@ import com.sparta.startup_be.favorite.FavoriteRepository;
 import com.sparta.startup_be.login.repository.UserRepository;
 import com.sparta.startup_be.login.security.UserDetailsImpl;
 import com.sparta.startup_be.login.model.User;
+import com.sparta.startup_be.utils.NaverSearchApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +35,7 @@ public class EstateService {
     private final CoordinateEstateRepository coordinateEstateRepository;
     private final ConvertAddress convertAddress;
     private final CoordinateEstateService coordinateEstateService;
+    private final NaverSearchApi naverSearchApi;
 
 
 //    public List<Estate> show(){
@@ -56,7 +58,6 @@ public class EstateService {
         } else if (query.equals("역")) {
             keyword = "서초동";
         }
-        System.out.println("잘들오네요");
         List<Estate> estates = estateRepository.searchAllBydong(keyword);
         System.out.println(estates.size());
         int i = 0;
@@ -82,8 +83,10 @@ public class EstateService {
     }
 
 
-    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum, String monthly,String depositlimit,String feelimit) {
+    public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum, String monthly,String depositlimit,String feelimit) throws InterruptedException {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
+        query = naverSearchApi.getQuery(query);
+        System.out.println(query);
         final int start = 10 * pagenum;
         int defaultDepositfee =1000000;
         int defaultFeelimit =1000000;
@@ -98,7 +101,7 @@ public class EstateService {
             defaultFeelimit=Integer.parseInt(feelimit);
         }
         List<Estate> estates = estateRepository.searchAllByQuery(query,start,defaultmonthly,defaultDepositfee,defaultFeelimit);
-        int size =estateRepository.countAllByQuery(query);
+        int size =estateRepository.countAllByQuery(query,defaultDepositfee,defaultFeelimit);
 //        if (query.contains("시")) {
 //            estates = estateRepository.searchAllByCityQuery(query,start);
 //            size = estateRepository.countAllByCity(query);

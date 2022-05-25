@@ -8,6 +8,7 @@ import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.SharedOffice;
 import com.sparta.startup_be.sharedOffice.SharedOfficeRepository;
 import com.sparta.startup_be.utils.ConvertAddress;
+import com.sparta.startup_be.utils.NaverSearchApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,12 +20,12 @@ public class CoordinateSharedOfficeService {
     private final SharedOfficeRepository sharedOfficeRepository;
     private final ConvertAddress convertAddress;
     private final CoordinateSharedOfficeRepository coordinateSharedOfficeRepository;
-    public void convertAddress() {
+    private final NaverSearchApi naverSearchApi;
+    public void convertAddress() throws InterruptedException {
         List<SharedOffice> sharedOffices = sharedOfficeRepository.findAll();
         for (SharedOffice sharedOffice : sharedOffices) {
-            String address = sharedOffice.getDong();
-            String response = convertAddress.convertAddress(address);
-            CoordinateDto coordinateDto = convertAddress.fromJSONtoItems(response, sharedOffice.getId());
+            String name = sharedOffice.getName();
+            CoordinateDto coordinateDto = new CoordinateDto(naverSearchApi.getCoordinate(name),sharedOffice.getId());
             CoordinateSharedOffice coordinateSharedOffice = new CoordinateSharedOffice(coordinateDto);
             coordinateSharedOfficeRepository.save(coordinateSharedOffice);
         }

@@ -23,21 +23,6 @@ public class EstateController {
     private final EstateService estateService;
     private final ConvertAddress convertAddress;
 
-//    @GetMapping("/api/show")
-//    private List<Estate> show(){
-//        return estateService.show();
-//    }
-
-//    @GetMapping("/api/showmore")
-//    private String average(@RequestParam String query){
-//        System.out.println(query);
-//        return estateService.average(query);
-//    }
-
-//    @GetMapping("/api/city/gu")
-//    private List<Estate> ugAverage(@RequestParam String query){
-//        return estateService.guAverage(query);
-//    }
 
     //메인 페이지 키워드 검색
     @GetMapping("/estates")
@@ -48,7 +33,7 @@ public class EstateController {
     //검색 후 리스트 반환
     @GetMapping("/estates/{pagenum}")
     private SearchDto searchTowm(@RequestParam String query, @RequestParam String monthly, @AuthenticationPrincipal UserDetailsImpl userDetails,
-                                 @RequestParam String depositlimit, @RequestParam String feelimit,@PathVariable int pagenum){
+                                 @RequestParam String depositlimit, @RequestParam String feelimit,@PathVariable int pagenum) throws InterruptedException {
         return estateService.searchTowm(query,userDetails,pagenum-1,monthly,depositlimit.replace(",",""),feelimit.replace(",",""));
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
 public interface SharedOfficeRepository extends JpaRepository<SharedOffice,Long>, QuerydslRepository {
 
     //지역 리스트 갯수
+    List<SharedOffice> findSharedOfficeByName(String name);
     @Query("select count(u) from SharedOffice u where u.city like :keyword")
     int countAllByCityQuery(@Param("keyword")String city);
 

@@ -21,33 +21,33 @@ public class SharedOfficeController {
     //위도 경도별 지도 조회
     @GetMapping("/map/sharedoffice")
     private MapResponseDto showSharedOffice(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
-                                       @RequestParam int level, @AuthenticationPrincipal UserDetailsImpl userDetails){
+                                       @RequestParam int level, @AuthenticationPrincipal UserDetailsImpl userDetails) throws InterruptedException {
         return sharedOfficeService.showSharedOffice(SWlng,NElng,SWlat,NElat,level,userDetails);
     }
 
     //해당 지역 조회
     @GetMapping("/sharedoffices")
-    private SearchSharedOfficeResponseDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Integer pagenum){
+    private SearchSharedOfficeResponseDto searchTowm(@RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails, @RequestParam Integer pagenum) throws InterruptedException {
         System.out.println(query);
         return sharedOfficeService.searchTowm(query,userDetails,pagenum-1);
     }
 
     //해당 매물 조회
     @GetMapping("/sharedoffice/{sharedofficeid}")
-    private SharedOfficeResponseDto showdetail(@PathVariable Long sharedofficeid,@AuthenticationPrincipal UserDetailsImpl userDetails){
+    private SharedOfficeResponseDto showdetail(@PathVariable Long sharedofficeid,@AuthenticationPrincipal UserDetailsImpl userDetails) throws InterruptedException {
         return sharedOfficeService.showdetail(sharedofficeid,userDetails);
     }
 
     //찜한 오피스 보기
     @GetMapping("/sharedoffices/favorite")
-    private List<SharedOfficeResponseDto> showmySharedOffice(@AuthenticationPrincipal UserDetailsImpl userDetail){
+    private List<SharedOfficeResponseDto> showmySharedOffice(@AuthenticationPrincipal UserDetailsImpl userDetail) throws InterruptedException {
         return sharedOfficeService.showMySharedOffice(userDetail.getUser());
     }
 
     @GetMapping("/sharedoffice/favorite")
     public List<SharedOfficeResponseDto> showFavorite(
             @AuthenticationPrincipal UserDetailsImpl userDetails
-    ){
+    ) throws InterruptedException {
         return sharedOfficeService.showFavorite(userDetails);
     }
 

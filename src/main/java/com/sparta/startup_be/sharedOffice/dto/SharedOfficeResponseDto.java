@@ -33,8 +33,10 @@ public class SharedOfficeResponseDto {
     private boolean mylike;
     private String address;
 
+    private String detail_address;
 
-    public SharedOfficeResponseDto(SharedOffice sharedOffice, String query, boolean mylike, CoordinateResponseDto coordinateResponseDto){
+
+    public SharedOfficeResponseDto(SharedOffice sharedOffice, String query, boolean mylike, CoordinateResponseDto coordinateResponseDto,String detail_address){
         this.shareofficeid =sharedOffice.getId();
         this.name =sharedOffice.getName();
         this.subwayInfo =sharedOffice.getSubwayInfo();
@@ -55,9 +57,10 @@ public class SharedOfficeResponseDto {
         this.coordinateResponseDto =coordinateResponseDto;
         this.mylike = mylike;
         this.address = sharedOffice.getCity()+" "+ sharedOffice.getGu() +" "+ sharedOffice.getDong();
+        this.detail_address =detail_address;
     }
 
-    public SharedOfficeResponseDto(SharedOffice sharedOffice, boolean mylike){
+    public SharedOfficeResponseDto(SharedOffice sharedOffice, boolean mylike, String detail_address){
         this.shareofficeid =sharedOffice.getId();
         this.name =sharedOffice.getName();
         this.subwayInfo =sharedOffice.getSubwayInfo();
@@ -77,5 +80,6 @@ public class SharedOfficeResponseDto {
         this.agent = sharedOffice.getAgent();
         this.mylike = mylike;
         this.address = sharedOffice.getCity()+" "+ sharedOffice.getGu() +" "+ sharedOffice.getDong();
+        this.detail_address =detail_address;
     }
 }

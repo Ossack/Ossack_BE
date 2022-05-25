@@ -2,6 +2,7 @@ package com.sparta.startup_be;
 
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.model.Estate;
+import com.sparta.startup_be.model.SharedOffice;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,7 +13,7 @@ public interface QuerydslRepository {
     int countGuQuery(String city,String monthly,int depositlimt,int feelimit);
     int countDongQuery(String city,String monthly,int depositlimt,int feelimit);
 
-    int countAllByQuery(@Param("keyword") String city);
+    int countAllByQuery(String city,int depositlimt,int feelimit);
 
     List<String> findDongQuery(double minX,double maxX,double minY,double maxY);
     List<String> findGuQuery(double minX,double maxX,double minY,double maxY);
@@ -21,15 +22,17 @@ public interface QuerydslRepository {
     List<Estate> searchAllByQuery(String city,int start,String monthly,int depositlimit,int feelimit);
 
     //SharedOffice Repository
-    @Query(nativeQuery = true,value = "select distinct e.city from shared_office e," +
-            " coordinate_shared_office c  where e.id=c.sharedofficeid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
     List<String> findSharedOfficebyCityQuery(double minX,  double maxX, double minY, double maxY);
-    @Query(nativeQuery = true,value = "select distinct e.gu from shared_office e," +
-            " coordinate_shared_office c  where e.id=c.sharedofficeid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+
     List<String> findSharedOfficebyGuQuery(double minX,  double maxX, double minY, double maxY);
-    @Query(nativeQuery = true,value = "select distinct e.dong from shared_office e," +
-            " coordinate_shared_office c  where e.id=c.sharedofficeid  and c.x between :minX and :maxX and c.y between :minY and :maxY")
+
     List<String> findSharedOfficebyDongQuery(double minX,  double maxX, double minY, double maxY);
+
+
+    int countSharedOfficeByQuery(String city);
+
+    List<SharedOffice> searchSharedOfficeByQuery(String city,int start);
+
 
 
 

@@ -82,7 +82,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 7000);
+        } while (j != 4000);
 
 
 

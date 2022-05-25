@@ -14,7 +14,7 @@ public class CoordinateSharedOfficeController {
     private final CoordinateSharedOfficeService coordinateSharedOfficeService;
 
     @ApiOperation(value = "좌표계산 메소드")
-    @PostMapping("/sharedoffice/convertAddress")
+    @PostMapping("/sharedoffice/coordinate")
     private String convertAddress() throws InterruptedException {
         coordinateSharedOfficeService.convertAddress();
         return "성공";

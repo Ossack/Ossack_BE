@@ -42,7 +42,8 @@ public class MypageController {
         return mypageService.isLogin(userDetails);
     }
 
-    // 회원 로그인 여부 확인
+
+    // 회원 탈퇴
     @PutMapping("/user/withdraw")
     public ResponseEntity<UserResponseDto> withdrawUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.withdrawUser(userDetails);

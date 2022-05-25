@@ -29,11 +29,11 @@ public class MypageService {
         );
 
         // user repository에서 기존 이미지(파일명) 불러오기
-        String oldImgName = user.getProfile();
+        String oldImg = user.getProfile();
 
         // 새로운 이미지 > S3 업로드 > 이미지 Url 생성
         String fileName = createFileName(multipartFile.getOriginalFilename());
-        String imageUrl = s3Uploader.updateFile(multipartFile, oldImgName, fileName);
+        String imageUrl = s3Uploader.updateFile(multipartFile, oldImg, fileName);
 
         // 새로운 이미지 Url을 파싱해서 파일명으로만 DB에 저장
         String[] newImgUrl = imageUrl.split("/");
@@ -48,19 +48,26 @@ public class MypageService {
         User user = userRepository.findById(userDetails.getId()).orElseThrow(
                 () -> new IllegalArgumentException("해당 유저가 없습니다")
         );
+        // user에서 기존 이미지(파일명) 불러오기
+        String oldImg = user.getProfile();
 
-        // 사진 삭제시 profileUrl이 안들어옴 -> 기본이미지로 변경
+        // 사진 '삭제' 버튼 눌렀을 때 : profileUrl이 안들어옴 -> 기본이미지로 변경
         if (profileImgUrl == null || profileImgUrl.equals("")) {
-
-            // user에서 기존 이미지(파일명) 불러오기
-            String oldImg = user.getProfile();
-            s3Uploader.deleteImage(oldImg);
-
-            // 디폴트 이미지
-            user.update(user.getId(), nickname, defaultImg);
-        } // 사진 유지 profileUrl이 들어옴 -> 그러면 그대로 해줘
+            // 현재 프로필 사진이 기본 프로필 사진이 아닐 때
+            if (!("https://ossack.s3.ap-northeast-2.amazonaws.com/" + oldImg).equals(defaultImg)) {
+                s3Uploader.deleteImage(oldImg);
+                user.update(user.getId(), nickname, defaultImg);
+            }
+        } // 닉네임만 수정 & 사진 유지 : profileUrl이 들어옴 -> 그러면 그대로 해줘
         else {
-            user.update(user.getId(), nickname, profileImgUrl.split("/")[profileImgUrl.split("/").length-1]);
+            // 현재 프로필 사진이 기본 프로필 사진이 아닐 때
+            if (!profileImgUrl.equals(defaultImg)) {
+                profileImgUrl = profileImgUrl.split("/")[profileImgUrl.split("/").length-1];
+                user.update(user.getId(), nickname, profileImgUrl);
+            } else { // 현재 사진이 기본 프로필 사진일 때
+                user.update(user.getId(), nickname, defaultImg);
+            }
+
         }
     }
 
@@ -95,6 +102,7 @@ public class MypageService {
         return ResponseEntity.status(200).body(userResponseDto);
     }
 
+    // 회원 탈퇴
     public ResponseEntity<UserResponseDto> withdrawUser(UserDetailsImpl userDetails){
         User user = userRepository.findById(userDetails.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("등록되지 않은 회원입니다.")

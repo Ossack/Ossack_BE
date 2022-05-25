@@ -10,6 +10,7 @@ import com.sparta.startup_be.login.security.UserDetailsImpl;
 import com.sparta.startup_be.login.security.jwt.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -32,11 +33,11 @@ import java.util.UUID;
 @Service
 public class GoogleUserService {
 
-//    @Value("${spring.security.oauth2.client.registration.google.client-id}")
-//    String googleClientId;
-//
-//    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
-//    String googleClientSecret;
+    @Value("${spring.security.oauth2.client.registration.google.client-id}")
+    String googleClientId;
+
+    @Value("${spring.security.oauth2.client.registration.google.client-secret}")
+    String googleClientSecret;
 
     private final BCryptPasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
@@ -70,8 +71,8 @@ public class GoogleUserService {
 
         // 바디에 필요한 정보 담기
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("client_id" , "922925499099-ae2nodkaoccn3rcd933u331j6bjnupum.apps.googleusercontent.com");
-        body.add("client_secret", "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");
+        body.add("client_id" , googleClientId);
+        body.add("client_secret", googleClientSecret);
         body.add("code", code);
         body.add("redirect_uri", "https://ossack.shop/user/google/callback");
         body.add("grant_type", "authorization_code");

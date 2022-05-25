@@ -58,12 +58,12 @@ public class WebDriverUtil extends Thread {
 //        options.addArguments("window-size=1920,1080");
         options.setCapability("ignoreProtectedModeSettings", true);
         // weDriver 생성.
-        driver = new ChromeDriver(options);
+        driver = new ChromeDriver();
         driver.manage().timeouts().pageLoadTimeout(30, TimeUnit.SECONDS);
     }
 
     public List<Estate> useDriverNemo() throws InterruptedException {
-        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=0&StoreTrade=false&CompletedOnly=false&SWLng=125.81608613027379&SWLat=37.09858746853276&NELng=128.03958724357463&NELat=37.96025215433923&Zoom=10&mode=1&category=1&list=true&articleId=&dataType=");
+        driver.get("https://www.nemoapp.kr/Search?ArticleType=2&PageIndex=1&StoreTrade=false&CompletedOnly=false&SWLng=126.58830712489255&SWLat=37.409703396204335&NELng=127.28334198580231&NELat=37.68715489671502&Zoom=12&mode=1&category=1&list=true&articleId=&dataType=");
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(10000, TimeUnit.MILLISECONDS);  // 페이지 불러오는 여유시간.
         log.info("++++++++++++++++++++++===================+++++++++++++ selenium : " + driver.getTitle());
@@ -82,7 +82,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 800);
+        } while (j != 7000);
 
 
 
@@ -406,6 +406,7 @@ public class WebDriverUtil extends Thread {
         quitDriver();
         return sharedOffices;
     }
+
 }
 
 

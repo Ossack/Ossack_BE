@@ -60,7 +60,7 @@ public class MypageService {
             user.update(user.getId(), nickname, defaultImg);
         } // 사진 유지 profileUrl이 들어옴 -> 그러면 그대로 해줘
         else {
-            user.update(user.getId(), nickname, profileImgUrl);
+            user.update(user.getId(), nickname, profileImgUrl.split("/")[profileImgUrl.split("/").length-1]);
         }
     }
 
@@ -83,6 +83,7 @@ public class MypageService {
     // 회원 정보 조회
     public ResponseEntity<UserResponseDto> isLogin(UserDetailsImpl userDetails) {
         String basicImg = "https://ossack.s3.ap-northeast-2.amazonaws.com/basicprofile.png";
+
         String profileImg = userDetails.getUser().getProfile();
 
         // 기본 프로필 이외의 프로필일 때 주소 추가
@@ -92,5 +93,13 @@ public class MypageService {
         UserResponseDto userResponseDto = new UserResponseDto(userDetails.getUser(), profileImg);
 
         return ResponseEntity.status(200).body(userResponseDto);
+    }
+
+    public ResponseEntity<UserResponseDto> withdrawUser(UserDetailsImpl userDetails){
+        User user = userRepository.findById(userDetails.getId()).orElseThrow(
+                ()-> new IllegalArgumentException("등록되지 않은 회원입니다.")
+        );
+        user.delete();
+        return ResponseEntity.status(200).body(new UserResponseDto(user));
     }
 }

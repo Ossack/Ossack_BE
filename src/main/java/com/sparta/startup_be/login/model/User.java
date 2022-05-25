@@ -49,9 +49,11 @@ public class User {
         this.profile = imageKey;
     }
 
-    public void delete(Long id, String imageKey) {
-        this.id = id;
-        this.profile = imageKey;
+    public void delete() {
+        this.profile = null;
+        this.userEmail = null;
+        this.password=null;
+        this.nickname=null;
     }
 }
 

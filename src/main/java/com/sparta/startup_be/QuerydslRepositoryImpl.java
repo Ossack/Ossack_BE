@@ -1,6 +1,7 @@
 package com.sparta.startup_be;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.model.*;
@@ -56,6 +57,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                                         .and(qEstate.rent_fee.between(0,feelimit))))
 //                                .and(qEstate.rent_fee.)))
                 .stream().count();
+
         return count;
     }
 

@@ -12,12 +12,9 @@ on:
     branches:
       - main
       - dev
-      - cicd
-  pull_request:
-    branches: [ dev ]
 
 env:
-  S3_BUCKET_NAME: mwmw1
+  S3_BUCKET_NAME: ossack
   PROJECT_NAME: Ossack
 
 jobs:
@@ -62,4 +59,4 @@ jobs:
 
       # Deploy
       - name: Deploy
-        run: aws deploy create-deployment --application-name Ossack-app --deployment-group-name Ossack-group --file-exists-behavior OVERWRITE --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip --region ap-northeast-2
+        run: aws deploy create-deployment --application-name Ossack-app --deployment-group-name Ossack-group-final --file-exists-behavior OVERWRITE --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip --region ap-northeast-2

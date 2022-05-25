@@ -43,7 +43,7 @@ public class MypageController {
     }
 
     // 회원 로그인 여부 확인
-    @PostMapping("/user/withdraw")
+    @PutMapping("/user/withdraw")
     public ResponseEntity<UserResponseDto> withdrawUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
         return mypageService.withdrawUser(userDetails);
     }

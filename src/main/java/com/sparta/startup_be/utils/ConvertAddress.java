@@ -20,27 +20,29 @@ public class ConvertAddress {
         HttpEntity<String> requestEntity = new HttpEntity<String>(body, headers);
         ResponseEntity<String> responseEntity = rest.exchange("https://dapi.kakao.com/v2/local/search/address.json?query="+query, HttpMethod.GET, requestEntity, String.class);
         HttpStatus httpStatus = responseEntity.getStatusCode();
-        int status = httpStatus.value();
-        String response = responseEntity.getBody();
-//        System.out.println("Response status: " + status);
+        //        System.out.println("Response status: " + status);
 //        System.out.println(response);
-        return response;
+        return responseEntity.getBody();
     }
 
     public CoordinateDto fromJSONtoItems(String result,Long estateid) {
         JSONObject rjson = new JSONObject(result);
         JSONArray items = rjson.getJSONArray("documents");
         JSONObject itemJson = items.getJSONObject(0);
-        CoordinateDto coordinateDto = new CoordinateDto(Double.parseDouble(String.valueOf(itemJson.get("x"))),Double.parseDouble(String.valueOf(itemJson.get("y"))),estateid);
-        return coordinateDto;
+        return new CoordinateDto(Double.parseDouble(String.valueOf(itemJson.get("x"))),Double.parseDouble(String.valueOf(itemJson.get("y"))),estateid);
     }
 
     public CoordinateResponseDto fromJSONtoItems(String result) {
         JSONObject rjson = new JSONObject(result);
         JSONArray items = rjson.getJSONArray("documents");
-        JSONObject itemJson = items.getJSONObject(0);
-        CoordinateResponseDto coordinateResponseDtoDtoDto = new CoordinateResponseDto(Double.parseDouble(String.valueOf(itemJson.get("y"))),Double.parseDouble(String.valueOf(itemJson.get("x"))));
-        return coordinateResponseDtoDtoDto;
+        try {
+            JSONObject itemJson = items.getJSONObject(0);
+            return new CoordinateResponseDto(Double.parseDouble(String.valueOf(itemJson.get("y"))),Double.parseDouble(String.valueOf(itemJson.get("x"))));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return new CoordinateResponseDto(0,0) ;
     }
 
 }

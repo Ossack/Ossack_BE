@@ -100,6 +100,7 @@ public class MypageService {
                 ()-> new IllegalArgumentException("등록되지 않은 회원입니다.")
         );
         user.delete();
+        userRepository.save(user);
         return ResponseEntity.status(200).body(new UserResponseDto(user));
     }
 }

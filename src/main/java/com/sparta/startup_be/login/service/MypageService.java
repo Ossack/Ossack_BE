@@ -95,6 +95,7 @@ public class MypageService {
         return ResponseEntity.status(200).body(userResponseDto);
     }
 
+    // 회원 탈퇴
     public ResponseEntity<UserResponseDto> withdrawUser(UserDetailsImpl userDetails){
         User user = userRepository.findById(userDetails.getId()).orElseThrow(
                 ()-> new IllegalArgumentException("등록되지 않은 회원입니다.")

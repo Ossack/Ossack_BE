@@ -18,7 +18,7 @@ public class UserRequestDto {
 
     @NotBlank(message = "닉네임을 입력해 주세요")
     @Size(min = 2, max = 10, message = "2자 이상 12자 이하의 값을 입력해 주세요!")
-    @Pattern(regexp = "^[가-힣a-zA-Z]$", message = "닉네임은 한글과 영문만 입력해 주세요!")
+    @Pattern(regexp = "^[가-힣a-zA-Z]{2,10}$", message = "닉네임은 한글과 영문만 입력해 주세요!")
     private String nickname;
 
     @NotBlank

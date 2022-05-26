@@ -85,8 +85,8 @@ public class EstateService {
 
     public SearchDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum, String monthly,String depositlimit,String feelimit) throws InterruptedException {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
-        query = naverSearchApi.getQuery(query);
-        System.out.println(query);
+        String keyword = naverSearchApi.getQuery(query);
+        System.out.println(keyword);
         final int start = 10 * pagenum;
         int defaultDepositfee =1000000;
         int defaultFeelimit =1000000;
@@ -100,8 +100,8 @@ public class EstateService {
         if(!feelimit.equals("undefined")){
             defaultFeelimit=Integer.parseInt(feelimit);
         }
-        List<Estate> estates = estateRepository.searchAllByQuery(query,start,defaultmonthly,defaultDepositfee,defaultFeelimit);
-        int size =estateRepository.countAllByQuery(query,defaultDepositfee,defaultFeelimit);
+        List<Estate> estates = estateRepository.searchAllByQuery(keyword,start,defaultmonthly,defaultDepositfee,defaultFeelimit);
+        int size =estateRepository.countAllByQuery(keyword,defaultDepositfee,defaultFeelimit);
 //        if (query.contains("시")) {
 //            estates = estateRepository.searchAllByCityQuery(query,start);
 //            size = estateRepository.countAllByCity(query);

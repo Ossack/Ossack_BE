@@ -80,10 +80,10 @@ public class SharedOfficeService {
 
     public SearchSharedOfficeResponseDto searchTowm(String query, UserDetailsImpl userDetails, int pagenum) throws InterruptedException {
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
-        query = naverSearchApi.getQuery(query);
+        String keyword = naverSearchApi.getQuery(query);
         final int start = 10 * pagenum;
-        List<SharedOffice> sharedOffices = sharedOfficeRepository.searchAllByQuery(query,start);
-        int size = sharedOfficeRepository.countAllByQuery(query);
+        List<SharedOffice> sharedOffices = sharedOfficeRepository.searchAllByQuery(keyword,start);
+        int size = sharedOfficeRepository.countAllByQuery(keyword);
 
 
         for (SharedOffice sharedOffice : sharedOffices) {
@@ -91,7 +91,7 @@ public class SharedOfficeService {
             CoordinateSharedOffice coordinateSharedOffice = coordinateSharedOfficeRepository.findBySharedofficeid(sharedOffice.getId());
             CoordinateResponseDto coordinateResponseDto = new CoordinateResponseDto(coordinateSharedOffice);
             String address = naverSearchApi.getAddress(sharedOffice.getName());
-            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, query, mylike,coordinateResponseDto,address);
+            SharedOfficeResponseDto sharedOfficeResponseDto = new SharedOfficeResponseDto(sharedOffice, keyword, mylike,coordinateResponseDto,address);
             sharedOfficeResponseDtos.add(sharedOfficeResponseDto);
         }
 

@@ -130,7 +130,7 @@ public class EstateService {
         } else {
             totalpage = size/10 + 1;
         }
-        SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, pagenum + 1);
+        SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, pagenum + 1,query);
         return searchDto;
     }
 

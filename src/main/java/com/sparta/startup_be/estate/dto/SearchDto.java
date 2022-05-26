@@ -13,13 +13,13 @@ public class SearchDto {
     private int totalpage;
     private int presentpage;
 
+    private String keyword;
 
-    public SearchDto (List<EstateResponseDto> estateResponseDtoList , int totalpage,int presentpage) {
+
+    public SearchDto (List<EstateResponseDto> estateResponseDtoList , int totalpage,int presentpage,String keyword) {
         this.estateResponseDtoList = estateResponseDtoList;
         this.totalpage = totalpage;
         this.presentpage = presentpage;
+        this.keyword = keyword;
     }
-
-
-
 }

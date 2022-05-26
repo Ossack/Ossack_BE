@@ -101,7 +101,7 @@ public class SharedOfficeService {
         } else {
             totalpage = size/10 + 1;
         }
-        SearchSharedOfficeResponseDto searchSharedOfficeResponseDto = new SearchSharedOfficeResponseDto(sharedOfficeResponseDtos, totalpage, pagenum + 1);
+        SearchSharedOfficeResponseDto searchSharedOfficeResponseDto = new SearchSharedOfficeResponseDto(sharedOfficeResponseDtos, totalpage, pagenum + 1,query);
         return searchSharedOfficeResponseDto;
     }
 

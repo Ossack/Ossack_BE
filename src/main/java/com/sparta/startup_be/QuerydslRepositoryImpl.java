@@ -62,14 +62,14 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public int countAllByQuery(String city,int depositlimit,int feelimit) {
+    public int countAllByQuery(String city,String keyword,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("e");
         return (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
-                .where((qEstate.city.contains(city)
-                        .or(qEstate.dong.contains(city)
-                                .or(qEstate.gu.contains(city))
+                .where((qEstate.city.contains(city).or(qEstate.city.contains(keyword))
+                        .or(qEstate.dong.contains(city).or(qEstate.dong.contains(keyword))
+                                .or(qEstate.gu.contains(city)).or(qEstate.gu.contains(keyword))
 //                                        .and(qEstate.monthly.contains(monthly)
                                 .and(qEstate.deposit.between(0,depositlimit)
                                         .and(qEstate.rent_fee.between(0,feelimit))))))
@@ -114,13 +114,13 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public List<Estate> searchAllByQuery(String city,int start,String monthly,int depositlimit,int feelimit) {
+    public List<Estate> searchAllByQuery(String city,String keyword,int start,String monthly,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate)
-                .where((qEstate.city.contains(city)
-                        .or(qEstate.dong.contains(city)
-                                .or(qEstate.gu.contains(city))
+                .where((qEstate.city.contains(city).or(qEstate.city.contains(keyword))
+                        .or(qEstate.dong.contains(city).or(qEstate.dong.contains(keyword))
+                                .or(qEstate.gu.contains(city)).or(qEstate.gu.contains(keyword))
 //                                        .and(qEstate.monthly.contains(monthly)
                                             .and(qEstate.deposit.between(0,depositlimit)
                                                 .and(qEstate.rent_fee.between(0,feelimit))))))
@@ -168,26 +168,27 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
 
     @Override
-    public int countSharedOfficeByQuery(String city) {
+    public int countSharedOfficeByQuery(String city,String keyword) {
         QSharedOffice qSharedOffice = new QSharedOffice("e");
         return (int) queryFactory
                 .from(qSharedOffice)
                 .select(qSharedOffice)
-                .where(qSharedOffice.city.contains(city)
-                        .or(qSharedOffice.dong.contains(city)
-                                .or(qSharedOffice.gu.contains(city))))
+                .where(qSharedOffice.city.contains(city).or(qSharedOffice.city.contains(keyword))
+                        .or(qSharedOffice.dong.contains(city).or(qSharedOffice.dong.contains(keyword))
+                                .or(qSharedOffice.gu.contains(city).or(qSharedOffice.gu.contains(keyword))
+                                        .or(qSharedOffice.name.contains(city).or(qSharedOffice.name.contains(keyword))))))
                 .stream().count();
     }
 
     @Override
-    public List<SharedOffice> searchSharedOfficeByQuery(String city, int start) {
+    public List<SharedOffice> searchSharedOfficeByQuery(String city,String keyword, int start) {
         QSharedOffice qSharedOffice = new QSharedOffice("q");
         return queryFactory.from(qSharedOffice)
                 .select(qSharedOffice)
-                .where(qSharedOffice.city.contains(city)
-                        .or(qSharedOffice.dong.contains(city)
-                                .or(qSharedOffice.gu.contains(city)
-                                        .or(qSharedOffice.name.contains(city)))))
+                .where(qSharedOffice.city.contains(city).or(qSharedOffice.city.contains(keyword))
+                        .or(qSharedOffice.dong.contains(city).or(qSharedOffice.dong.contains(keyword))
+                                .or(qSharedOffice.gu.contains(city).or(qSharedOffice.gu.contains(keyword))
+                                        .or(qSharedOffice.name.contains(city).or(qSharedOffice.name.contains(keyword))))))
                 .limit(10).offset(start)
                 .fetch();
     }

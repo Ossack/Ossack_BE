@@ -13,13 +13,13 @@ public interface QuerydslRepository {
     int countGuQuery(String city,String monthly,int depositlimt,int feelimit);
     int countDongQuery(String city,String monthly,int depositlimt,int feelimit);
 
-    int countAllByQuery(String city,int depositlimt,int feelimit);
+    int countAllByQuery(String city,String keyword,int depositlimt,int feelimit);
 
     List<String> findDongQuery(double minX,double maxX,double minY,double maxY);
     List<String> findGuQuery(double minX,double maxX,double minY,double maxY);
     List<String> findCityQuery(double minX,double maxX,double minY,double maxY);
 
-    List<Estate> searchAllByQuery(String city,int start,String monthly,int depositlimit,int feelimit);
+    List<Estate> searchAllByQuery(String city,String keyword,int start,String monthly,int depositlimit,int feelimit);
 
     //SharedOffice Repository
     List<String> findSharedOfficebyCityQuery(double minX,  double maxX, double minY, double maxY);
@@ -29,9 +29,9 @@ public interface QuerydslRepository {
     List<String> findSharedOfficebyDongQuery(double minX,  double maxX, double minY, double maxY);
 
 
-    int countSharedOfficeByQuery(String city);
+    int countSharedOfficeByQuery(String city,String keyword);
 
-    List<SharedOffice> searchSharedOfficeByQuery(String city,int start);
+    List<SharedOffice> searchSharedOfficeByQuery(String city,String keyword,int start);
 
 
 

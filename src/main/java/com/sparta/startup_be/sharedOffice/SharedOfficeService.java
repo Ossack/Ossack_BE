@@ -35,7 +35,6 @@ public class SharedOfficeService {
     }
 
     public MapResponseDto showSharedOffice(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) throws InterruptedException {
-        long temp1 = System.currentTimeMillis();
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
         List<String> cities = new ArrayList<>();
@@ -47,17 +46,18 @@ public class SharedOfficeService {
         } else {
             cities = sharedOfficeRepository.findSharedOfficebyCityQuery(minX, maxX, minY, maxY);
         }
-        long temp2 = System.currentTimeMillis();
-        System.out.println("temp1:");
-        System.out.println(temp2 - temp1);
+
 //        System.out.println("size"+cities2.size());
 //        Iterator<String> it = cities.iterator();
+        long temp = System.currentTimeMillis();
+
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         for (int i = 0; i < cities.size(); i++) {
             String title = cities.get(i);
             List<EstateResponseDto> estate = new ArrayList<>();
             int estate_cnt = 0;
             float avg = 0f;
+            long temp1 = System.currentTimeMillis();
             if (level < 7) {
                 estate_cnt = sharedOfficeRepository.countAllByDongQuery(title);
             } else if (level == 7 || level == 8) {
@@ -65,16 +65,17 @@ public class SharedOfficeService {
             } else {
                 estate_cnt = sharedOfficeRepository.countAllByCityQuery(title);
             }
+            long temp2 = System.currentTimeMillis();
             avg = Integer.parseInt(String.valueOf(Math.round(avg)));
             CoordinateResponseDto coordinateResponseDtoDtoDto = naverSearchApi.getCoordinate(title);
             CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt, (int) avg);
             cityResponseDtoList.add(cityResponseDto);
+            System.out.println(temp2-temp1);
         }
         long temp3 = System.currentTimeMillis();
         System.out.println("temp2:");
-        System.out.println(temp3 - temp2);
-        System.out.println("총:");
-        System.out.println(temp3 - temp1);
+        System.out.println(temp3 - temp);
+
         return new MapResponseDto(level, cityResponseDtoList);
     }
 
@@ -82,10 +83,11 @@ public class SharedOfficeService {
         List<SharedOfficeResponseDto> sharedOfficeResponseDtos = new ArrayList<>();
         String keyword = naverSearchApi.getQuery(query);
         final int start = 10 * pagenum;
-        List<SharedOffice> sharedOffices = sharedOfficeRepository.searchAllByQuery(keyword,start);
-        int size = sharedOfficeRepository.countAllByQuery(keyword);
 
+        List<SharedOffice> sharedOffices = sharedOfficeRepository.searchSharedOfficeByQuery(query,keyword,start);
+        int size = sharedOfficeRepository.countSharedOfficeByQuery(query,keyword);
 
+        System.out.println(keyword);
         for (SharedOffice sharedOffice : sharedOffices) {
             boolean mylike = favoriteRepository.existsByEstateidAndUserid(sharedOffice.getId(), userDetails.getId());
             CoordinateSharedOffice coordinateSharedOffice = coordinateSharedOfficeRepository.findBySharedofficeid(sharedOffice.getId());

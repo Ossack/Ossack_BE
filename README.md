@@ -1,3 +1,11 @@
+# <img src="https://avatars.githubusercontent.com/u/104211703?s=200&v=4" align=left width=50 >오싹 소개
+
+![logo](https://velog.velcdn.com/images/ryurim0109/post/617aad8d-f4d4-45a9-9efc-eb23f73b55de/image.jpg
+)
+
+## 💻 프로젝트 소개
+> 오싹은 지도로 오피스 매물과 공유 오피스 매물을 찾아볼 수 있는 모바일 웹입니다.
+
 ## 😇‍ 백엔드 팀원
 
 <table>
@@ -20,6 +28,28 @@
    
   </tr>
 </table>
+
+## 📜 아키텍쳐
+
+![아키텍처](https://velog.velcdn.com/images/ryurim0109/post/0a30cec0-d32e-4e37-ba69-61c34a43916f/image.jpg)
+
+### 👀 사용 라이브러리 👀  
+<div>
+<img src="https://img.shields.io/badge/JAVA-007396?style=flat&logo=java&logoColor=white">
+<img src="https://img.shields.io/badge/Spring-6DB33F?style=flat&logo=Spring&logoColor=white"> 
+<img src="https://img.shields.io/badge/Springboot-6DB33F?style=flat&logo=Springboot&logoColor=white">
+<img src="https://img.shields.io/badge/gradle-02303A?style=flat&logo=gradle&logoColor=white">
+<img src="https://img.shields.io/badge/MySQL-4479A1??style=flat&logo=MySQL&logoColor=white">
+<img src="https://img.shields.io/badge/AWS-%23FF9900.svg?style=flat&logo=AmazonAWS&logoColor=white"> 
+<img src="https://img.shields.io/badge/Amazon S3-569A31?style=flat&logo=Amazon S3&logoColor=white">
+<img src="https://img.shields.io/badge/GitHub Actions-2088FF??style=flat&logo=GitHub Actions&logoColor=white"> 
+<img src="https://img.shields.io/badge/AWS CodeDeploy-6DB33F??style=flat&logo=AWS Codedeploy&logoColor=white">
+<img src="https://img.shields.io/badge/JUnit5-25A162?style=flat&logo=JUnit5&logoColor=white">
+<img src="https://img.shields.io/badge/Apache JMeter-D22128?style=flat&logo=Apache JMeter&logoColor=white">
+<img src="https://img.shields.io/badge/NGINX-009639?style=flat&logo=NGINX&logoColor=white">
+<img src="https://img.shields.io/badge/spring security-6DB33F?style=flat&logo=spring security&logoColor=white">
+<img src="https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black">
+</div>
 
 ### 🚫 push, merge에 대한 주의사항
 - main은 프로젝트가 끝날 때까지 손대지 말기  

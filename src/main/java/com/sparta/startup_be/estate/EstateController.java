@@ -45,12 +45,6 @@ public class EstateController {
         return estateService.showEstate(SWlng,NElng,SWlat,NElat,level,userDetails,depositlimit,feelimit,monthly);
     }
 
-    //검색 복록 지도 조회
-    @GetMapping("/map/search")
-    private CityResponseDto showSearchonMap(@RequestParam int level, @RequestParam String query, @AuthenticationPrincipal UserDetailsImpl userDetails){
-        return estateService.showSearchonMap(level,query,userDetails);
-    }
-
     //리스트 선택 후 디테일 조회
     @GetMapping("/estate/{estateid}")
     private EstateResponseDto showDetail(@PathVariable Long estateid, @AuthenticationPrincipal UserDetailsImpl userDetails){

@@ -21,8 +21,8 @@ public class SharedOfficeController {
     //위도 경도별 지도 조회
     @GetMapping("/map/sharedoffice")
     private MapResponseDto showSharedOffice(@RequestParam float SWlat, @RequestParam float SWlng, @RequestParam float NElat, @RequestParam float NElng,
-                                       @RequestParam int level, @AuthenticationPrincipal UserDetailsImpl userDetails) throws InterruptedException {
-        return sharedOfficeService.showSharedOffice(SWlng,NElng,SWlat,NElat,level,userDetails);
+                                       @RequestParam int level) throws InterruptedException {
+        return sharedOfficeService.showSharedOffice(SWlng,NElng,SWlat,NElat,level);
     }
 
     //해당 지역 조회

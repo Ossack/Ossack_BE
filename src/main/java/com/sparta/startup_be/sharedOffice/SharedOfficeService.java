@@ -34,10 +34,10 @@ public class SharedOfficeService {
         }
     }
 
-    public MapResponseDto showSharedOffice(float minX, float maxX, float minY, float maxY, int level, UserDetailsImpl userDetails) throws InterruptedException {
+    public MapResponseDto showSharedOffice(float minX, float maxX, float minY, float maxY, int level) throws InterruptedException {
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
-        List<String> cities = new ArrayList<>();
+        List<String> cities;
 
         if (level < 7) {
             cities = sharedOfficeRepository.findSharedOfficebyDongQuery(minX, maxX, minY, maxY);
@@ -54,7 +54,7 @@ public class SharedOfficeService {
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         for (int i = 0; i < cities.size(); i++) {
             String title = cities.get(i);
-            List<EstateResponseDto> estate = new ArrayList<>();
+
             int estate_cnt = 0;
             float avg = 0f;
             long temp1 = System.currentTimeMillis();
@@ -103,8 +103,7 @@ public class SharedOfficeService {
         } else {
             totalpage = size/10 + 1;
         }
-        SearchSharedOfficeResponseDto searchSharedOfficeResponseDto = new SearchSharedOfficeResponseDto(sharedOfficeResponseDtos, totalpage, pagenum + 1,query);
-        return searchSharedOfficeResponseDto;
+        return new SearchSharedOfficeResponseDto(sharedOfficeResponseDtos, totalpage, pagenum + 1,query);
     }
 
     public SharedOfficeResponseDto showdetail(Long shareofficeid, UserDetailsImpl userDetails) throws InterruptedException {

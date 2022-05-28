@@ -37,11 +37,6 @@ public class EstateService {
     private final CoordinateEstateService coordinateEstateService;
     private final NaverSearchApi naverSearchApi;
 
-
-//    public List<Estate> show(){
-//        return estateRepository.findAllByFloor(4);
-//    }
-
     public void storeEstate(List<Estate> estates) {
         coordinateEstateService.storeAddress(estates);
         for (Estate estate : estates) {
@@ -125,18 +120,17 @@ public class EstateService {
             estateResponseDtoList.add(estateResponseDto);
             i++;
         }
-        final int end = Math.min(start + 10, estateResponseDtoList.size());
+
         int totalpage = 0;
         if (size % 10 == 0) {
             totalpage = size / 10;
         } else {
             totalpage = size/10 + 1;
         }
-        SearchDto searchDto = new SearchDto(estateResponseDtoList, totalpage, pagenum + 1,query);
-        return searchDto;
+        return new SearchDto(estateResponseDtoList, totalpage, pagenum + 1,query);
     }
 
-    //핫한 매물 보기기
+    //핫한 매물 보기
     public List<Map<String, Object>> searchHot(UserDetailsImpl userDetails) {
         //        for(Map<String,Object> asdd : asd){
 //            boolean mylike = favoriteRepository.existsByEstateidAndUserid(Long.valueOf(String.valueOf(asdd.get("id"))),userDetails.getId());
@@ -171,7 +165,7 @@ public class EstateService {
         long temp1 = System.currentTimeMillis();
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
-        List<String> cities = new ArrayList<>();
+        List<String> cities;
 
         if (level < 7) {
             cities = estateRepository.findDongQuery(minX, maxX, minY, maxY);
@@ -188,7 +182,7 @@ public class EstateService {
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         for (int i = 0; i < cities.size(); i++) {
             String title = cities.get(i);
-            List<EstateResponseDto> estate = new ArrayList<>();
+
             int estate_cnt = 0;
             float avg = 0f;
             int defaultDepositfee =1000000;
@@ -226,21 +220,5 @@ public class EstateService {
         System.out.println("총:");
         System.out.println(temp3 - temp1);
         return new MapResponseDto(level, cityResponseDtoList);
-    }
-
-    //지도 검색 조회
-    public CityResponseDto showSearchonMap(int level, String query, UserDetailsImpl userDetails) {
-        List<Estate> estateList = estateRepository.searchAllByCity(query);
-        float avg = estateRepository.cityAvgQuery(query);
-        List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
-//        for (Estate estate : estateList) {
-//            boolean myLike = favoriteRepository.existsByEstateidAndUserid(estate.getId(), userDetails.getId());
-//            EstateResponseDto estateResponseDto = new EstateResponseDto(estate, myLike);
-//            estateResponseDtoList.add(estateResponseDto);
-//        }
-        avg = Integer.parseInt(String.valueOf(Math.round(avg)));
-        String response = convertAddress.convertAddress(query);
-        CoordinateResponseDto coordinateResponseDto = convertAddress.fromJSONtoItems(response);
-        return new CityResponseDto(query, coordinateResponseDto, 0, (int) avg);
     }
 }

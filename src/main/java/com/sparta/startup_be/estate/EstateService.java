@@ -90,13 +90,13 @@ public class EstateService {
         int defaultDepositfee =1000000;
         int defaultFeelimit =1000000;
         String defaultmonthly =null;
-        if(!monthly.equals("undefined")){
+        if(!monthly.equals("undefined") & !monthly.equals("null")){
             defaultmonthly=monthly;
         }
-        if(!depositlimit.equals("undefined")){
+        if(!depositlimit.equals("undefined") & !depositlimit.equals("null")){
             defaultDepositfee=Integer.parseInt(depositlimit);
         }
-        if(!feelimit.equals("undefined")){
+        if(!feelimit.equals("undefined") & !feelimit.equals("null")){
             defaultFeelimit=Integer.parseInt(feelimit);
         }
         List<Estate> estates = estateRepository.searchAllByQuery(query,keyword,start,defaultmonthly,defaultDepositfee,defaultFeelimit);
@@ -194,13 +194,13 @@ public class EstateService {
             int defaultDepositfee =1000000;
             int defaultFeelimit =1000000;
             String defaultmonthly ="";
-            if(!monthly.equals("undefined")){
+            if(!monthly.equals("undefined") & !monthly.equals("null")){
                 defaultmonthly=monthly;
             }
-            if(!depositlimit.equals("undefined")){
+            if(!depositlimit.equals("undefined") & !depositlimit.equals("null")){
                 defaultDepositfee=Integer.parseInt(depositlimit);
             }
-            if(!feelimit.equals("undefined")){
+            if(!feelimit.equals("undefined") & !feelimit.equals("null")){
                 defaultFeelimit=Integer.parseInt(feelimit);
             }
             if (level < 7) {

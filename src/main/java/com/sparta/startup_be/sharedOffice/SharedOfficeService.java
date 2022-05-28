@@ -38,6 +38,7 @@ public class SharedOfficeService {
 
 //        List<String> cities = estateRepository.findCity(minX,maxX,minY,maxY);
         List<String> cities = new ArrayList<>();
+        long temp1 = System.currentTimeMillis();
 
         if (level < 7) {
             cities = sharedOfficeRepository.findSharedOfficebyDongQuery(minX, maxX, minY, maxY);
@@ -46,10 +47,14 @@ public class SharedOfficeService {
         } else {
             cities = sharedOfficeRepository.findSharedOfficebyCityQuery(minX, maxX, minY, maxY);
         }
+        for(String city : cities){
+            System.out.println(city);
+        }
 
 //        System.out.println("size"+cities2.size());
 //        Iterator<String> it = cities.iterator();
-        long temp = System.currentTimeMillis();
+        long temp2 = System.currentTimeMillis();
+        System.out.println(temp2-temp1);
 
         List<CityResponseDto> cityResponseDtoList = new ArrayList<>();
         for (int i = 0; i < cities.size(); i++) {
@@ -57,7 +62,6 @@ public class SharedOfficeService {
             List<EstateResponseDto> estate = new ArrayList<>();
             int estate_cnt = 0;
             float avg = 0f;
-            long temp1 = System.currentTimeMillis();
             if (level < 7) {
                 estate_cnt = sharedOfficeRepository.countAllByDongQuery(title);
             } else if (level == 7 || level == 8) {
@@ -65,16 +69,14 @@ public class SharedOfficeService {
             } else {
                 estate_cnt = sharedOfficeRepository.countAllByCityQuery(title);
             }
-            long temp2 = System.currentTimeMillis();
             avg = Integer.parseInt(String.valueOf(Math.round(avg)));
             CoordinateResponseDto coordinateResponseDtoDtoDto = naverSearchApi.getCoordinate(title);
             CityResponseDto cityResponseDto = new CityResponseDto(title, coordinateResponseDtoDtoDto, estate_cnt, (int) avg);
             cityResponseDtoList.add(cityResponseDto);
-            System.out.println(temp2-temp1);
         }
         long temp3 = System.currentTimeMillis();
         System.out.println("temp2:");
-        System.out.println(temp3 - temp);
+        System.out.println(temp3 - temp2);
 
         return new MapResponseDto(level, cityResponseDtoList);
     }

@@ -167,6 +167,19 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .distinct().fetch();
     }
 
+    //@Override
+    //    public List<String> findDongQuery(double minX, double maxX, double minY, double maxY) {
+    //        QEstate qEstate = new QEstate("e");
+    //        QCoordinateEstate qCoordinateEstate = new QCoordinateEstate("q");
+    //        return queryFactory.from(qEstate)
+    //                .select(qEstate.dong)
+    //                .join(qCoordinateEstate)
+    //                .on(qEstate.id.eq(qCoordinateEstate.estateid))
+    //                .where(qCoordinateEstate.x.between(minX,maxX)
+    //                                .and(qCoordinateEstate.y.between(minY,maxY)))
+    //                .distinct().fetch();
+    //    }
+
     @Override
     public int countSharedOfficeByQuery(String city,String keyword) {
         QSharedOffice qSharedOffice = new QSharedOffice("e");

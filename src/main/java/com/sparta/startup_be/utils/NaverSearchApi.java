@@ -58,13 +58,13 @@ public class NaverSearchApi {
     }
 
     public CoordinateResponseDto getCoordinate(String name) throws InterruptedException {
-        String address;
-        JSONObject jsonObject = NaverSearchApi(name);
-        if(jsonObject.getInt("total")==0){
-            address = sharedOfficeRepository.findSharedOfficeByName(name).get(0).getDong();
-        }else {
-            address = jsonObject.getJSONArray("items").getJSONObject(0).getString("address");
-        }
-        return convertAddress.fromJSONtoItems(convertAddress.convertAddress(address));
+//        String address;
+//        JSONObject jsonObject = NaverSearchApi(name);
+//        if(jsonObject.getInt("total")==0){
+//            address = sharedOfficeRepository.findSharedOfficeByName(name).get(0).getDong();
+//        }else {
+//            address = jsonObject.getJSONArray("items").getJSONObject(0).getString("address");
+//        }
+        return convertAddress.fromJSONtoItems(convertAddress.convertAddress(name));
     }
 }

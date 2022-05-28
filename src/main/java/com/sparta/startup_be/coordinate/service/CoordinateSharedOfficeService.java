@@ -24,7 +24,7 @@ public class CoordinateSharedOfficeService {
     public void convertAddress() throws InterruptedException {
         List<SharedOffice> sharedOffices = sharedOfficeRepository.findAll();
         for (SharedOffice sharedOffice : sharedOffices) {
-            String name = sharedOffice.getName();
+            String name = sharedOffice.getDong();
             CoordinateDto coordinateDto = new CoordinateDto(naverSearchApi.getCoordinate(name),sharedOffice.getId());
             CoordinateSharedOffice coordinateSharedOffice = new CoordinateSharedOffice(coordinateDto);
             coordinateSharedOfficeRepository.save(coordinateSharedOffice);

@@ -30,7 +30,7 @@
   </tr>
 </table>
 
-## 📜 아키텍쳐
+## ⚙️ 아키텍쳐
 
 ![아키텍처](https://velog.velcdn.com/images/ryurim0109/post/0a30cec0-d32e-4e37-ba69-61c34a43916f/image.jpg)
 

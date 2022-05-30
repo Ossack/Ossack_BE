@@ -15,7 +15,7 @@ public class EstateResponseDto {
     private String title;
     private String type;
     private String monthly;
-    private int deposit;
+    private String deposit;
     private int rent_fee;
     private String buildingFloor;
     private String roomFloor;
@@ -52,7 +52,16 @@ public class EstateResponseDto {
         this.type = estate.getType();
         this.address = estate.getCity()+" "+ estate.getGu()+" "+estate.getDong();
         this.monthly = estate.getMonthly();
-        this.deposit = estate.getDeposit();
+        if (estate.getDeposit() < 10000) {
+            this.deposit = String.valueOf((estate.getDeposit())) + "만";
+        }else{
+            String s= String.valueOf(estate.getDeposit());
+            if(!String.valueOf(estate.getDeposit()).substring(s.length()-4,s.length()).equals("0000")){
+                this.deposit = String.valueOf(estate.getDeposit()).substring(0,s.length()-4)+ "억"+String.valueOf(estate.getDeposit()).substring(s.length()-4,s.length())+"만";
+            }else{
+                this.deposit = String.valueOf(estate.getDeposit()).substring(0,s.length()-4)+ "억";
+            }
+        }
         this.rent_fee = estate.getRent_fee();
         this.buildingFloor = estate.getBuildingFloor();
         this.roomFloor = estate.getRoomFloor();
@@ -75,7 +84,16 @@ public class EstateResponseDto {
         this.title = estate.getCity();
         this.type = estate.getType();
         this.monthly = estate.getMonthly();
-        this.deposit = estate.getDeposit();
+        if (estate.getDeposit() < 10000) {
+            this.deposit = String.valueOf((estate.getDeposit())) + "만";
+        }else{
+            String s= String.valueOf(estate.getDeposit());
+            if(!String.valueOf(estate.getDeposit()).substring(s.length()-4,s.length()).equals("0000")){
+                this.deposit = String.valueOf(estate.getDeposit()).substring(0,s.length()-4)+ "억"+String.valueOf(estate.getDeposit()).substring(s.length()-4,s.length())+"만";
+            }else{
+                this.deposit = String.valueOf(estate.getDeposit()).substring(0,s.length()-4)+ "억";
+            }
+        }
         this.rent_fee = estate.getRent_fee();
         this.buildingFloor = estate.getBuildingFloor();
         this.roomFloor = estate.getRoomFloor();
@@ -102,7 +120,16 @@ public class EstateResponseDto {
         this.title = city;
         this.type = estate.getType();
         this.monthly = estate.getMonthly();
-        this.deposit = estate.getDeposit();
+        if (estate.getDeposit() < 10000) {
+            this.deposit = String.valueOf((estate.getDeposit())) + "만";
+        }else{
+            String s= String.valueOf(estate.getDeposit());
+            if(!String.valueOf(estate.getDeposit()).substring(s.length()-4,s.length()).equals("0000")){
+                this.deposit = String.valueOf(estate.getDeposit()).substring(0,s.length()-4)+ "억"+String.valueOf(estate.getDeposit()).substring(s.length()-4,s.length())+"만";
+            }else{
+                this.deposit = String.valueOf(estate.getDeposit()).substring(0,s.length()-4)+ "억";
+            }
+        }
         this.rent_fee = estate.getRent_fee();
         this.buildingFloor = estate.getBuildingFloor();
         this.roomFloor = estate.getRoomFloor();

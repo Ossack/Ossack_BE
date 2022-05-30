@@ -1,5 +1,6 @@
 package com.sparta.startup_be;
 
+import com.sparta.startup_be.estate.dto.CityResponseDto;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.model.Estate;
 import com.sparta.startup_be.model.SharedOffice;
@@ -14,6 +15,8 @@ public interface QuerydslRepository {
     int countDongQuery(String city,String monthly,int depositlimt,int feelimit);
 
     int countAllByQuery(String city,String keyword,int depositlimt,int feelimit);
+
+//    List<CityResponseDto> findcountDong(double minX, double maxX, double minY, double maxY);
 
     List<String> findDongQuery(double minX,double maxX,double minY,double maxY);
     List<String> findGuQuery(double minX,double maxX,double minY,double maxY);

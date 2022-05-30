@@ -1,8 +1,11 @@
 package com.sparta.startup_be;
 
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.sparta.startup_be.estate.dto.CityResponseDto;
 import com.sparta.startup_be.estate.dto.EstateResponseDto;
 import com.sparta.startup_be.model.*;
 
@@ -20,7 +23,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     @Override
     public int countCityQuery(String city,String monthly,int depositlimit,int feelimit) {
         QEstate qEstate = new QEstate("e");
-        int count = (int) queryFactory
+        return (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
                 .where(qEstate.city.contains(city)
@@ -29,7 +32,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                                         .and(qEstate.rent_fee.between(0,feelimit))))
                 .stream()
                 .count();
-        return count;
     }
     @Override
     public int countGuQuery(String city,String monthly,int depositlimit,int feelimit) {
@@ -76,6 +78,20 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .stream().count();
     }
 
+//    @Override
+//    public List<CityResponseDto> findcountDong(double minX, double maxX, double minY, double maxY) {
+//        QEstate qEstate = new QEstate("e");
+//        QCoordinateEstate qCoordinateEstate =new QCoordinateEstate("q");
+//        List<String> cities = findDongQuery(minX, maxX, minY, maxY);
+//        List<CityResponseDto> cityResponseDtoList = queryFactory
+//                .select(Projections.constructor(CityResponseDto.class,
+//        qEstate.dong,
+//        qEstate.city))
+//                .from(qEstate).fetch();
+//
+//        return null;
+//    }
+
     @Override
     public List<String> findDongQuery(double minX, double maxX, double minY, double maxY) {
         QEstate qEstate = new QEstate("e");
@@ -88,6 +104,7 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                                 .and(qCoordinateEstate.y.between(minY,maxY)))
                 .distinct().fetch();
     }
+
     @Override
     public List<String> findGuQuery(double minX, double maxX, double minY, double maxY) {
         QEstate qEstate = new QEstate("e");
@@ -166,6 +183,19 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                         .and(qCoordinateSharedOffice.y.between(minY,maxY)))
                 .distinct().fetch();
     }
+
+    //@Override
+    //    public List<String> findDongQuery(double minX, double maxX, double minY, double maxY) {
+    //        QEstate qEstate = new QEstate("e");
+    //        QCoordinateEstate qCoordinateEstate = new QCoordinateEstate("q");
+    //        return queryFactory.from(qEstate)
+    //                .select(qEstate.dong)
+    //                .join(qCoordinateEstate)
+    //                .on(qEstate.id.eq(qCoordinateEstate.estateid))
+    //                .where(qCoordinateEstate.x.between(minX,maxX)
+    //                                .and(qCoordinateEstate.y.between(minY,maxY)))
+    //                .distinct().fetch();
+    //    }
 
     @Override
     public int countSharedOfficeByQuery(String city,String keyword) {

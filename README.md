@@ -32,9 +32,49 @@
 
 ## ⚙️ 아키텍쳐
 
-![아키텍처](https://velog.velcdn.com/images/ryurim0109/post/0a30cec0-d32e-4e37-ba69-61c34a43916f/image.jpg)
+![아키텍처](https://velog.velcdn.com/images/ryurim0109/post/94c8fd2f-7ea2-44da-b425-fac874853c5c/image.jpg)
 
-### 👀 사용 라이브러리 👀  
+## ⚛️ 개인 역할
+
+<code>장민우</code> DB설계, 매물 관련 API 설계, 매물 크롤링, 페이징처리
+
+<code>황다빈</code> 프로필 수정, 로그인, 소셜로그인, https적용, CI/CD
+
+<code>지수민</code> Swagger적용, 좋아요 기능, 페이징처리
+
+## 🔨 Trouble Shooting
+
+<details markdown="1">
+<summary>크롤링 시간 지연 및 API 요청 지연</summary>
+  
+### ✅ 문제상황
+
+> 초기목표는 크롤링을 통해 매일 매물리스트를 갱신하는 것  
+> 크롤링 소요시간이 길고, 크롤링 중 API 요청이 지연됨  
+> > 82개의 매물을 가져오는 데 약 5시 30분의 시간이 걸릴 것으로 예상
+
+### ✅ 해결방안
+
+> 1. Multi Thread를 적용  
+> 2. 서버 스펙 상향  
+> → 코어 2개와 4GB RAM의 서버로 업그레이드 해 4개의 Multi Thread를 사용
+
+### ✅ 결과
+
+> 85개의 매물을 크롤링 하는 데 약 2분 20초 소요  
+> 크롤링 중 API 응답 속도 28% 감소
+
+### ✅ 향후 추가 개선 목표
+
+> 1. RAM의 부하로 크롤링 지속시간이 길어지면 소요시간이 급격히 늘어나는 문제 발생  
+> 2. 크롤링이 진행되지 않는 상황일 때 고사양의 서버를 유지하는 것은 비효율적이라 판단  
+> → AWS autoscaling 적용 예정
+
+
+
+</details>
+
+### 👀 사용 Stack 👀  
 <div>
 <img src="https://img.shields.io/badge/JAVA-007396?style=flat&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/Spring-6DB33F?style=flat&logo=Spring&logoColor=white"> 
@@ -52,20 +92,9 @@
 <img src="https://img.shields.io/badge/Linux-FCC624?style=flat&logo=linux&logoColor=black">
 </div>
 
-### 🚫 push, merge에 대한 주의사항
-- main은 프로젝트가 끝날 때까지 손대지 말기  
-- 기능별로 branch를 만들기  
-- 모든 branch의 merge는 dev로 하기  
-- merge된 branch는 삭제하기  
-
-### ✅ 이슈 관리
-- 이슈를 먼저 생성  
-- 커밋 메세지에 이슈 번호 
-
 ### ✅ 커밋 종류
 
 > 수정한 종류에 따라 커밋 메시지를 선택  
-> 커밋 메세지는 한국어로 통일
 
 |메시지명|설명|
 |---|---|

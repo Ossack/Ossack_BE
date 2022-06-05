@@ -59,4 +59,4 @@ jobs:
 
       # Deploy
       - name: Deploy
-        run: aws deploy create-deployment --application-name Ossack-app --deployment-group-name Ossack-group --file-exists-behavior OVERWRITE --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip --region ap-northeast-2
+        run: aws deploy create-deployment --application-name Ossack-app --deployment-group-name Ossack-group-final --file-exists-behavior OVERWRITE --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip --region ap-northeast-2

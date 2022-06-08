@@ -23,8 +23,8 @@ public class WebDriverUtil extends Thread {
     private WebDriver driver;
     private List<Estate> result;
     public static String WEB_DRIVER_ID = "webdriver.chrome.driver"; // Properties 설정
-    public static String WEB_DRIVER_PATH = "C:/Users/장윤희/Desktop/미누/chromedriver.exe"; // WebDriver 경로
-//    public static String WEB_DRIVER_PATH = "chromedriver"; // WebDriver 경로
+//    public static String WEB_DRIVER_PATH = "C:/Users/장윤희/Desktop/미누/chromedriver.exe"; // WebDriver 경로
+    public static String WEB_DRIVER_PATH = "chromedriver"; // WebDriver 경로
     //C:/Users/장윤희/Desktop/미누/chromedriver.exe
     private int num;
     @Override
@@ -84,7 +84,7 @@ public class WebDriverUtil extends Thread {
             Thread.sleep(10);
             j++;
             System.out.println(j);
-        } while (j != 500);
+        } while (j != 100);
 
 
 

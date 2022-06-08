@@ -37,6 +37,4 @@ out/
 .vscode/
 
 #custom
-CrawlingEx.java
-WebDriverUtil.java
 aws.yml

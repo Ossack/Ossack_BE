@@ -3,6 +3,7 @@ package com.sparta.startup_be;
 import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.startup_be.estate.dto.CityResponseDto;
@@ -18,63 +19,54 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     public QuerydslRepositoryImpl(EntityManager em){
         this.queryFactory = new JPAQueryFactory(em);
     }
+    private final QEstate qEstate = new QEstate("e");
+    private final QSharedOffice qSharedOffice = new QSharedOffice("s");
 
     //해당 좌쵸 내 시,구,동 조회
     @Override
     public int countCityQuery(String city,String monthly,int depositlimit,int feelimit) {
-        QEstate qEstate = new QEstate("e");
         return (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
-                .where(qEstate.city.contains(city)
+                .where(qEstate.city.contains(city),noDepositLimit(depositlimit),noRentfeeLimit(feelimit)
 //                        .and(qEstate.monthly.contains(monthly)
-                                .and(qEstate.deposit.between(0,depositlimit)
-                                        .and(qEstate.rent_fee.between(0,feelimit))))
+                                )
                 .stream()
                 .count();
     }
     @Override
     public int countGuQuery(String city,String monthly,int depositlimit,int feelimit) {
-        QEstate qEstate = new QEstate("e");
-        int count = (int) queryFactory.
+        return (int) queryFactory.
                 from(qEstate)
                 .select(qEstate)
                 .where(qEstate.gu.contains(city)
 //                        .and(qEstate.monthly.contains(monthly)
-                                .and(qEstate.deposit.between(0,depositlimit)
-                                        .and(qEstate.rent_fee.between(0,feelimit))))
+                                ,noDepositLimit(depositlimit),noRentfeeLimit(feelimit))
                 .stream()
                 .count();
-        return count;
     }
     @Override
     public int countDongQuery(String city,String monthly,int depositlimit,int feelimit) {
-        QEstate qEstate = new QEstate("e");
-        int count = (int) queryFactory
+        return (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
                 .where(qEstate.dong.contains(city)
 //                        .and(qEstate.monthly.contains(monthly)
-                                .and(qEstate.deposit.between(0,depositlimit)
-                                        .and(qEstate.rent_fee.between(0,feelimit))))
+                               ,noDepositLimit(depositlimit),noRentfeeLimit(feelimit))
 //                                .and(qEstate.rent_fee.)))
                 .stream().count();
-
-        return count;
     }
 
     @Override
     public int countAllByQuery(String city,String keyword,int depositlimit,int feelimit) {
-        QEstate qEstate = new QEstate("e");
         return (int) queryFactory
                 .from(qEstate)
                 .select(qEstate)
-                .where((qEstate.city.contains(city).or(qEstate.city.contains(keyword))
-                        .or(qEstate.dong.contains(city).or(qEstate.dong.contains(keyword))
-                                .or(qEstate.gu.contains(city)).or(qEstate.gu.contains(keyword))
-//                                        .and(qEstate.monthly.contains(monthly)
-                                .and(qEstate.deposit.between(0,depositlimit)
-                                        .and(qEstate.rent_fee.between(0,feelimit))))))
+                .where(noDepositLimit(depositlimit),noRentfeeLimit(feelimit)
+                        ,(qEstate.city.contains(city).or(qEstate.city.contains(keyword))
+                                .or(qEstate.dong.contains(city).or(qEstate.dong.contains(keyword))
+                                        .or(qEstate.gu.contains(city)).or(qEstate.gu.contains(keyword)))))
+//                                        .and(qEstate.monthly.contains(monthly)))
                 .stream().count();
     }
 
@@ -94,7 +86,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public List<String> findDongQuery(double minX, double maxX, double minY, double maxY) {
-        QEstate qEstate = new QEstate("e");
         QCoordinateEstate qCoordinateEstate = new QCoordinateEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate.dong)
@@ -107,7 +98,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public List<String> findGuQuery(double minX, double maxX, double minY, double maxY) {
-        QEstate qEstate = new QEstate("e");
         QCoordinateEstate qCoordinateEstate = new QCoordinateEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate.gu)
@@ -119,7 +109,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
     }
     @Override
     public List<String> findCityQuery(double minX, double maxX, double minY, double maxY) {
-        QEstate qEstate = new QEstate("e");
         QCoordinateEstate qCoordinateEstate = new QCoordinateEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate.city)
@@ -132,22 +121,19 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public List<Estate> searchAllByQuery(String city,String keyword,int start,String monthly,int depositlimit,int feelimit) {
-        QEstate qEstate = new QEstate("q");
         return queryFactory.from(qEstate)
                 .select(qEstate)
-                .where((qEstate.city.contains(city).or(qEstate.city.contains(keyword))
-                        .or(qEstate.dong.contains(city).or(qEstate.dong.contains(keyword))
-                                .or(qEstate.gu.contains(city)).or(qEstate.gu.contains(keyword))
-//                                        .and(qEstate.monthly.contains(monthly)
-                                            .and(qEstate.deposit.between(0,depositlimit)
-                                                .and(qEstate.rent_fee.between(0,feelimit))))))
+                .where(noDepositLimit(depositlimit),noRentfeeLimit(feelimit)
+                        ,(qEstate.city.contains(city).or(qEstate.city.contains(keyword))
+                                .or(qEstate.dong.contains(city).or(qEstate.dong.contains(keyword))
+                                        .or(qEstate.gu.contains(city)).or(qEstate.gu.contains(keyword)))))
+//                                        .and(qEstate.monthly.contains(monthly)))
                 .limit(10).offset(start)
                 .fetch();
     }
 
     @Override
     public List<String> findSharedOfficebyCityQuery(double minX, double maxX, double minY, double maxY) {
-        QSharedOffice qSharedOffice = new QSharedOffice("s");
         QCoordinateSharedOffice qCoordinateSharedOffice = new QCoordinateSharedOffice("q");
         return queryFactory.from(qSharedOffice)
                 .select(qSharedOffice.city)
@@ -160,7 +146,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public List<String> findSharedOfficebyGuQuery(double minX, double maxX, double minY, double maxY) {
-        QSharedOffice qSharedOffice = new QSharedOffice("s");
         QCoordinateSharedOffice qCoordinateSharedOffice = new QCoordinateSharedOffice("q");
         return queryFactory.from(qSharedOffice)
                 .select(qSharedOffice.gu)
@@ -173,7 +158,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public List<String> findSharedOfficebyDongQuery(double minX, double maxX, double minY, double maxY) {
-        QSharedOffice qSharedOffice = new QSharedOffice("s");
         QCoordinateSharedOffice qCoordinateSharedOffice = new QCoordinateSharedOffice("q");
         return queryFactory.from(qSharedOffice)
                 .select(qSharedOffice.dong)
@@ -199,7 +183,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public int countSharedOfficeByQuery(String city,String keyword) {
-        QSharedOffice qSharedOffice = new QSharedOffice("e");
         return (int) queryFactory
                 .from(qSharedOffice)
                 .select(qSharedOffice)
@@ -212,7 +195,6 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
 
     @Override
     public List<SharedOffice> searchSharedOfficeByQuery(String city,String keyword, int start) {
-        QSharedOffice qSharedOffice = new QSharedOffice("q");
         return queryFactory.from(qSharedOffice)
                 .select(qSharedOffice)
                 .where(qSharedOffice.city.contains(city).or(qSharedOffice.city.contains(keyword))
@@ -222,6 +204,15 @@ public class QuerydslRepositoryImpl implements QuerydslRepository {
                 .limit(10).offset(start)
                 .fetch();
     }
+
+    private BooleanExpression noDepositLimit(Integer depositlimit){
+        return depositlimit !=0 ? qEstate.deposit.between(0,depositlimit) : null;
+    }
+
+    private BooleanExpression noRentfeeLimit(Integer rentfeeLimit){
+        return rentfeeLimit !=0 ? qEstate.rent_fee.between(0,rentfeeLimit) : null;
+    }
+
 
 
 }

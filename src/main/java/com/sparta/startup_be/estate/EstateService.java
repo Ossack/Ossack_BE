@@ -82,16 +82,16 @@ public class EstateService {
         List<EstateResponseDto> estateResponseDtoList = new ArrayList<>();
         String keyword = naverSearchApi.getQuery(query);
         final int start = 10 * pagenum;
-        int defaultDepositfee =1000000;
-        int defaultFeelimit =1000000;
+        int defaultDepositfee=0;
+        int defaultFeelimit=0;
         String defaultmonthly =null;
         if(!monthly.equals("undefined") & !monthly.equals("null")){
             defaultmonthly=monthly;
         }
-        if(!depositlimit.equals("undefined") & !depositlimit.equals("null")){
+        if(!depositlimit.equals("undefined") & !depositlimit.equals("null")&!depositlimit.equals("")){
             defaultDepositfee=Integer.parseInt(depositlimit);
         }
-        if(!feelimit.equals("undefined") & !feelimit.equals("null")){
+        if(!feelimit.equals("undefined") & !feelimit.equals("null")&!feelimit.equals("")){
             defaultFeelimit=Integer.parseInt(feelimit);
         }
         List<Estate> estates = estateRepository.searchAllByQuery(query,keyword,start,defaultmonthly,defaultDepositfee,defaultFeelimit);
